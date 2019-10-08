@@ -5,6 +5,7 @@
  */
 package com.iviettech.coffeeshop.entities;
 
+import com.iviettech.coffeeshop.enums.Gender;
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;

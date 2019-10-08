@@ -21,6 +21,8 @@
         <bootstrap.version>3.4.1</bootstrap.version>
 	<jackson.version>2.6.3</jackson.version>
 	<servletapi.version>3.1.0</servletapi.version>
+        <hibernate.validator.version>6.0.16.Final</hibernate.validator.version>
+        <spring.security.version>4.2.12.RELEASE</spring.security.version>
     </properties>
     
     <dependencies>
@@ -80,12 +82,24 @@
         </dependency>
         
         <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate.validator.version}</version>
+        </dependency>
+        
+        <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>bootstrap</artifactId>
             <version>${bootstrap.version}</version>
         </dependency>
         
         <!--this is for ajax-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        
 	<dependency>
 		<groupId>com.fasterxml.jackson.core</groupId>
 		<artifactId>jackson-core</artifactId>
@@ -106,7 +120,30 @@
 		<scope>provided</scope>
 	</dependency>
         
+        <!--Security-->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>${spring.security.version}</version>
+        </dependency>
         
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${spring.security.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${spring.security.version}</version>
+        </dependency>
+        
+         <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-taglibs</artifactId>
+            <version>${spring.security.version}</version>
+         </dependency>
         <!-- All Mail Related Stuff + Much more -->
         <dependency>
             <groupId>org.springframework</groupId>

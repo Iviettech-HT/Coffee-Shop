@@ -5,10 +5,11 @@
  */
 package com.iviettech.coffeeshop.entities;
 
-import java.util.List;
+import com.iviettech.coffeeshop.enums.Role;
 import java.util.Set;
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,13 +28,13 @@ public class RoleEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     
-    @Column(length = 10)
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
     
     @ManyToMany(mappedBy = "roles",fetch = FetchType.LAZY)
     Set<AccountEntity> accounts;
 
-    public RoleEntity(String role, Set<AccountEntity> accounts) {
+    public RoleEntity(Role role, Set<AccountEntity> accounts) {
         this.role = role;
         this.accounts = accounts;
     }
@@ -46,11 +47,11 @@ public class RoleEntity {
         this.id = id;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 

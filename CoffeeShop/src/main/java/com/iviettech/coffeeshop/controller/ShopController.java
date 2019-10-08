@@ -19,4 +19,24 @@ public class ShopController {
     public String viewHome(Model model){
         return "home";
     }
+    
+    @RequestMapping(value = {"/dang-nhap"})
+    public String viewLogin(Model model){
+        return "login";
+    }
+    
+    @RequestMapping(value = {"/dang-ky"})
+    public String viewRegister(Model model){
+        return "register";
+    }
+    
+    @RequestMapping(value = {"/gio-hang"})
+    public String viewCart(Model model){
+        return "cart/cart";
+    }
+    
+    @RequestMapping(value = {"/dat-hang"})
+    public String viewCheckout(Model model){
+        return "cart/check-out";
+    }
 }

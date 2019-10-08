@@ -25,15 +25,15 @@ public class ProductEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     
-    private char size;
+    private String name;
     private double price;
     private boolean status;
     
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<VoteEntity> votes;
 
-    public ProductEntity(char size, double price, boolean status, List<VoteEntity> votes) {
-        this.size = size;
+    public ProductEntity(String name, double price, boolean status, List<VoteEntity> votes) {
+        this.name = name;
         this.price = price;
         this.status = status;
         this.votes = votes;
@@ -47,12 +47,12 @@ public class ProductEntity {
         this.id = id;
     }
 
-    public char getSize() {
-        return size;
+    public String getSize() {
+        return name;
     }
 
-    public void setSize(char size) {
-        this.size = size;
+    public void setSize(String name) {
+        this.name = name;
     }
 
     public double getPrice() {

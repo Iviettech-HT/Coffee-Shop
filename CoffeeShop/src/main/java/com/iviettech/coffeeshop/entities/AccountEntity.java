@@ -5,6 +5,7 @@
  */
 package com.iviettech.coffeeshop.entities;
 
+import com.iviettech.coffeeshop.enums.Gender;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.Entity;

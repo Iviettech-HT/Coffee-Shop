@@ -8,6 +8,7 @@ package com.iviettech.coffeeshop.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -21,7 +22,11 @@ public class ShopController {
     }
     
     @RequestMapping(value = {"/dang-nhap"})
-    public String viewLogin(Model model){
+    public String viewLogin(Model model,
+            @RequestParam(name = "isError", required = false) boolean isError){
+        if(isError){
+            model.addAttribute("messageError","Error");
+        }
         return "login";
     }
     

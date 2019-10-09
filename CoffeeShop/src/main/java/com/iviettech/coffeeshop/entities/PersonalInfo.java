@@ -22,7 +22,7 @@ public abstract class PersonalInfo {
     protected String address;
     
     @Column(length = 100, unique = true)
-    String email;
+    protected String email;
     
     @Enumerated(EnumType.STRING)
     Gender gender = Gender.MALE;

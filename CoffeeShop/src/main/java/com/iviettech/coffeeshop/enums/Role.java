@@ -10,5 +10,5 @@ package com.iviettech.coffeeshop.enums;
  * @author admin
  */
 public enum Role {
-    
+    ROLE_USER, ROLE_ADMIN, ROLE_SELLER, ROLE_MANAGER
 }

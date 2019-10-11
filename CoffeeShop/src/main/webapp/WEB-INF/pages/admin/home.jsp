@@ -6,13 +6,13 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="resources-management/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="resources/admin/css/bootstrap-responsive.min.css" />
-        <link rel="stylesheet" href="resources/admin/css/fullcalendar.css" />
-        <link rel="stylesheet" href="resources/admin/css/matrix-style.css" />
-        <link rel="stylesheet" href="resources/admin/css/matrix-media.css" />
-        <link href="resources/admin/css/font-awesome.css" rel="stylesheet" />
-        <link rel="stylesheet" href="resources/admin/css/jquery.gritter.css" />
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/resources-management/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/resources-management/css/bootstrap-responsive.min.css" />
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/resources-management/css/fullcalendar.css" />
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/resources-management/css/matrix-style.css" />
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/resources-management/css/matrix-media.css" />
+        <link href="${pageContext.request.contextPath}/resources-management/css/font-awesome.css" rel="stylesheet" />
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/resources-management/css/jquery.gritter.css" />
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
     </head>
     <body>
@@ -418,26 +418,26 @@
         <!--end-Footer-part-->
 
         <script src="resource/admin/js/excanvas.min.js"></script> 
-        <script src="resources/admin/js/jquery.min.js"></script> 
-        <script src="resources/admin/js/jquery.ui.custom.js"></script> 
-        <script src="resources/admin/js/bootstrap.min.js"></script> 
-        <script src="resources/admin/js/jquery.flot.min.js"></script> 
-        <script src="resources/admin/js/jquery.flot.resize.min.js"></script> 
-        <script src="resources/admin/js/jquery.peity.min.js"></script> 
-        <script src="resources/admin/js/fullcalendar.min.js"></script> 
-        <script src="resources/admin/js/matrix.js"></script> 
-        <script src="resources/admin/js/matrix.dashboard.js"></script> 
-        <script src="resources/admin/js/jquery.gritter.min.js"></script> 
-        <script src="resources/admin/js/matrix.interface.js"></script> 
-        <script src="resources/admin/js/matrix.chat.js"></script> 
-        <script src="resources/admin/js/jquery.validate.js"></script> 
-        <script src="resources/admin/js/matrix.form_validation.js"></script> 
-        <script src="resources/admin/js/jquery.wizard.js"></script> 
-        <script src="resources/admin/js/jquery.uniform.js"></script> 
-        <script src="resources/admin/js/select2.min.js"></script> 
-        <script src="resources/admin/js/matrix.popover.js"></script> 
-        <script src="resources/admin/js/jquery.dataTables.min.js"></script> 
-        <script src="resources/admin/js/matrix.tables.js"></script> 
+        <script src="${pageContext.request.contextPath}/resources-management/js/jquery.min.js"></script> 
+        <script src="${pageContext.request.contextPath}/resources-management/js/jquery.ui.custom.js"></script> 
+        <script src="${pageContext.request.contextPath}/resources-management/js/bootstrap.min.js"></script> 
+        <script src="${pageContext.request.contextPath}/resources-management/js/jquery.flot.min.js"></script> 
+        <script src="${pageContext.request.contextPath}/resources-management/js/jquery.flot.resize.min.js"></script> 
+        <script src="${pageContext.request.contextPath}/resources-management/js/jquery.peity.min.js"></script> 
+        <script src="${pageContext.request.contextPath}/resources-management/js/fullcalendar.min.js"></script> 
+        <script src="${pageContext.request.contextPath}/resources-management/js/matrix.js"></script> 
+        <script src="${pageContext.request.contextPath}/resources-management/js/matrix.dashboard.js"></script> 
+        <script src="${pageContext.request.contextPath}/resources-management/js/jquery.gritter.min.js"></script> 
+        <script src="${pageContext.request.contextPath}/resources-management/js/matrix.interface.js"></script> 
+        <script src="${pageContext.request.contextPath}/resources-management/js/matrix.chat.js"></script> 
+        <script src="${pageContext.request.contextPath}/resources-management/js/jquery.validate.js"></script> 
+        <script src="${pageContext.request.contextPath}/resources-management/js/matrix.form_validation.js"></script> 
+        <script src="${pageContext.request.contextPath}/resources-management/js/jquery.wizard.js"></script> 
+        <script src="${pageContext.request.contextPath}/resources-management/js/jquery.uniform.js"></script> 
+        <script src="${pageContext.request.contextPath}/resources-management/js/select2.min.js"></script> 
+        <script src="${pageContext.request.contextPath}/resources-management/js/matrix.popover.js"></script> 
+        <script src="${pageContext.request.contextPath}/resources-management/js/jquery.dataTables.min.js"></script> 
+        <script src="${pageContext.request.contextPath}/resources-management/js/matrix.tables.js"></script> 
 
         <script type="text/javascript">
             // This function is called from the pop-up menus to transfer to

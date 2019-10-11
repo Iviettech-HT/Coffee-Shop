@@ -9,17 +9,18 @@ Array.from(vote).forEach(element => {
 });
 
 let stars = votePanel.children;
-for(let i=0; i< stars.length ; i++){
-    stars[i].onclick = ()=>{
-        console.log(5-i);
-        Array.from(stars).forEach(e => {e.classList.remove('selected');});
+for (let i = 0; i < stars.length; i++) {
+    stars[i].onclick = () => {
+        console.log(5 - i);
+        Array.from(stars).forEach(e => {
+            e.classList.remove('selected');
+        });
         stars[i].classList.add('selected');
         hideVotePanel();
-
     }
 }
-function hideVotePanel(){
-    votePanel.style.display = 'none';  
+function hideVotePanel() {
+    votePanel.style.display = 'none';
 }
 function showVotePanel() {
     votePanel.style.display = 'flex';

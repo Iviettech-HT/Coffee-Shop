@@ -27,6 +27,15 @@
             </div>
         </div>
         <main id="main">
+            <div class="filter">
+                <p class="spacing">Bộ Lọc:</p>
+                <div class="filter__selection">
+                    <a href="" class="spacing">Giá từ thấp đến cao</a>
+                    <a href="" class="spacing">Giá từ cao xuống thấp</a>
+                    <a href="" class="spacing">Sản phẩm được mua nhiều</a>
+
+                </div>
+            </div>
             <nav>
                 <ul class="category">
                     <li class="category__item-header">
@@ -181,12 +190,14 @@
                     </div>
                 </div>
         </main>
-        <div id="vote">
-            <div class="star"></div>
-            <div class="star"></div>
-            <div class="star"></div>
-            <div class="star"></div>
-            <div class="star"></div>
+        <div id="container-filter">
+            <div id="vote">
+                <div class="star"></div>
+                <div class="star"></div>
+                <div class="star"></div>
+                <div class="star"></div>
+                <div class="star"></div>
+            </div>
         </div>
         <jsp:include page="include/footer.jsp"/>
 

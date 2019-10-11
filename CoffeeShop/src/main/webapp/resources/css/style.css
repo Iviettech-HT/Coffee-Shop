@@ -20,7 +20,15 @@
 
     border-radius: 10px;
 }
-
+#vote:after{
+    content: '';
+    position:absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000000;
+}
 .star {
     line-height: 60px;
     color: #ebebeb;
@@ -111,11 +119,28 @@
 main {
     display: flex;
     justify-content: center;
-    margin-top: 50px;
+    flex-wrap: wrap;
     padding: 20px 0;
 
 }
-
+/*Filter*/
+.filter{
+    width: 90%;
+    
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+    padding: 10px 0;
+    
+    background-color: #ccc;
+    border-radius: 10px;
+}
+.spacing{
+    margin: 0 20px;
+}
+.filter__selection > a:hover{
+    text-decoration: underline;
+}
 /* Category */
 main>nav {
     width: 15%;

@@ -76,9 +76,10 @@
                     <div class="product__info">
                         <img src="resources\images\landingPage\products\add-to-cart-icon.svg" alt="add-to-cart">
                         <p>Thêm vào giỏ</p>
-                        <p class="size">Size M</p>
-                        <p class="size">Size L</p>
-                        <p class="vote">Vote</p>
+                        <a class="size">Size M</a>
+                        <a class="size">Size L</a>
+                        <a class="vote">Vote</a>
+                        <a class="favorite">Thêm vào yêu thích</a>
                     </div>
                 </div>
                 <div class="product__item">
@@ -89,9 +90,10 @@
                     <div class="product__info">
                         <img src="resources\images\landingPage\products\add-to-cart-icon.svg" alt="add-to-cart">
                         <p>Thêm vào giỏ</p>
-                        <p class="size">Size M</p>
-                        <p class="size">Size L</p>
-                        <p class="vote">Vote</p>
+                        <a class="size">Size M</a>
+                        <a class="size">Size L</a>
+                        <a class="vote">Vote</a>
+                        <a class="favorite">Thêm vào yêu thích</a>
                     </div>
                 </div>
                 <div class="product__item">
@@ -102,9 +104,10 @@
                     <div class="product__info">
                         <img src="resources\images\landingPage\products\add-to-cart-icon.svg" alt="add-to-cart">
                         <p>Thêm vào giỏ</p>
-                        <p class="size">Size M</p>
-                        <p class="size">Size L</p>
-                        <p class="vote">Vote</p>
+                        <a class="size">Size M</a>
+                        <a class="size">Size L</a>
+                        <a class="vote">Vote</a>
+                        <a class="favorite">Thêm vào yêu thích</a>
                     </div>
                 </div>
                 <div class="product__item">
@@ -115,9 +118,10 @@
                     <div class="product__info">
                         <img src="resources\images\landingPage\products\add-to-cart-icon.svg" alt="add-to-cart">
                         <p>Thêm vào giỏ</p>
-                        <p class="size">Size M</p>
-                        <p class="size">Size L</p>
-                        <p class="vote">Vote</p>
+                        <a class="size">Size M</a>
+                        <a class="size">Size L</a>
+                        <a class="vote">Vote</a>
+                        <a class="favorite">Thêm vào yêu thích</a>
                     </div>
                 </div>
                 <div class="product__item">
@@ -128,9 +132,10 @@
                     <div class="product__info">
                         <img src="resources\images\landingPage\products\add-to-cart-icon.svg" alt="add-to-cart">
                         <p>Thêm vào giỏ</p>
-                        <p class="size">Size M</p>
-                        <p class="size">Size L</p>
-                        <p class="vote">Vote</p>
+                        <a class="size">Size M</a>
+                        <a class="size">Size L</a>
+                        <a class="vote">Vote</a>
+                        <a class="favorite">Thêm vào yêu thích</a>
                     </div>
                 </div>
                 <div class="product__item">
@@ -141,12 +146,40 @@
                     <div class="product__info">
                         <img src="resources\images\landingPage\products\add-to-cart-icon.svg" alt="add-to-cart">
                         <p>Thêm vào giỏ</p>
-                        <p class="size">Size M</p>
-                        <p class="size">Size L</p>
-                        <p class="vote">Vote</p>
+                        <a class="size">Size M</a>
+                        <a class="size">Size L</a>
+                        <a class="vote">Vote</a>
+                        <a class="favorite">Thêm vào yêu thích</a>
                     </div>
                 </div>
-            </div>
+                <div class="product__item">
+                    <img src="resources\images\landingPage\products\product.jpg" alt="product">
+                    <p class="product__item--name">Product name</p>
+                    <p class="product__item--price">20000 vnđ</p>
+                    <p class="product__item--vote">5<span style="vertical-align: text-bottom">&#11088;</span></p>
+                    <div class="product__info">
+                        <img src="resources\images\landingPage\products\add-to-cart-icon.svg" alt="add-to-cart">
+                        <p>Thêm vào giỏ</p>
+                        <a class="size">Size M</a>
+                        <a class="size">Size L</a>
+                        <a class="vote">Vote</a>
+                        <a class="favorite">Thêm vào yêu thích</a>
+                    </div>
+                </div>
+                <div class="product__item">
+                    <img src="resources\images\landingPage\products\product.jpg" alt="product">
+                    <p class="product__item--name">Product name</p>
+                    <p class="product__item--price">20000 vnđ</p>
+                    <p class="product__item--vote">5<span style="vertical-align: text-bottom">&#11088;</span></p>
+                    <div class="product__info">
+                        <img src="resources\images\landingPage\products\add-to-cart-icon.svg" alt="add-to-cart">
+                        <p>Thêm vào giỏ</p>
+                        <a class="size">Size M</a>
+                        <a class="size">Size L</a>
+                        <a class="vote">Vote</a>
+                        <a class="favorite">Thêm vào yêu thích</a>
+                    </div>
+                </div>
         </main>
         <div id="vote">
             <div class="star"></div>

@@ -17,6 +17,7 @@
     <mvc:annotation-driven validator="validator"/>
     <mvc:resources mapping="/webjars/**" location="/webjars/"/>
     <mvc:resources mapping="/resources/**" location="/resources/"/>
+    <mvc:resources mapping="/resources-management/**" location="/resources-management/"/>
     
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/pages/" />

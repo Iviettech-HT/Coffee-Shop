@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author admin
  */
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/admintest")
 public class AdminCotroller {
     @RequestMapping("/home")
     public String viewAdmin(Model model){
-        return "admin/admin";
+        return "admin/home";
     }
 }

@@ -13,7 +13,7 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <link rel="stylesheet" href="resources/css/standard.css">
         <link rel="stylesheet" href="resources/css/cartStyle.css">
-        <link rel="shortcut icon" href="images/landingPage/favicon.png">
+        <link rel="shortcut icon" href="resources/images/landingPage/favicon.png">
         <title>Teaffee Shop</title>
     </head>
     <body>

@@ -20,4 +20,10 @@ public class AdminCotroller {
     public String viewAdmin(Model model){
         return "admin/home";
     }
+
+    @RequestMapping("/test")
+    public String test(Model model){
+        return "admin/tesst";
+    }
+
 }

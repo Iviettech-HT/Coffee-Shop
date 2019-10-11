@@ -190,7 +190,7 @@
                     </div>
                 </div>
         </main>
-        <div id="container-filter">
+        <div id="container-vote">
             <div id="vote">
                 <div class="star"></div>
                 <div class="star"></div>

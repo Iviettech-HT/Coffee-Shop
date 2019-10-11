@@ -4,30 +4,26 @@
     padding: 0;
     box-sizing: border-box;
 }
+#container-vote{
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(28, 33, 31, 0.7);
+    position: fixed;
+    
+    display: none;
+    top: 0;
+    left: 0;
+    justify-content: center;
+    align-items: center;
+}
 #vote {
     box-sizing: content-box;
     height: 60px;
     padding: 10px;
-    display: none;
+    display: flex;
     flex-direction: row-reverse;
-    justify-content: center;
-
-    position: fixed;
     background-color: #000000;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-
     border-radius: 10px;
-}
-#vote:after{
-    content: '';
-    position:absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: #000000;
 }
 .star {
     line-height: 60px;

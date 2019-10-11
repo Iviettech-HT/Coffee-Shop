@@ -17,15 +17,15 @@ import javax.persistence.MappedSuperclass;
  */
 @MappedSuperclass
 public abstract class PersonalInfo {
-    protected String name;
-    protected String phone;
-    protected String address;
+    private String name;
+    private String phone;
+    private String address;
     
     @Column(length = 100, unique = true)
-    protected String email;
+    private String email;
     
     @Enumerated(EnumType.STRING)
-    Gender gender = Gender.MALE;
+    private Gender gender = Gender.MALE;
 
     public PersonalInfo(String name, String phone, String address, String email, Gender gender) {
         this.name = name;

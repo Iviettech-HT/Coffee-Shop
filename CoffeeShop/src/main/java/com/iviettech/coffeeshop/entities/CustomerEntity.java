@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -22,10 +24,15 @@ public class CustomerEntity extends PersonalInfo{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    
+    @ManyToOne
+    @JoinColumn(name = "accountId")
+    private AccountEntity account;
 
-    public CustomerEntity(int id, String name, String phone, String address, String email, Gender gender) {
+    public CustomerEntity(int id, AccountEntity account, String name, String phone, String address, String email, Gender gender) {
         super(name, phone, address, email, gender);
         this.id = id;
+        this.account = account;
     }
 
     public int getId() {
@@ -38,52 +45,52 @@ public class CustomerEntity extends PersonalInfo{
 
     @Override
     public String getName() {
-        return name;
+        return super.getName();
     }
 
     @Override
     public void setName(String name) {
-        this.name = name;
+        super.setName(name);
     }
 
     @Override
     public String getPhone() {
-        return phone;
+        return super.getPhone();
     }
 
     @Override
     public void setPhone(String phone) {
-        this.phone = phone;
+        super.setPhone(phone);
     }
 
     @Override
     public String getAddress() {
-        return address;
+        return super.getAddress();
     }
 
     @Override
     public void setAddress(String address) {
-        this.address = address;
+        super.setAddress(address);
     }
 
     @Override
     public String getEmail() {
-        return email;
+        return super.getEmail();
     }
 
     @Override
     public void setEmail(String email) {
-        this.email = email;
+        super.setEmail(email);
     }
 
     @Override
     public Gender getGender() {
-        return gender;
+        return super.getGender();
     }
 
     @Override
     public void setGender(Gender gender) {
-        this.gender = gender;
+        super.setGender(gender);
     }
     
 }

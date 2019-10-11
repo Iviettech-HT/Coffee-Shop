@@ -42,15 +42,19 @@ public class AccountEntity extends PersonalInfo{
             joinColumns = @JoinColumn(name = "accountId"),
             inverseJoinColumns = @JoinColumn(name = "roleId"))
     private Set<RoleEntity> roles;
+    
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    private List<CustomerEntity> customers;
 
-    public AccountEntity(String username, String password, boolean status, List<VoteEntity> votes, Set<RoleEntity> roles, 
-            String name, String phone, String address, String email, Gender gender) {
+    public AccountEntity(int id, String username, String password, boolean status, List<VoteEntity> votes, Set<RoleEntity> roles, List<CustomerEntity> customers, String name, String phone, String address, String email, Gender gender) {
         super(name, phone, address, email, gender);
+        this.id = id;
         this.username = username;
         this.password = password;
         this.status = status;
         this.votes = votes;
         this.roles = roles;
+        this.customers = customers;
     }
     
     public int getId() {
@@ -87,52 +91,52 @@ public class AccountEntity extends PersonalInfo{
 
     @Override
     public String getName() {
-        return name;
+        return super.getName();
     }
 
     @Override
     public void setName(String name) {
-        this.name = name;
+        super.setName(name);
     }
 
     @Override
     public String getPhone() {
-        return phone;
+        return super.getPhone();
     }
 
     @Override
     public void setPhone(String phone) {
-        this.phone = phone;
+        super.setPhone(phone);
     }
 
     @Override
     public String getAddress() {
-        return address;
+        return super.getAddress();
     }
 
     @Override
     public void setAddress(String address) {
-        this.address = address;
+        super.setAddress(address);
     }
 
     @Override
     public String getEmail() {
-        return email;
+        return super.getEmail();
     }
 
     @Override
     public void setEmail(String email) {
-        this.email = email;
+        super.setEmail(email);
     }
 
     @Override
     public Gender getGender() {
-        return gender;
+        return super.getGender();
     }
 
     @Override
     public void setGender(Gender gender) {
-        this.gender = gender;
+        super.setGender(gender);
     }
 
     public List<VoteEntity> getVotes() {
@@ -151,4 +155,11 @@ public class AccountEntity extends PersonalInfo{
         this.roles = roles;
     }
     
+    public List<CustomerEntity> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(List<CustomerEntity> customers) {
+        this.customers = customers;
+    }
 }

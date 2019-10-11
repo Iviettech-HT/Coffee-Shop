@@ -11,11 +11,11 @@ import java.io.Serializable;
  *
  * @author admin
  */
-public class VoteId implements Serializable{
+public class AccountProductId implements Serializable{
     protected int productId;
     protected int accountId;
 
-    public VoteId(int productId, int accountId) {
+    public AccountProductId(int productId, int accountId) {
         this.productId = productId;
         this.accountId = accountId;
     }
@@ -55,7 +55,7 @@ public class VoteId implements Serializable{
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final VoteId other = (VoteId) obj;
+        final AccountProductId other = (AccountProductId) obj;
         if (this.productId != other.productId) {
             return false;
         }

@@ -18,7 +18,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "vote")
-@IdClass(VoteId.class)
+@IdClass(AccountProductId.class)
 public class VoteEntity {
     @Id
     private int productId;

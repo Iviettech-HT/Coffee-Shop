@@ -25,28 +25,28 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @author PC
  */
 @Entity
-@Table(name="order")
+@Table(name="orders")
 public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     
-    @DateTimeFormat(pattern = "MM-dd-yyyy")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     @Temporal(TemporalType.DATE)
     private Date orderDate;
     
-    @DateTimeFormat(pattern = "MM-dd-yyyy")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     @Temporal(TemporalType.DATE)
     private Date shippingDate;
     
     private double totalPrice;
     private String status;
     
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<OrderDetailEntity> orderDetails;
     
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customerId")
     private CustomerEntity customer;
 
     public OrderEntity(Date orderDate, Date shippingDate, double totalPrice, String status, List<OrderDetailEntity> orderDetails, CustomerEntity customer) {

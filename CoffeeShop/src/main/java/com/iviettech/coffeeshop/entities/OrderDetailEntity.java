@@ -27,11 +27,11 @@ public class OrderDetailEntity {
     private double price;
     
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "productId")
     private ProductEntity product;
     
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "orderId")
     private OrderEntity order;
 
     public OrderDetailEntity(double unitPrice, double price, ProductEntity product, OrderEntity order) {

@@ -67,8 +67,18 @@ public class ProductEntity {
     
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<VoteEntity> votes;
+    
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "topping_product",
+            joinColumns = {
+                @JoinColumn(name = "product_id")},
+            inverseJoinColumns = {
+                @JoinColumn(name = "topping_id")}
+    )
+    private Set<ToppingEntity> toppings;
 
-    public ProductEntity(String name, int quantity, double price, boolean status, CategoryEntity category, List<ImageEntity> images, Set<PromotionEntity> promotions, List<OrderDetailEntity> orderDetails, List<VoteEntity> votes) {
+    public ProductEntity(String name, int quantity, double price, boolean status, CategoryEntity category, List<ImageEntity> images, Set<PromotionEntity> promotions, List<OrderDetailEntity> orderDetails, Set<SizeEntity> product, List<VoteEntity> votes, Set<ToppingEntity> toppings) {
         this.name = name;
         this.quantity = quantity;
         this.price = price;
@@ -77,9 +87,10 @@ public class ProductEntity {
         this.images = images;
         this.promotions = promotions;
         this.orderDetails = orderDetails;
+        this.product = product;
         this.votes = votes;
+        this.toppings = toppings;
     }
-    
 
     public int getId() {
         return id;
@@ -167,6 +178,14 @@ public class ProductEntity {
 
     public void setProduct(Set<SizeEntity> product) {
         this.product = product;
+    }
+
+    public Set<ToppingEntity> getToppings() {
+        return toppings;
+    }
+
+    public void setToppings(Set<ToppingEntity> toppings) {
+        this.toppings = toppings;
     }
     
 }

@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -18,23 +19,27 @@ import javax.persistence.Table;
  * @author PC
  */
 @Entity
-@Table(name="images")
-public class ImageEntity {
+@Table(name="orderDetail")
+public class OrderDetailEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    
     private int id;
-    private String path;
-    private String name;
+    private double unitPrice;
+    private double price;
     
     @ManyToOne
     @JoinColumn(name = "product_id")
     private ProductEntity product;
+    
+    @ManyToMany
+    @JoinColumn(name = "order_id")
+    private OrderEntity order;
 
-    public ImageEntity(String path, String name, ProductEntity product) {
-        this.path = path;
-        this.name = name;
+    public OrderDetailEntity(double unitPrice, double price, ProductEntity product, OrderEntity order) {
+        this.unitPrice = unitPrice;
+        this.price = price;
         this.product = product;
+        this.order = order;
     }
 
     public int getId() {
@@ -45,20 +50,20 @@ public class ImageEntity {
         this.id = id;
     }
 
-    public String getPath() {
-        return path;
+    public double getUnitPrice() {
+        return unitPrice;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setUnitPrice(double unitPrice) {
+        this.unitPrice = unitPrice;
     }
 
-    public String getName() {
-        return name;
+    public double getPrice() {
+        return price;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public ProductEntity getProduct() {
@@ -68,5 +73,14 @@ public class ImageEntity {
     public void setProduct(ProductEntity product) {
         this.product = product;
     }
+
+    public OrderEntity getOrders() {
+        return order;
+    }
+
+    public void setOrders(OrderEntity order) {
+        this.order = order;
+    }
+    
     
 }

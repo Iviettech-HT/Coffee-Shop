@@ -6,12 +6,15 @@
 package com.iviettech.coffeeshop.entities;
 
 import com.iviettech.coffeeshop.enums.Gender;
+import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -28,12 +31,33 @@ public class CustomerEntity extends PersonalInfo{
     @ManyToOne
     @JoinColumn(name = "accountId")
     private AccountEntity account;
+    
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    private List<OrderEntity> orders;
 
-    public CustomerEntity(int id, AccountEntity account, String name, String phone, String address, String email, Gender gender) {
+    public CustomerEntity(AccountEntity account, List<OrderEntity> orders, String name, String phone, String address, String email, Gender gender) {
         super(name, phone, address, email, gender);
-        this.id = id;
+        this.account = account;
+        this.orders = orders;
+    }
+
+    public AccountEntity getAccount() {
+        return account;
+    }
+
+    public void setAccount(AccountEntity account) {
         this.account = account;
     }
+
+    public List<OrderEntity> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<OrderEntity> orders) {
+        this.orders = orders;
+    }
+
+    
 
     public int getId() {
         return id;

@@ -29,4 +29,43 @@ public class SizeEntity {
     
     @ManyToMany(mappedBy = "product")
     private Set<ProductEntity> products;
+
+    public SizeEntity(String size, double percent, Set<ProductEntity> products) {
+        this.size = size;
+        this.percent = percent;
+        this.products = products;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public double getPercent() {
+        return percent;
+    }
+
+    public void setPercent(double percent) {
+        this.percent = percent;
+    }
+
+    public Set<ProductEntity> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<ProductEntity> products) {
+        this.products = products;
+    }
+    
 }

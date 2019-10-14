@@ -33,7 +33,6 @@ public class ProductEntity {
     private String name;
     private int quantity;
     private double price;
-    private String size;
     private boolean status;
     
     @ManyToOne
@@ -41,13 +40,13 @@ public class ProductEntity {
     private CategoryEntity category;
     
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-    private List<ImageEntity> imageEntitys;
+    private List<ImageEntity> images;
     
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-    private List<PromotionEntity> promotionEntitys;
+    private List<PromotionEntity> promotions;
     
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-    private List<OrderDetailsEntity> orderDetailsEntitys;
+    private List<OrderDetailEntity> orderDetails;
    
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -62,12 +61,18 @@ public class ProductEntity {
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<VoteEntity> votes;
 
-    public ProductEntity(String name, double price, boolean status, List<VoteEntity> votes) {
+    public ProductEntity(String name, int quantity, double price, boolean status, CategoryEntity category, List<ImageEntity> images, List<PromotionEntity> promotions, List<OrderDetailEntity> orderDetails, List<VoteEntity> votes) {
         this.name = name;
+        this.quantity = quantity;
         this.price = price;
         this.status = status;
+        this.category = category;
+        this.images = images;
+        this.promotions = promotions;
+        this.orderDetails = orderDetails;
         this.votes = votes;
     }
+    
 
     public int getId() {
         return id;
@@ -76,15 +81,7 @@ public class ProductEntity {
     public void setId(int id) {
         this.id = id;
     }
-
-    public String getSize() {
-        return name;
-    }
-
-    public void setSize(String name) {
-        this.name = name;
-    }
-
+    
     public double getPrice() {
         return price;
     }
@@ -107,6 +104,62 @@ public class ProductEntity {
 
     public void setVotes(List<VoteEntity> votes) {
         this.votes = votes;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public CategoryEntity getCategory() {
+        return category;
+    }
+
+    public void setCategory(CategoryEntity category) {
+        this.category = category;
+    }
+
+    public List<ImageEntity> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ImageEntity> images) {
+        this.images = images;
+    }
+
+    public List<PromotionEntity> getPromotions() {
+        return promotions;
+    }
+
+    public void setPromotions(List<PromotionEntity> promotions) {
+        this.promotions = promotions;
+    }
+
+    public List<OrderDetailEntity> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetailEntity> orderDetails) {
+        this.orderDetails = orderDetails;
+    }
+
+    public Set<SizeEntity> getProduct() {
+        return product;
+    }
+
+    public void setProduct(Set<SizeEntity> product) {
+        this.product = product;
     }
     
 }

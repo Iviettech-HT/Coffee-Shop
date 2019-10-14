@@ -5,12 +5,18 @@
  */
 package com.iviettech.coffeeshop.entities;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -21,13 +27,37 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "product")
 public class ProductEntity {
-    @Id
+   @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    
     private String name;
+    private int quantity;
     private double price;
+    private String size;
     private boolean status;
+    
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private CategoryEntity category;
+    
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<ImageEntity> imageEntitys;
+    
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<PromotionEntity> promotionEntitys;
+    
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<OrderDetailsEntity> orderDetailsEntitys;
+   
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "size_product",
+            joinColumns = {
+                @JoinColumn(name = "size_id")},
+            inverseJoinColumns = {
+                @JoinColumn(name = "product_id")}
+    )
+    private Set<SizeEntity> product = new HashSet<SizeEntity>();
     
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<VoteEntity> votes;

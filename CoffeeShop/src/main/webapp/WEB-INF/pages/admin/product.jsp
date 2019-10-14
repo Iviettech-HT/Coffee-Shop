@@ -59,7 +59,7 @@
                                         <tr class="gradeU">
                                             <td>Other browsers</td>
                                             <td>All others</td>
-                                            <td>-</td>
+                                            <td></td>
                                             <td class="center">-</td>
                                         </tr>
                                     </tbody>
@@ -78,7 +78,7 @@
         <script src="${pageContext.request.contextPath}/resources-management/js/bootstrap.min.js"></script> 
         <script src="${pageContext.request.contextPath}/resources-management/js/jquery.uniform.js"></script> 
         <script src="${pageContext.request.contextPath}/resources-management/js/select2.min.js"></script> 
-        <script src="${pageContext.request.contextPath}/resources-management/js/jquery.dataTables.min.js"></script> 
+        <script src="${pageContext.request.contextPath}/resources-management/js/jquery.datajjTables.min.js"></script> 
         <script src="${pageContext.request.contextPath}/resources-management/js/matrix.js"></script> 
         <script src="${pageContext.request.contextPath}/resources-management/js/matrix.tables.js"></script>
     </body>

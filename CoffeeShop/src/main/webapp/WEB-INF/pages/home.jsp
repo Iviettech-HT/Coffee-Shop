@@ -27,6 +27,20 @@
             </div>
         </div>
         <main id="main">
+            <div class="sale">
+                <div class="sale__info">
+                    <h4>Title:</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. At, necessitatibus tempore sit impedit cupiditate incidunt eveniet ad possimus recusandae fugit. Quidem, dicta vitae nihil deleniti dolore dolorem voluptatibus reprehenderit laudantium.</p>
+                </div>
+                <div class="sale__info">
+                    <h4>Title:</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. At, necessitatibus tempore sit impedit cupiditate incidunt eveniet ad possimus recusandae fugit. Quidem, dicta vitae nihil deleniti dolore dolorem voluptatibus reprehenderit laudantium.</p>
+                </div>
+                <div class="sale__info">
+                    <h4>Title:</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. At, necessitatibus tempore sit impedit cupiditate incidunt eveniet ad possimus recusandae fugit. Quidem, dicta vitae nihil deleniti dolore dolorem voluptatibus reprehenderit laudantium.</p>
+                </div>
+            </div>
             <div class="filter">
                 <p class="spacing">Bộ Lọc:</p>
                 <div class="filter__selection">

@@ -119,9 +119,23 @@ main {
     padding: 20px 0;
 
 }
+/*Sale*/
+
+.sale{
+    width: 98%;
+    overflow: auto;
+    
+    
+}
+.sale__info{
+    width: fit-content;
+    float: left;
+    display: flex;
+    overflow-wrap: break-word;
+}
 /*Filter*/
 .filter{
-    width: 90%;
+    width: 100%;
     
     display: flex;
     justify-content: center;
@@ -129,7 +143,6 @@ main {
     padding: 10px 0;
     
     background-color: #ccc;
-    border-radius: 10px;
 }
 .spacing{
     margin: 0 20px;

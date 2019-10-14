@@ -57,8 +57,6 @@ public class CustomerEntity extends PersonalInfo{
         this.orders = orders;
     }
 
-    
-
     public int getId() {
         return id;
     }

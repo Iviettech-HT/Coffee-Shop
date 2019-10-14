@@ -34,23 +34,27 @@ public class OrderEntity {
     @DateTimeFormat(pattern = "MM-dd-yyyy")
     @Temporal(TemporalType.DATE)
     private Date orderDate;
+    
+    @DateTimeFormat(pattern = "MM-dd-yyyy")
+    @Temporal(TemporalType.DATE)
     private Date shippingDate;
+    
     private double totalPrice;
     private String status;
     
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
-    private List<OrderDetailEntity> orderDetail;
+    private List<OrderDetailEntity> orderDetails;
     
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private CustomerEntity customer;
 
-    public OrderEntity(Date orderDate, Date shippingDate, double totalPrice, String status, List<OrderDetailEntity> orderDetail, CustomerEntity customer) {
+    public OrderEntity(Date orderDate, Date shippingDate, double totalPrice, String status, List<OrderDetailEntity> orderDetails, CustomerEntity customer) {
         this.orderDate = orderDate;
         this.shippingDate = shippingDate;
         this.totalPrice = totalPrice;
         this.status = status;
-        this.orderDetail = orderDetail;
+        this.orderDetails = orderDetails;
         this.customer = customer;
     }
 
@@ -94,12 +98,12 @@ public class OrderEntity {
         this.status = status;
     }
 
-    public List<OrderDetailEntity> getOrderDetail() {
-        return orderDetail;
+    public List<OrderDetailEntity> getOrderDetails() {
+        return orderDetails;
     }
 
-    public void setOrderDetail(List<OrderDetailEntity> orderDetail) {
-        this.orderDetail = orderDetail;
+    public void setOrderDetails(List<OrderDetailEntity> orderDetails) {
+        this.orderDetails = orderDetails;
     }
 
     public CustomerEntity getCustomer() {
@@ -109,5 +113,5 @@ public class OrderEntity {
     public void setCustomer(CustomerEntity customer) {
         this.customer = customer;
     }
-    
+
 }

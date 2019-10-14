@@ -42,8 +42,15 @@ public class ProductEntity {
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<ImageEntity> images;
     
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-    private List<PromotionEntity> promotions;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "promotion_product",
+            joinColumns = {
+                @JoinColumn(name = "product_id")},
+            inverseJoinColumns = {
+                @JoinColumn(name = "promotion_id")}
+    )
+    private Set<PromotionEntity> promotions;
     
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<OrderDetailEntity> orderDetails;
@@ -52,16 +59,16 @@ public class ProductEntity {
     @JoinTable(
             name = "size_product",
             joinColumns = {
-                @JoinColumn(name = "size_id")},
+                @JoinColumn(name = "product_id")},
             inverseJoinColumns = {
-                @JoinColumn(name = "product_id")}
+                @JoinColumn(name = "size_id")}
     )
-    private Set<SizeEntity> product = new HashSet<SizeEntity>();
+    private Set<SizeEntity> product;
     
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<VoteEntity> votes;
 
-    public ProductEntity(String name, int quantity, double price, boolean status, CategoryEntity category, List<ImageEntity> images, List<PromotionEntity> promotions, List<OrderDetailEntity> orderDetails, List<VoteEntity> votes) {
+    public ProductEntity(String name, int quantity, double price, boolean status, CategoryEntity category, List<ImageEntity> images, Set<PromotionEntity> promotions, List<OrderDetailEntity> orderDetails, List<VoteEntity> votes) {
         this.name = name;
         this.quantity = quantity;
         this.price = price;
@@ -138,11 +145,11 @@ public class ProductEntity {
         this.images = images;
     }
 
-    public List<PromotionEntity> getPromotions() {
+    public Set<PromotionEntity> getPromotions() {
         return promotions;
     }
 
-    public void setPromotions(List<PromotionEntity> promotions) {
+    public void setPromotions(Set<PromotionEntity> promotions) {
         this.promotions = promotions;
     }
 

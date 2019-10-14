@@ -10,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -31,7 +30,7 @@ public class OrderDetailEntity {
     @JoinColumn(name = "product_id")
     private ProductEntity product;
     
-    @ManyToMany
+    @ManyToOne
     @JoinColumn(name = "order_id")
     private OrderEntity order;
 
@@ -74,13 +73,11 @@ public class OrderDetailEntity {
         this.product = product;
     }
 
-    public OrderEntity getOrders() {
+    public OrderEntity getOrder() {
         return order;
     }
 
-    public void setOrders(OrderEntity order) {
+    public void setOrder(OrderEntity order) {
         this.order = order;
     }
-    
-    
 }

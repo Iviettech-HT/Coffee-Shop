@@ -6,12 +6,13 @@
 package com.iviettech.coffeeshop.entities;
 
 import java.util.Date;
+import java.util.Set;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -38,18 +39,17 @@ public class PromotionEntity {
     private Date startDate;
     private Date endDate;
     
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private ProductEntity product;
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Set<ProductEntity> products;
 
-    public PromotionEntity(String description, String discount, String image, String status, Date startDate, Date endDate, ProductEntity product) {
+    public PromotionEntity(String description, String discount, String image, String status, Date startDate, Date endDate, Set<ProductEntity> products) {
         this.description = description;
         this.discount = discount;
         this.image = image;
         this.status = status;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.product = product;
+        this.products = products;
     }
 
     public int getId() {
@@ -108,14 +108,14 @@ public class PromotionEntity {
         this.endDate = endDate;
     }
 
-    public ProductEntity getProduct() {
-        return product;
+    public Set<ProductEntity> getProducts() {
+        return products;
     }
 
-    public void setProduct(ProductEntity product) {
-        this.product = product;
+    public void setProducts(Set<ProductEntity> products) {
+        this.products = products;
     }
-    
+
     
 }
 

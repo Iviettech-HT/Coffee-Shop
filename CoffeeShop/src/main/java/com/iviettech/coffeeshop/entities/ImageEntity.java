@@ -18,22 +18,24 @@ import javax.persistence.Table;
  * @author PC
  */
 @Entity
-@Table(name="images")
+@Table(name = "images")
 public class ImageEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    
     private int id;
     private String path;
-    private String name;
-    
+
     @ManyToOne
     @JoinColumn(name = "product_id")
     private ProductEntity product;
-        
-    public ImageEntity(String path, String name, ProductEntity product) {
+
+    public ImageEntity() {
+    }
+    
+    public ImageEntity(int id, String path, ProductEntity product) {
+        this.id = id;
         this.path = path;
-        this.name = name;
         this.product = product;
     }
 
@@ -53,14 +55,6 @@ public class ImageEntity {
         this.path = path;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public ProductEntity getProduct() {
         return product;
     }
@@ -68,5 +62,5 @@ public class ImageEntity {
     public void setProduct(ProductEntity product) {
         this.product = product;
     }
-    
+
 }

@@ -5,8 +5,12 @@
  */
 package com.iviettech.coffeeshop.entities;
 
+import com.iviettech.coffeeshop.enums.Size;
 import java.util.Set;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,13 +28,20 @@ public class SizeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     
     private int id;
-    private String size;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(length = 2)
+    private Size size;
     private double percent;
     
     @ManyToMany(mappedBy = "product")
     private Set<ProductEntity> products;
 
-    public SizeEntity(String size, double percent, Set<ProductEntity> products) {
+    public SizeEntity() {
+    }
+
+    public SizeEntity(int id, Size size, double percent, Set<ProductEntity> products) {
+        this.id = id;
         this.size = size;
         this.percent = percent;
         this.products = products;
@@ -44,11 +55,11 @@ public class SizeEntity {
         this.id = id;
     }
 
-    public String getSize() {
+    public Size getSize() {
         return size;
     }
 
-    public void setSize(String size) {
+    public void setSize(Size size) {
         this.size = size;
     }
 

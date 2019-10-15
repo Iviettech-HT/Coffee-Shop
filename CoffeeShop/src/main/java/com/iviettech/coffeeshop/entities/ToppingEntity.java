@@ -29,14 +29,18 @@ public class ToppingEntity {
     private double price;
     private boolean status;
     
-    @ManyToMany(fetch = FetchType.LAZY)
-    private Set<ProductEntity> products;
+    @ManyToMany(mappedBy = "toppings", fetch = FetchType.LAZY)
+    private Set<OrderDetailEntity> orderDetails;
 
-    public ToppingEntity(String name, double price, boolean status, Set<ProductEntity> products) {
+    public ToppingEntity() {
+    }
+
+    public ToppingEntity(int id, String name, double price, boolean status, Set<OrderDetailEntity> orderDetails) {
+        this.id = id;
         this.name = name;
         this.price = price;
         this.status = status;
-        this.products = products;
+        this.orderDetails = orderDetails;
     }
 
     public int getId() {
@@ -71,12 +75,13 @@ public class ToppingEntity {
         this.status = status;
     }
 
-    public Set<ProductEntity> getProducts() {
-        return products;
+    public Set<OrderDetailEntity> getOrderDetails() {
+        return orderDetails;
     }
 
-    public void setProducts(Set<ProductEntity> products) {
-        this.products = products;
+    public void setOrderDetails(Set<OrderDetailEntity> orderDetails) {
+        this.orderDetails = orderDetails;
     }
-    
+
+
 }

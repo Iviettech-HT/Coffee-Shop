@@ -5,9 +5,9 @@
  */
 package com.iviettech.coffeeshop.entities;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -27,21 +27,24 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "product")
 public class ProductEntity {
-   @Id
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
-    private int quantity;
+    
+    @Column(name = "quantity_in_store")
+    private int quantityInStore;
     private double price;
     private boolean status;
-    
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
-    
+
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<ImageEntity> images;
-    
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "promotion_product",
@@ -51,10 +54,7 @@ public class ProductEntity {
                 @JoinColumn(name = "promotion_id")}
     )
     private Set<PromotionEntity> promotions;
-    
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-    private List<OrderDetailEntity> orderDetails;
-   
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "size_product",
@@ -64,33 +64,30 @@ public class ProductEntity {
                 @JoinColumn(name = "size_id")}
     )
     private Set<SizeEntity> product;
-    
+
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<VoteEntity> votes;
     
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "topping_product",
-            joinColumns = {
-                @JoinColumn(name = "product_id")},
-            inverseJoinColumns = {
-                @JoinColumn(name = "topping_id")}
-    )
-    private Set<ToppingEntity> toppings;
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<FavoriteEntity> favorites;
+    
+    public ProductEntity() {
+    }
 
-    public ProductEntity(String name, int quantity, double price, boolean status, CategoryEntity category, List<ImageEntity> images, Set<PromotionEntity> promotions, List<OrderDetailEntity> orderDetails, Set<SizeEntity> product, List<VoteEntity> votes, Set<ToppingEntity> toppings) {
+    public ProductEntity(String name, int quantityInStore, double price, boolean status, CategoryEntity category, List<ImageEntity> images, Set<PromotionEntity> promotions, Set<SizeEntity> product, List<VoteEntity> votes, List<FavoriteEntity> favorites) {
         this.name = name;
-        this.quantity = quantity;
+        this.quantityInStore = quantityInStore;
         this.price = price;
         this.status = status;
         this.category = category;
         this.images = images;
         this.promotions = promotions;
-        this.orderDetails = orderDetails;
         this.product = product;
         this.votes = votes;
-        this.toppings = toppings;
+        this.favorites = favorites;
     }
+    
+    
 
     public int getId() {
         return id;
@@ -99,7 +96,23 @@ public class ProductEntity {
     public void setId(int id) {
         this.id = id;
     }
-    
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getQuantityInStore() {
+        return quantityInStore;
+    }
+
+    public void setQuantityInStore(int quantityInStore) {
+        this.quantityInStore = quantityInStore;
+    }
+
     public double getPrice() {
         return price;
     }
@@ -114,30 +127,6 @@ public class ProductEntity {
 
     public void setStatus(boolean status) {
         this.status = status;
-    }
-
-    public List<VoteEntity> getVotes() {
-        return votes;
-    }
-
-    public void setVotes(List<VoteEntity> votes) {
-        this.votes = votes;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 
     public CategoryEntity getCategory() {
@@ -164,14 +153,6 @@ public class ProductEntity {
         this.promotions = promotions;
     }
 
-    public List<OrderDetailEntity> getOrderDetails() {
-        return orderDetails;
-    }
-
-    public void setOrderDetails(List<OrderDetailEntity> orderDetails) {
-        this.orderDetails = orderDetails;
-    }
-
     public Set<SizeEntity> getProduct() {
         return product;
     }
@@ -180,12 +161,21 @@ public class ProductEntity {
         this.product = product;
     }
 
-    public Set<ToppingEntity> getToppings() {
-        return toppings;
+    public List<VoteEntity> getVotes() {
+        return votes;
     }
 
-    public void setToppings(Set<ToppingEntity> toppings) {
-        this.toppings = toppings;
+    public void setVotes(List<VoteEntity> votes) {
+        this.votes = votes;
     }
-    
+
+    public List<FavoriteEntity> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(List<FavoriteEntity> favorites) {
+        this.favorites = favorites;
+    }
+
+
 }

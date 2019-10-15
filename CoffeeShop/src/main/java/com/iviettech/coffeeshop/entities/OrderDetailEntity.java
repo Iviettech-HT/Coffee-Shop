@@ -5,11 +5,20 @@
  */
 package com.iviettech.coffeeshop.entities;
 
+import com.iviettech.coffeeshop.enums.Size;
+import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -18,27 +27,50 @@ import javax.persistence.Table;
  * @author PC
  */
 @Entity
-@Table(name="orderDetail")
+@Table(name = "orderDetail")
 public class OrderDetailEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private double unitPrice;
     private double price;
+    private int quantity;
     
+    @Enumerated(EnumType.STRING)
+    @Column(length = 2)
+    private Size size;
+    private String topping;
+
     @ManyToOne
     @JoinColumn(name = "productId")
     private ProductEntity product;
-    
+
     @ManyToOne
     @JoinColumn(name = "orderId")
     private OrderEntity order;
+    
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "topping_orderDetail",
+            joinColumns = @JoinColumn(name = "orderDetail_id"),
+            inverseJoinColumns = @JoinColumn(name = "topping_id")
+    )
+    private Set<ToppingEntity> toppings;
 
-    public OrderDetailEntity(double unitPrice, double price, ProductEntity product, OrderEntity order) {
+    public OrderDetailEntity() {
+    }
+
+    public OrderDetailEntity(int id, double unitPrice, double price, int quantity, Size size, String topping, ProductEntity product, OrderEntity order, Set<ToppingEntity> toppings) {
+        this.id = id;
         this.unitPrice = unitPrice;
         this.price = price;
+        this.quantity = quantity;
+        this.size = size;
+        this.topping = topping;
         this.product = product;
         this.order = order;
+        this.toppings = toppings;
     }
 
     public int getId() {
@@ -65,6 +97,30 @@ public class OrderDetailEntity {
         this.price = price;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public Size getSize() {
+        return size;
+    }
+
+    public void setSize(Size size) {
+        this.size = size;
+    }
+
+    public String getTopping() {
+        return topping;
+    }
+
+    public void setTopping(String topping) {
+        this.topping = topping;
+    }
+
     public ProductEntity getProduct() {
         return product;
     }
@@ -80,4 +136,14 @@ public class OrderDetailEntity {
     public void setOrder(OrderEntity order) {
         this.order = order;
     }
+
+    public Set<ToppingEntity> getToppings() {
+        return toppings;
+    }
+
+    public void setToppings(Set<ToppingEntity> toppings) {
+        this.toppings = toppings;
+    }
+
+    
 }

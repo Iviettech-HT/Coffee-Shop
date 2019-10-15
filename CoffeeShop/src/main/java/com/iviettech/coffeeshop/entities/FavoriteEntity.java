@@ -6,8 +6,11 @@
 package com.iviettech.coffeeshop.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -16,36 +19,36 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "favorite")
-@IdClass(AccountProductId.class)
 public class FavoriteEntity {
     @Id
-    private int productId;
-    
-    @Id
-    private int accountId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     
     private boolean status;
+    
+    @ManyToOne
+    @JoinColumn(name = "product_id", insertable = false, updatable = false)
+    private ProductEntity product;
+    
+    @ManyToOne
+    @JoinColumn(name = "account_id", insertable = false, updatable = false)
+    private AccountEntity account;
 
-    public FavoriteEntity(int productId, int accountId, boolean status) {
-        this.productId = productId;
-        this.accountId = accountId;
+    public FavoriteEntity() {
+    }
+
+    public FavoriteEntity(boolean status, ProductEntity product, AccountEntity account) {
         this.status = status;
+        this.product = product;
+        this.account = account;
     }
 
-    public int getProductId() {
-        return productId;
+    public int getId() {
+        return id;
     }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
-    }
-
-    public int getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(int accountId) {
-        this.accountId = accountId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public boolean isStatus() {
@@ -55,4 +58,22 @@ public class FavoriteEntity {
     public void setStatus(boolean status) {
         this.status = status;
     }
+
+    public ProductEntity getProduct() {
+        return product;
+    }
+
+    public void setProduct(ProductEntity product) {
+        this.product = product;
+    }
+
+    public AccountEntity getAccount() {
+        return account;
+    }
+
+    public void setAccount(AccountEntity account) {
+        this.account = account;
+    }
+    
+    
 }

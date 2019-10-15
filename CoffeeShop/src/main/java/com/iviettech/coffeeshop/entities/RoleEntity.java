@@ -31,9 +31,12 @@ public class RoleEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
     
-    @ManyToMany(mappedBy = "roles",fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "roles")
     Set<AccountEntity> accounts;
 
+    public RoleEntity() {
+    }
+    
     public RoleEntity(Role role, Set<AccountEntity> accounts) {
         this.role = role;
         this.accounts = accounts;

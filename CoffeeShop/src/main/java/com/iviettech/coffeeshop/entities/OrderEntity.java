@@ -35,8 +35,8 @@ public class OrderEntity {
     @Temporal(TemporalType.DATE)
     private Date orderDate;
     
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
-    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd-MM-yyyy hh:mm")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date shippingDate;
     
     private double totalPrice;

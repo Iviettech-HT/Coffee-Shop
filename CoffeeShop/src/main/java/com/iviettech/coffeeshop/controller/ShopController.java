@@ -25,7 +25,7 @@ public class ShopController {
     public String viewLogin(Model model,
             @RequestParam(name = "isError", required = false) boolean isError){
         if(isError){
-            model.addAttribute("messageError","Error");
+            model.addAttribute("messageError","Sai tên đăng nhập hoặc mật khẩu");
         }
         return "login";
     }

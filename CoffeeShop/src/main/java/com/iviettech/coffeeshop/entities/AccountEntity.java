@@ -9,6 +9,7 @@ import com.iviettech.coffeeshop.enums.Gender;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -31,8 +32,12 @@ public class AccountEntity extends PersonalInfo{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     
+    @Column(length = 50)
     private String username;
+    
+    @Column(length = 50)
     private String password;
+    
     private boolean status;
     
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)

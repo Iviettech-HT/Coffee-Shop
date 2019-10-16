@@ -20,5 +20,5 @@ public class AdminCotroller {
     public String viewAdmin(Model model){
         return "admin/home";
     }
-
+    
 }

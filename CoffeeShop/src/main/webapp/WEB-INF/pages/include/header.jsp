@@ -5,6 +5,7 @@
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <header>
@@ -34,14 +35,35 @@
                     <a href="#contact">LIÊN HỆ</a>
                 </li>
                 <li>
-                    <a>CHÍNH SÁCH</p>
+                    <a>CHÍNH SÁCH</a>
                 </li>
-                <li>
-                    <a href='<c:url value="/dang-nhap"/>'>ĐĂNG NHẬP</a>
+                <li style="border-bottom: 0.5px solid black">
+                    <a href="#">PHẢN HỒI</a>
                 </li>
-                <li>
-                    <a href='<c:url value="/dang-ky"/>'>ĐĂNG KÝ</a>
-                </li>
+                <sec:authorize access="!isAuthenticated()">
+                    <li>
+                        <a href='<c:url value="/dang-nhap"/>'>ĐĂNG NHẬP</a>
+                    </li>
+                    <li>
+                        <a href='<c:url value="/dang-ky"/>'>ĐĂNG KÝ</a>
+                    </li>
+                </sec:authorize>
+                <sec:authorize access="hasRole('ROLE_ADMIN')">
+                    <li>
+                        <a href='<c:url value="/admin/home"/>'>QUẢN LÝ</a>
+                    </li>
+                    <li>
+                        <a href='<c:url value="/dang-xuat"/>'>ĐĂNG XUẤT</a>
+                    </li>
+                </sec:authorize>
+                <sec:authorize access="hasRole('ROLE_USER')">
+                    <li>
+                        <a href='<c:url value="/thong-tin-ca-nhan"/>'>HỒ SƠ</a>
+                    </li>
+                    <li>
+                        <a href='<c:url value="/dang-xuat"/>'>ĐĂNG XUẤT</a>
+                    </li>
+                </sec:authorize>
             </ul>
         </div>
     </div>

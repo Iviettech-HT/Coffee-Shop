@@ -23,6 +23,7 @@
         <security:logout
             delete-cookies="JSESSIONID"
             logout-success-url="/home"
+            logout-url="/dang-xuat"
         />
         
         <security:csrf disabled="true" />

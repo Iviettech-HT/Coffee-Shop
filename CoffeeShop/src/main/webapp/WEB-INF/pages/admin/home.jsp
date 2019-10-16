@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,6 +13,7 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/resources-management/css/matrix-style.css" />
         <link rel="stylesheet" href="${pageContext.request.contextPath}/resources-management/css/matrix-media.css" />
         <link rel="stylesheet" href="${pageContext.request.contextPath}/resources-management/css/font-awesome.css"/>
+        <link rel="stylesheet" href="<c:url value="/webjars/font-awesome/4.6.2/css/font-awesome.css"/>"/>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/resources-management/css/jquery.gritter.css" />
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
     </head>
@@ -49,7 +51,7 @@
                         <li class="bg_ls"> <a href="buttons.html"> <i class="icon-tint"></i> Buttons</a> </li>
                         <li class="bg_lb"> <a href="interface.html"> <i class="icon-pencil"></i>Elements</a> </li>
                         <li class="bg_lg"> <a href="calendar.html"> <i class="icon-calendar"></i> Calendar</a> </li>
-                        <li class="bg_lr"> <a href="test"> <i class="icon-info-sign"></i> Error</a> </li>
+                        <li class="bg_lr"> <a href="test"> <i class="icon-asterisk"></i> Error</a> </li>
 
                     </ul>
                 </div>

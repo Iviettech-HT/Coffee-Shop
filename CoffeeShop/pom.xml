@@ -19,8 +19,9 @@
         <mysql.connector.version>8.0.16</mysql.connector.version>
         <hibernate.entity.version>5.4.0.Final</hibernate.entity.version>
         <bootstrap.version>3.4.1</bootstrap.version>
-	<jackson.version>2.6.3</jackson.version>
-	<servletapi.version>3.1.0</servletapi.version>
+        <font-awesome.version>4.6.2</font-awesome.version>
+        <jackson.version>2.6.3</jackson.version>
+        <servletapi.version>3.1.0</servletapi.version>
         <hibernate.validator.version>6.0.16.Final</hibernate.validator.version>
         <spring.security.version>4.2.13.RELEASE</spring.security.version>
     </properties>
@@ -86,13 +87,24 @@
             <artifactId>hibernate-validator</artifactId>
             <version>${hibernate.validator.version}</version>
         </dependency>
-        
+        <!--webjars-->
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>bootstrap</artifactId>
             <version>${bootstrap.version}</version>
         </dependency>
         
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>font-awesome</artifactId>
+            <version>${font-awesome.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>webjars-locator</artifactId>
+            <version>0.32</version>
+        </dependency>
         <!--this is for ajax-->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -100,25 +112,25 @@
             <version>${jackson.version}</version>
         </dependency>
         
-	<dependency>
-		<groupId>com.fasterxml.jackson.core</groupId>
-		<artifactId>jackson-core</artifactId>
-		<version>${jackson.version}</version>
-	</dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
 
-	<dependency>
-		<groupId>com.fasterxml.jackson.core</groupId>
-		<artifactId>jackson-databind</artifactId>
-		<version>${jackson.version}</version>
-	</dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
         
         
-	<dependency>
-		<groupId>javax.servlet</groupId>
-		<artifactId>javax.servlet-api</artifactId>
-		<version>${servletapi.version}</version>
-		<scope>provided</scope>
-	</dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servletapi.version}</version>
+            <scope>provided</scope>
+        </dependency>
         
         <!--Security-->
         <dependency>
@@ -139,11 +151,11 @@
             <version>${spring.security.version}</version>
         </dependency>
         
-         <dependency>
+        <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-taglibs</artifactId>
             <version>${spring.security.version}</version>
-         </dependency>
+        </dependency>
         <!-- All Mail Related Stuff + Much more -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -212,5 +224,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

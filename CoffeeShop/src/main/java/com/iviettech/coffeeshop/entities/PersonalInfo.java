@@ -25,6 +25,7 @@ public abstract class PersonalInfo {
     private String email;
     
     @Enumerated(EnumType.STRING)
+    @Column(length = 6)
     private Gender gender = Gender.MALE;
 
     public PersonalInfo() {

@@ -26,7 +26,6 @@ import javax.persistence.Table;
 public class SizeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    
     private int id;
     
     @Enumerated(EnumType.STRING)
@@ -34,7 +33,7 @@ public class SizeEntity {
     private Size size;
     private double percent;
     
-    @ManyToMany(mappedBy = "product")
+    @ManyToMany(mappedBy = "sizes")
     private Set<ProductEntity> products;
 
     public SizeEntity() {

@@ -31,9 +31,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider{
     public Authentication authenticate(Authentication a) throws AuthenticationException {
         String username = a.getName().trim();
         String password = a.getCredentials().toString().trim();
-        if (!StringUtils.isEmpty(username)
-                && !StringUtils.isEmpty(password)) {
+        
+        if (!username.isEmpty() && !password.isEmpty()) {
             AccountEntity account = accountService.findAccount(username, password);
+            
             if (account != null && account.getId() > 0) {
                 List<GrantedAuthority> roles = new ArrayList<>();
                 for (RoleEntity role : account.getRoles()) {
@@ -45,6 +46,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider{
             } else {
                 return null;
             }
+            
         } else {
             return null;
         }

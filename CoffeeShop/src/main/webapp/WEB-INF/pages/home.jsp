@@ -3,6 +3,7 @@
     Created on : Sep 29, 2019, 7:55:06 PM
     Author     : admin
 --%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -57,151 +58,44 @@
                     <li class="category__item category__item--border category__item--active">
                         <p>Best choose</p>
                     </li>
-                    <li class="category__item">
-                        <p>Cà phê
-                    </li>
-                    <li class="category__item">
-                        <p>Soda/Mojito</p>
-                    </li>
-                    <li class="category__item">
-                        <p>Trà kem sữa</p>
-                    </li>
-                    <li class="category__item">
-                        <p>Nước ép</p>
-                    </li>
-                    <li class="category__item">
-                        <p>Sữa chua</p>
-                    </li>
-                    <li class="category__item">
-                        <p>Trà trái cây</p>
-                    </li>
-                    <li class="category__item">
-                        <p>Trà sữa</p>
-                    </li>
-                    <li class="category__item">
-                        <p>Đá xay</p>
-                    </li>
-                    <li class="category__item">
-                        <p>Topping</p>
-                    </li>
-                    <li class="category__item">
-                        <p>Ăn nhẹ</p>
+                    <c:forEach var="category" items="${categories}">
+                        <li class="category__item">
+                            <p>${category.name}</p>
+                        </li>
+                    </c:forEach>
+                    <li class="category__item" style="color: #F66">
+                        <p>Yêu thích</p>
                     </li>
                 </ul>
             </nav>
             <div class="product">
-                <div class="product__item">
-                    <img src="resources\images\landingPage\products\product.jpg" alt="product">
-                    <p class="product__item--name">Product name</p>
-                    <p class="product__item--price">20000 vnđ</p>
-                    <p class="product__item--vote">5<span style="vertical-align: text-bottom">&#11088;</span></p>
-                    <div class="product__info">
-                        <img src="resources\images\landingPage\products\add-to-cart-icon.svg" alt="add-to-cart">
-                        <p>Thêm vào giỏ</p>
-                        <a class="size">Size M</a>
-                        <a class="size">Size L</a>
-                        <a class="vote">Vote</a>
-                        <a class="favorite">Thêm vào yêu thích</a>
+                <c:forEach var="product" items="${categories.get(0).products}">
+                    <div class="product__item">
+                        <img src="resources\images\landingPage\products\product.jpg" alt="product">
+                        <p class="product__item--name">${product.name}</p>
+                        <p class="product__item--price">${product.price}00 vnđ</p>
+                        <p class="product__item--vote">
+                            <c:set var="countStar" value="0"/>
+                            <c:set var="totalStar" value="0"/>
+                            <c:forEach var="star" items="${product.votes}">
+                                <c:set var="countStar" value="${countStar + 1}"/>
+                                <c:set var="totalStar" value="${totalStar + star.star}"/>
+                            </c:forEach>
+                            ${totalStar/countStar}
+                            <span style="vertical-align: text-bottom">&#11088;</span>
+                        </p>
+                        <div class="product__info">
+                            <img src="resources\images\landingPage\products\add-to-cart-icon.svg" alt="add-to-cart">
+                            <p>Thêm vào giỏ</p>
+                            <c:forEach var="size" items="${product.sizes}">
+                                <a class="size">Size ${size.size}</a>
+                            </c:forEach>
+                            <a class="vote">Vote</a>
+                            <a class="favorite">Thêm vào yêu thích</a>
+                        </div>
                     </div>
-                </div>
-                <div class="product__item">
-                    <img src="resources\images\landingPage\products\product.jpg" alt="product">
-                    <p class="product__item--name">Product name</p>
-                    <p class="product__item--price">20000 vnđ</p>
-                    <p class="product__item--vote">5<span style="vertical-align: text-bottom">&#11088;</span></p>
-                    <div class="product__info">
-                        <img src="resources\images\landingPage\products\add-to-cart-icon.svg" alt="add-to-cart">
-                        <p>Thêm vào giỏ</p>
-                        <a class="size">Size M</a>
-                        <a class="size">Size L</a>
-                        <a class="vote">Vote</a>
-                        <a class="favorite">Thêm vào yêu thích</a>
-                    </div>
-                </div>
-                <div class="product__item">
-                    <img src="resources\images\landingPage\products\product.jpg" alt="product">
-                    <p class="product__item--name">Product name</p>
-                    <p class="product__item--price">20000 vnđ</p>
-                    <p class="product__item--vote">5<span style="vertical-align: text-bottom">&#11088;</span></p>
-                    <div class="product__info">
-                        <img src="resources\images\landingPage\products\add-to-cart-icon.svg" alt="add-to-cart">
-                        <p>Thêm vào giỏ</p>
-                        <a class="size">Size M</a>
-                        <a class="size">Size L</a>
-                        <a class="vote">Vote</a>
-                        <a class="favorite">Thêm vào yêu thích</a>
-                    </div>
-                </div>
-                <div class="product__item">
-                    <img src="resources\images\landingPage\products\product.jpg" alt="product">
-                    <p class="product__item--name">Product name</p>
-                    <p class="product__item--price">20000 vnđ</p>
-                    <p class="product__item--vote">5<span style="vertical-align: text-bottom">&#11088;</span></p>
-                    <div class="product__info">
-                        <img src="resources\images\landingPage\products\add-to-cart-icon.svg" alt="add-to-cart">
-                        <p>Thêm vào giỏ</p>
-                        <a class="size">Size M</a>
-                        <a class="size">Size L</a>
-                        <a class="vote">Vote</a>
-                        <a class="favorite">Thêm vào yêu thích</a>
-                    </div>
-                </div>
-                <div class="product__item">
-                    <img src="resources\images\landingPage\products\product.jpg" alt="product">
-                    <p class="product__item--name">Product name</p>
-                    <p class="product__item--price">20000 vnđ</p>
-                    <p class="product__item--vote">5<span style="vertical-align: text-bottom">&#11088;</span></p>
-                    <div class="product__info">
-                        <img src="resources\images\landingPage\products\add-to-cart-icon.svg" alt="add-to-cart">
-                        <p>Thêm vào giỏ</p>
-                        <a class="size">Size M</a>
-                        <a class="size">Size L</a>
-                        <a class="vote">Vote</a>
-                        <a class="favorite">Thêm vào yêu thích</a>
-                    </div>
-                </div>
-                <div class="product__item">
-                    <img src="resources\images\landingPage\products\product.jpg" alt="product">
-                    <p class="product__item--name">Product name</p>
-                    <p class="product__item--price">20000 vnđ</p>
-                    <p class="product__item--vote">5<span style="vertical-align: text-bottom">&#11088;</span></p>
-                    <div class="product__info">
-                        <img src="resources\images\landingPage\products\add-to-cart-icon.svg" alt="add-to-cart">
-                        <p>Thêm vào giỏ</p>
-                        <a class="size">Size M</a>
-                        <a class="size">Size L</a>
-                        <a class="vote">Vote</a>
-                        <a class="favorite">Thêm vào yêu thích</a>
-                    </div>
-                </div>
-                <div class="product__item">
-                    <img src="resources\images\landingPage\products\product.jpg" alt="product">
-                    <p class="product__item--name">Product name</p>
-                    <p class="product__item--price">20000 vnđ</p>
-                    <p class="product__item--vote">5<span style="vertical-align: text-bottom">&#11088;</span></p>
-                    <div class="product__info">
-                        <img src="resources\images\landingPage\products\add-to-cart-icon.svg" alt="add-to-cart">
-                        <p>Thêm vào giỏ</p>
-                        <a class="size">Size M</a>
-                        <a class="size">Size L</a>
-                        <a class="vote">Vote</a>
-                        <a class="favorite">Thêm vào yêu thích</a>
-                    </div>
-                </div>
-                <div class="product__item">
-                    <img src="resources\images\landingPage\products\product.jpg" alt="product">
-                    <p class="product__item--name">Product name</p>
-                    <p class="product__item--price">20000 vnđ</p>
-                    <p class="product__item--vote">5<span style="vertical-align: text-bottom">&#11088;</span></p>
-                    <div class="product__info">
-                        <img src="resources\images\landingPage\products\add-to-cart-icon.svg" alt="add-to-cart">
-                        <p>Thêm vào giỏ</p>
-                        <a class="size">Size M</a>
-                        <a class="size">Size L</a>
-                        <a class="vote">Vote</a>
-                        <a class="favorite">Thêm vào yêu thích</a>
-                    </div>
-                </div>
+                </c:forEach>
+             </div>
         </main>
         <div id="container-vote">
             <div id="vote">
@@ -216,5 +110,6 @@
 
         <script src="resources/js/landingPage.js"></script>
         <script src="resources/js/standard.js"></script>
+        <script src="resources/js/controlLandingPage.js"></script>
     </body>
 </html>

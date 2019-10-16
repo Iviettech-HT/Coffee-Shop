@@ -183,6 +183,7 @@ nav ul {
 }
 
 .category__item:hover {
+    cursor: pointer;
     color: #0099cc;
 }
 

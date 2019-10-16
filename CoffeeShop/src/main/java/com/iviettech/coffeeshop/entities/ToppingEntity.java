@@ -6,6 +6,7 @@
 package com.iviettech.coffeeshop.entities;
 
 import java.util.Set;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -25,7 +26,9 @@ public class ToppingEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     
+    @Column(length = 100)
     private String name;
+    
     private double price;
     private boolean status;
     

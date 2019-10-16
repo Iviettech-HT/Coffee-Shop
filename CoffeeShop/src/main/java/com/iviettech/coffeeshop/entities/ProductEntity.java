@@ -31,10 +31,10 @@ public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    
+    @Column(length = 100)
     private String name;
     
-    @Column(name = "quantity_in_store")
-    private int quantityInStore;
     private double price;
     private boolean status;
 
@@ -63,7 +63,7 @@ public class ProductEntity {
             inverseJoinColumns = {
                 @JoinColumn(name = "size_id")}
     )
-    private Set<SizeEntity> product;
+    private Set<SizeEntity> sizes;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<VoteEntity> votes;
@@ -74,20 +74,17 @@ public class ProductEntity {
     public ProductEntity() {
     }
 
-    public ProductEntity(String name, int quantityInStore, double price, boolean status, CategoryEntity category, List<ImageEntity> images, Set<PromotionEntity> promotions, Set<SizeEntity> product, List<VoteEntity> votes, List<FavoriteEntity> favorites) {
+    public ProductEntity(String name, double price, boolean status, CategoryEntity category, List<ImageEntity> images, Set<PromotionEntity> promotions, Set<SizeEntity> sizes, List<VoteEntity> votes, List<FavoriteEntity> favorites) {
         this.name = name;
-        this.quantityInStore = quantityInStore;
         this.price = price;
         this.status = status;
         this.category = category;
         this.images = images;
         this.promotions = promotions;
-        this.product = product;
+        this.sizes = sizes;
         this.votes = votes;
         this.favorites = favorites;
     }
-    
-    
 
     public int getId() {
         return id;
@@ -103,14 +100,6 @@ public class ProductEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getQuantityInStore() {
-        return quantityInStore;
-    }
-
-    public void setQuantityInStore(int quantityInStore) {
-        this.quantityInStore = quantityInStore;
     }
 
     public double getPrice() {
@@ -153,12 +142,12 @@ public class ProductEntity {
         this.promotions = promotions;
     }
 
-    public Set<SizeEntity> getProduct() {
-        return product;
+    public Set<SizeEntity> getSizes() {
+        return sizes;
     }
 
-    public void setProduct(Set<SizeEntity> product) {
-        this.product = product;
+    public void setSizes(Set<SizeEntity> sizes) {
+        this.sizes = sizes;
     }
 
     public List<VoteEntity> getVotes() {

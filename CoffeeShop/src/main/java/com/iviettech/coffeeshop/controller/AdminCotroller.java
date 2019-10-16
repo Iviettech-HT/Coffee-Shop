@@ -5,6 +5,10 @@
  */
 package com.iviettech.coffeeshop.controller;
 
+import com.iviettech.coffeeshop.entities.CategoryEntity;
+import com.iviettech.coffeeshop.services.CategoryService;
+import java.util.ArrayList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,9 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/admin")
 public class AdminCotroller {
-    @RequestMapping("/home")
+    @Autowired
+    CategoryService categoryService;
+    
+    @RequestMapping(value = {"/*","/home"})
     public String viewAdmin(Model model){
         return "admin/home";
     }
-    
 }

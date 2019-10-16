@@ -6,6 +6,7 @@
 package com.iviettech.coffeeshop.entities;
 
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -24,16 +25,22 @@ public class CategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    
+    @Column(length = 100)
     private String name;
-    private String status;
+    
+    private boolean status;
     
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    private List<ProductEntity> product;
+    private List<ProductEntity> products;
 
-    public CategoryEntity(String name, String status, List<ProductEntity> product) {
+    public CategoryEntity() {
+    }
+
+    public CategoryEntity(String name, boolean status, List<ProductEntity> products) {
         this.name = name;
         this.status = status;
-        this.product = product;
+        this.products = products;
     }
 
     public int getId() {
@@ -52,21 +59,20 @@ public class CategoryEntity {
         this.name = name;
     }
 
-    public String getStatus() {
+    public boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 
-    public List<ProductEntity> getProduct() {
-        return product;
+    public List<ProductEntity> getProducts() {
+        return products;
     }
 
-    public void setProduct(List<ProductEntity> product) {
-        this.product = product;
+    public void setProducts(List<ProductEntity> products) {
+        this.products = products;
     }
-    
     
 }

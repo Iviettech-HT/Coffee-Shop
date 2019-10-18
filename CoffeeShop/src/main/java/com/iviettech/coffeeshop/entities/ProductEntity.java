@@ -68,6 +68,11 @@ public class ProductEntity {
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<VoteEntity> votes;
 
+    public ProductEntity() {
+    }
+    
+    
+
     public ProductEntity(String name, int quantity, double price, boolean status, CategoryEntity category, List<ImageEntity> images, Set<PromotionEntity> promotions, List<OrderDetailEntity> orderDetails, List<VoteEntity> votes) {
         this.name = name;
         this.quantity = quantity;

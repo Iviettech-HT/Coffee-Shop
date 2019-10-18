@@ -8,8 +8,8 @@
 <div id="sidebar"><a href="#" class="visible-phone"><i class="icon icon-home"></i> Dashboard</a>
     <ul>
         <li class="active"><a href="home.html"><i class="icon icon-home"></i> <span>Dashboard</span></a> </li>
-        <li> <a href="charts.html"><i class="icon icon-signal"></i> <span>Category</span></a> </li>
-        <li> <a href="product.html"><i class="icon icon-inbox"></i> <span>Product</span></a> </li>
+        <li> <a href="category"><i class="icon icon-signal"></i> <span>Category</span></a> </li>
+        <li> <a href="product"><i class="icon icon-inbox"></i> <span>Product</span></a> </li>
         <li><a href="tables.html"><i class="icon icon-th"></i> <span>Tables</span></a></li>
         <li><a href="grid.html"><i class="icon icon-fullscreen"></i> <span>Full width</span></a></li>
         <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Forms</span> <span class="label label-important">3</span></a>

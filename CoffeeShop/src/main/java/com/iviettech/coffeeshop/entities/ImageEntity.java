@@ -30,7 +30,11 @@ public class ImageEntity {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private ProductEntity product;
+
+    public ImageEntity() {
+    }
         
+    
     public ImageEntity(String path, String name, ProductEntity product) {
         this.path = path;
         this.name = name;

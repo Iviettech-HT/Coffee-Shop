@@ -30,6 +30,11 @@ public class CategoryEntity {
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<ProductEntity> product;
 
+    public CategoryEntity() {
+    }
+
+    
+    
     public CategoryEntity(String name, String status, List<ProductEntity> product) {
         this.name = name;
         this.status = status;

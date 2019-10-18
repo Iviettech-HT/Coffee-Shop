@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <html lang="en">
     <head>
         <title>Matrix Admin</title>
@@ -29,38 +32,35 @@
         <div id="content">
             <div id="content-header">
                 <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Product</a> </div>
-                <h1>Product</h1>
+                <h1>Category</h1>
             </div>
             <div class="container-fluid">
                 <hr>
                 <div class="row-fluid">
                     <div class="span12">
                         <div>
-                            <button type="button" class="btn btn-primary">Add product</button>
+                            <button class="btn btn-primary"
+                                    onclick="location.href = '<c:url value="/admintest/add-category"/>'">Add Category</button>
                         </div>
                         <div class="widget-box">
 
                             <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
-                                <h5>Product table</h5>
+                                <h5>Category table</h5>
                             </div>
                             <div class="widget-content nopadding">
                                 <table class="table table-bordered data-table">
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>Quantity</th>
-                                            <th>Price</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="p" items="${product}">
+                                        <c:forEach var="c" items="${category}">
                                             <tr class="gradeU">
-                                                <td>${p.name}</td>
-                                                <td>${p.quantity}</td>
-                                                <td>${p.price}</td>
-                                                <td>${p.status}</td>
+                                                <td>${c.name}</td>
+                                                <td>${c.status}</td>
                                                 <td>
                                                     <button type="button" class="btn btn-primary btn-sm">Edit</button>
                                                     <button type="button" class="btn btn-primary btn-sm">Delete</button>

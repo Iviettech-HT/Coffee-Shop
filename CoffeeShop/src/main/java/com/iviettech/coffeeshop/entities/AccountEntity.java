@@ -6,6 +6,7 @@
 package com.iviettech.coffeeshop.entities;
 
 import com.iviettech.coffeeshop.enums.Gender;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -27,7 +28,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "account")
-public class AccountEntity extends PersonalInfo{
+public class AccountEntity extends PersonalInfo implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

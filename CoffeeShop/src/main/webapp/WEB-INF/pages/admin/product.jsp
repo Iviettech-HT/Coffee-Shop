@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <html lang="en">
     <head>
         <title>Matrix Admin</title>
@@ -12,6 +15,7 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/resources-management/css/matrix-media.css" />
         <link href="${pageContext.request.contextPath}/resources-management/css/font-awesome.css" rel="stylesheet" />
 
+        <link rel="stylesheet" href="<c:url value="/webjars/font-awesome/4.6.2/css/font-awesome.css"/>"/>
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
     </head>
     <body>
@@ -36,7 +40,8 @@
                 <div class="row-fluid">
                     <div class="span12">
                         <div>
-                            <button type="button" class="btn btn-primary">Add product</button>
+                            <button class="btn btn-primary"
+                                    onclick="location.href = '<c:url value="/admin/add-product"/>'">Add Product</button>
                         </div>
                         <div class="widget-box">
 
@@ -47,19 +52,31 @@
                                 <table class="table table-bordered data-table">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Quantity</th>
+                                            <th>Name</th>                                            
                                             <th>Price</th>
+                                            <th>Category</th>                                            
+                                            <th>Size</th>
+                                            <th>Image</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="p" items="${product}">
+                                        <c:forEach var="p" items="${products}">
                                             <tr class="gradeU">
                                                 <td>${p.name}</td>
-                                                <td>${p.quantity}</td>
                                                 <td>${p.price}</td>
+                                                <td>${p.category.name}</td>
+                                                <td>
+                                                    <c:forEach var="s" items="p.sizes">
+                                                        <p>${s.size}</p>
+                                                    </c:forEach>
+                                                </td>
+                                                <td>
+                                                        <div class="col-sm-3 image" >
+                                                            <img src="${pageContext.request.contextPath}/${p.images[0].path}" alt="${product.name}" height="50px" width="50px"/>
+                                                        </div>
+                                                </td>
                                                 <td>${p.status}</td>
                                                 <td>
                                                     <button type="button" class="btn btn-primary btn-sm">Edit</button>

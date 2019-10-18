@@ -14,7 +14,8 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/resources-management/css/matrix-style.css" />
         <link rel="stylesheet" href="${pageContext.request.contextPath}/resources-management/css/matrix-media.css" />
         <link href="${pageContext.request.contextPath}/resources-management/css/font-awesome.css" rel="stylesheet" />
-
+        
+        <link rel="stylesheet" href="<c:url value="/webjars/font-awesome/4.6.2/css/font-awesome.css"/>"/>
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
     </head>
     <body>
@@ -40,7 +41,7 @@
                     <div class="span12">
                         <div>
                             <button class="btn btn-primary"
-                                    onclick="location.href = '<c:url value="/admintest/add-category"/>'">Add Category</button>
+                                    onclick="location.href = '<c:url value="/admin/add-category"/>'">Add Category</button>
                         </div>
                         <div class="widget-box">
 

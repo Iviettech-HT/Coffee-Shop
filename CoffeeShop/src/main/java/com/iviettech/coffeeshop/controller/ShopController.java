@@ -38,13 +38,9 @@ public class ShopController {
     
     @RequestMapping(value = {"/*","/home"})
     public String viewHome(Model model, HttpServletRequest request){
-        ArrayList<CategoryEntity> categories = (ArrayList) categoryService.getCategories();
-<<<<<<< HEAD
-=======
-        
+      
         model.addAttribute("products", productService.getBestProducts());
->>>>>>> 8d76b1ccc1cba4d28239ac9fcef05b1cca7ee284
-        model.addAttribute("categories", categories);
+        model.addAttribute("categories", categoryService.getCategories());
         return "home";
     }
     

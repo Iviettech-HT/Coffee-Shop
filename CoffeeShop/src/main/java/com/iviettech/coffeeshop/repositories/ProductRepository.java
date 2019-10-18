@@ -18,6 +18,9 @@ public interface ProductRepository extends CrudRepository<ProductEntity, Integer
             + "WHERE p.category.id = ?1")
     public List<ProductEntity> getProductsByCategoryId(int id);
     
+    @Query(value = "SELECT DISTINCT p FROM ProductEntity p INNER JOIN FETCH p.sizes s ")
+    public List<ProductEntity> getAll();
+    
     @Query(value = "SELECT DISTINCT p FROM ProductEntity p INNER JOIN FETCH p.sizes s "
             + "WHERE p.category.name = ?1 "
             + "ORDER BY p.name ")

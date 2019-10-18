@@ -52,5 +52,11 @@
     </bean>
     
     <!-- Send Email Exception Resolver i.e. In Case Of Exception The Controller Will Navigate To 'error.jsp' & Will Display The Exception Message -->
-    
+    <bean id="multipartResolver"
+                class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+
+        <!-- setting maximum upload size -->
+        <property name="maxUploadSize" value="100000" />
+
+    </bean>
 </beans>

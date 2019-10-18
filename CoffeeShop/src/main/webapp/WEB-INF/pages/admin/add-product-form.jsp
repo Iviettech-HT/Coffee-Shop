@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="mvc" uri="http://www.springframework.org/tags/form"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,11 +46,27 @@
                                 <h5>Personal-info</h5>
                             </div>
                             <div class="widget-content nopadding">
-                                <form action="${pageContext.request.contextPath}/admin/${action}" method="post" class="form-horizontal" modelAttribute="category">
+                                <mvc:form action="${pageContext.request.contextPath}/admin/${action}" method="post" class="form-horizontal" modelAttribute="product" enctype="multipart/form-data">
                                     <div class="control-group">
-                                        <label class="control-label" >Category Name :</label>
+                                        <label class="control-label" >Product Name :</label>
                                         <div class="controls">
                                             <input type="text" class="span11" name="name" placeholder="First name" />
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">Price :</label>
+                                        <div class="controls">
+                                            <input type="text" class="span11" name="price" placeholder="Price" />
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">Category :</label>
+                                        <div class="controls">
+                                            <select name="category.id" class="form-control">
+                                                <c:forEach var="c" items="${categories}">             
+                                                    <option value="${c.id}">${c.name}</option>                      
+                                                </c:forEach>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="control-group">
@@ -57,18 +74,41 @@
                                         <div class="controls">
                                             <input type="text" class="span11" name="status" value="true" />
                                         </div>
-                                    </div>                                  
+                                    </div>    
+                                    <div class="control-group">
+                                        <label class="control-label">Size :</label>
+                                        <div class="controls">
+                                            <c:forEach var="s" items="${sizes}">
+                                                <label>
+                                                    <input type="checkbox" name="sizeTemp" value="${s.id}"/>
+                                                ${s.size}
+                                                </label>
+                                            </c:forEach>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">Image :</label>
+                                        <div class="controls">
+                                            <input type="file" name="file"/>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">Image Small :</label>
+                                        <div class="controls">
+                                            <input type="file" name="file"/>
+                                        </div>
+                                    </div>
                                     <div class="form-actions">
                                         <button type="submit" class="btn btn-success">Save</button>
                                     </div>
-                                </form>
+                                </mvc:form>
                             </div>
                         </div>
 
                     </div>
 
                 </div>
-                
+
             </div></div>
 
         <jsp:include page="../include/footerAdmin.jsp"/>

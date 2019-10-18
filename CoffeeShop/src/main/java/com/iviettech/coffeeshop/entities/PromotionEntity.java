@@ -30,22 +30,25 @@ public class PromotionEntity {
     
     private int id;
     private String description;
-    private String discount;
+    private double discount;
     private String image;
     private String status;
     
-    @DateTimeFormat(pattern = "MM-dd-yyyy")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date startDate;
     
-    @DateTimeFormat(pattern = "MM-dd-yyyy")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date endDate;
     
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "promotions",fetch = FetchType.LAZY)
     private Set<ProductEntity> products;
 
-    public PromotionEntity(String description, String discount, String image, String status, Date startDate, Date endDate, Set<ProductEntity> products) {
+    public PromotionEntity() {
+    }
+    
+    public PromotionEntity(String description, double discount, String image, String status, Date startDate, Date endDate, Set<ProductEntity> products) {
         this.description = description;
         this.discount = discount;
         this.image = image;
@@ -71,11 +74,11 @@ public class PromotionEntity {
         this.description = description;
     }
 
-    public String getDiscount() {
+    public double getDiscount() {
         return discount;
     }
 
-    public void setDiscount(String discount) {
+    public void setDiscount(double discount) {
         this.discount = discount;
     }
 

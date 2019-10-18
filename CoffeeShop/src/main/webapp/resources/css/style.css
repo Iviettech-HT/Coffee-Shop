@@ -9,7 +9,7 @@
     height: 100vh;
     background-color: rgba(28, 33, 31, 0.7);
     position: fixed;
-    
+
     display: none;
     top: 0;
     left: 0;
@@ -124,8 +124,8 @@ main {
 .sale{
     width: 98%;
     overflow: auto;
-    
-    
+
+
 }
 .sale__info{
     width: fit-content;
@@ -136,12 +136,12 @@ main {
 /*Filter*/
 .filter{
     width: 100%;
-    
+
     display: flex;
     justify-content: center;
     margin: 10px 0;
     padding: 10px 0;
-    
+
     background-color: #ccc;
 }
 .spacing{
@@ -329,8 +329,6 @@ a.size:hover {
 
         display: grid;
         grid-template-columns: repeat(3, 33%);
-        grid-template-rows: repeat(6, 40px);
-
         justify-content: center;
         text-align: center;
     }

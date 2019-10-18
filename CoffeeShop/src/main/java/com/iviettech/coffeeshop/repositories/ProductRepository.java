@@ -15,6 +15,23 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProductRepository extends CrudRepository<ProductEntity, Integer>{
     @Query(value = "SELECT DISTINCT p FROM ProductEntity p INNER JOIN FETCH p.sizes s "
-            + "INNER JOIN FETCH p.votes WHERE p.category.id = ?1")
-    public List<ProductEntity> getProductByCategoryId(int id);
+            + "WHERE p.category.id = ?1")
+    public List<ProductEntity> getProductsByCategoryId(int id);
+    
+    @Query(value = "SELECT DISTINCT p FROM ProductEntity p INNER JOIN FETCH p.sizes s "
+            + "WHERE p.category.name = ?1 "
+            + "ORDER BY p.name ")
+    public List<ProductEntity> getProductsByCategoryName(String name);
+    
+    @Query(value = "SELECT p.id FROM product p "
+            + "JOIN vote v "
+            + "ON p.id = v.product_id "
+            + "GROUP BY p.id "
+            + "ORDER BY AVG(v.star) DESC "
+            + "LIMIT 20 ", nativeQuery = true)
+    public List<Integer> getBestProducts();
+    
+    @Query(value = "SELECT DISTINCT p FROM ProductEntity p INNER JOIN FETCH p.sizes s "
+            + "WHERE p.id = ?1 ")
+    public ProductEntity getProductById(int id);
 }

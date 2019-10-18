@@ -31,11 +31,11 @@ public class OrderEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date orderDate;
     
-    @DateTimeFormat(pattern = "dd-MM-yyyy hh:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm")
     @Temporal(TemporalType.TIMESTAMP)
     private Date shippingDate;
     

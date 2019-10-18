@@ -1,5 +1,5 @@
 let main = document.getElementById('main');
-let categoryItem = document.getElementsByClassName('category__item');
+let categoryItems = document.getElementsByClassName('category__item');
 let vote = document.getElementsByClassName('vote');
 let votePanel = document.getElementById('vote');
 let containerVotePanel = document.getElementById('container-vote');
@@ -29,13 +29,13 @@ function showVotePanel() {
 }
 // end
 
-for (let i = 0; i < categoryItem.length; i++) {
-    categoryItem[i].onclick = function () {
-        for (let i = 0; i < categoryItem.length; i++) {
-            categoryItem[i].classList.remove('category__item--active');
-            categoryItem[i].classList.remove('category__item--border');
+for (let i = 0; i < categoryItems.length; i++) {
+    categoryItems[i].onclick = function () {
+        for (let i = 0; i < categoryItems.length; i++) {
+            categoryItems[i].classList.remove('category__item--active');
+            categoryItems[i].classList.remove('category__item--border');
         }
-        categoryItem[i].classList.add('category__item--active');
-        categoryItem[i].classList.add('category__item--border');
+        categoryItems[i].classList.add('category__item--active');
+        categoryItems[i].classList.add('category__item--border');
     }
 }

@@ -1,13 +1,18 @@
-categoryItem = document.getElementsByClassName("category__item");
-categoryItem[1].addEventListener("click", getAllProduct2);
+let product = document.getElementsByClassName('product')[0];
 
-function getAllProduct2(){
+categoryItems = document.getElementsByClassName('category__item');
+
+for(let categoryItem of categoryItems){
+    categoryItem.addEventListener('click', function(){getAllProduct(categoryItem.children[0].innerHTML)});
+}
+
+function getAllProduct(name){
     let xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "/list-san-pham?name=" + "caphe");
+    xhttp.open('GET', '/CoffeeShop/list-san-pham?name=' + name);
     xhttp.send();
     xhttp.onreadystatechange = ()=>{
         if(xhttp.readyState == 4 && xhttp.status == 200){
-            console.log(xhttp.responseText);
+            product.innerHTML = xhttp.responseText;
         }
     }
 }

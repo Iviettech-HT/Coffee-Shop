@@ -5,15 +5,24 @@
  */
 package com.iviettech.coffeeshop.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iviettech.coffeeshop.entities.CategoryEntity;
+import com.iviettech.coffeeshop.entities.ProductEntity;
+import com.iviettech.coffeeshop.entities.SizeEntity;
 import com.iviettech.coffeeshop.services.CategoryService;
+import com.iviettech.coffeeshop.services.ProductService;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  *
@@ -24,9 +33,14 @@ public class ShopController {
     @Autowired
     CategoryService categoryService;
     
+    @Autowired
+    ProductService productService;
+    
     @RequestMapping(value = {"/*","/home"})
     public String viewHome(Model model, HttpServletRequest request){
-        ArrayList<CategoryEntity> categories = (ArrayList) categoryService.getAllCategories();
+        ArrayList<CategoryEntity> categories = (ArrayList) categoryService.getCategories();
+        
+        model.addAttribute("products", productService.getBestProducts());
         model.addAttribute("categories", categories);
         return "home";
     }
@@ -55,11 +69,16 @@ public class ShopController {
         return "cart/check-out";
     }
     
-//    @RequestMapping(value = {"/list-san-pham"})
-//    public @ResponseBody String getCategory(@RequestParam(name = "name") String nameCategory){
-//        ObjectMapper mapper = new ObjectMapper();
-//        CategoryEntity categoryEntity
-//        
-//        
-//    }
+    @RequestMapping(value = {"/list-san-pham"})
+    public String getCategory(Model model,
+            @RequestParam(name = "name") String nameCategory){
+        List<ProductEntity> products = null;
+        if(nameCategory.equalsIgnoreCase("best choose"))
+            products = productService.getBestProducts();
+        else
+            products = productService.getProducts(nameCategory);
+        
+        model.addAttribute("products", products);
+        return "ajax/listProduct";
+    }
 }

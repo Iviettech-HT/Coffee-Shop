@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,7 +34,7 @@ public class SizeEntity {
     private Size size;
     private double percent;
     
-    @ManyToMany(mappedBy = "sizes")
+    @ManyToMany(mappedBy = "sizes", fetch = FetchType.LAZY)
     private Set<ProductEntity> products;
 
     public SizeEntity() {

@@ -5,6 +5,7 @@
  */
 package com.iviettech.coffeeshop.entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,26 +19,32 @@ import javax.persistence.Table;
  * @author PC
  */
 @Entity
-@Table(name="images")
+@Table(name = "images")
 public class ImageEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    
     private int id;
-    private String path;
-    private String name;
     
+    @Column(length = 200)
+    private String path;
+
     @ManyToOne
     @JoinColumn(name = "product_id")
     private ProductEntity product;
 
     public ImageEntity() {
     }
+<<<<<<< HEAD
         
     
     public ImageEntity(String path, String name, ProductEntity product) {
+=======
+    
+    public ImageEntity(int id, String path, ProductEntity product) {
+        this.id = id;
+>>>>>>> 9fbd6c4cfdc3e9b269926029e7efc30d9a53a20a
         this.path = path;
-        this.name = name;
         this.product = product;
     }
 
@@ -57,14 +64,6 @@ public class ImageEntity {
         this.path = path;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public ProductEntity getProduct() {
         return product;
     }
@@ -72,5 +71,5 @@ public class ImageEntity {
     public void setProduct(ProductEntity product) {
         this.product = product;
     }
-    
+
 }

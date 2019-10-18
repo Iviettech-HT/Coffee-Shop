@@ -18,11 +18,13 @@
             password-parameter="password"
             authentication-failure-url="/dang-nhap?isError=true"
             login-processing-url="/j_spring_security_check"
+            authentication-success-handler-ref="authentication-success"
         />
         
         <security:logout
             delete-cookies="JSESSIONID"
             logout-success-url="/home"
+            logout-url="/dang-xuat"
         />
         
         <security:csrf disabled="true" />
@@ -35,5 +37,7 @@
     
     <bean id="authentication"
           class="com.iviettech.coffeeshop.security.CustomAuthenticationProvider"/>
+    <bean id="authentication-success"
+          class="com.iviettech.coffeeshop.security.CustomAuthenticationSuccessHandler"/>
 </beans>
 

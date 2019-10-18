@@ -6,6 +6,7 @@
 package com.iviettech.coffeeshop.controller;
 
 import com.iviettech.coffeeshop.entities.CategoryEntity;
+<<<<<<< HEAD
 import com.iviettech.coffeeshop.entities.ImageEntity;
 import com.iviettech.coffeeshop.entities.ProductEntity;
 import com.iviettech.coffeeshop.services.CategoryService;
@@ -19,6 +20,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ResourceLoader;
+=======
+import com.iviettech.coffeeshop.services.CategoryService;
+import java.util.ArrayList;
+import org.springframework.beans.factory.annotation.Autowired;
+>>>>>>> 9fbd6c4cfdc3e9b269926029e7efc30d9a53a20a
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -33,8 +39,9 @@ import org.springframework.web.multipart.MultipartFile;
  * @author admin
  */
 @Controller
-@RequestMapping("/admintest")
+@RequestMapping("/admin")
 public class AdminCotroller {
+<<<<<<< HEAD
 
     @Autowired
     private CategoryService categoryService;
@@ -134,4 +141,13 @@ public class AdminCotroller {
         return "admin/tesst";
     }
 
+=======
+    @Autowired
+    CategoryService categoryService;
+    
+    @RequestMapping(value = {"/*","/home"})
+    public String viewAdmin(Model model){
+        return "admin/home";
+    }
+>>>>>>> 9fbd6c4cfdc3e9b269926029e7efc30d9a53a20a
 }

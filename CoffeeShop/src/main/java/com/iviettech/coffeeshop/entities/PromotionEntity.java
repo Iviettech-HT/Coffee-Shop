@@ -37,6 +37,9 @@ public class PromotionEntity {
     @DateTimeFormat(pattern = "MM-dd-yyyy")
     @Temporal(TemporalType.DATE)
     private Date startDate;
+    
+    @DateTimeFormat(pattern = "MM-dd-yyyy")
+    @Temporal(TemporalType.DATE)
     private Date endDate;
     
     @ManyToMany(fetch = FetchType.LAZY)

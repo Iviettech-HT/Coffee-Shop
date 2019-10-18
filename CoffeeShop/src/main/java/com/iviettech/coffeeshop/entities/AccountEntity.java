@@ -8,6 +8,8 @@ package com.iviettech.coffeeshop.entities;
 import com.iviettech.coffeeshop.enums.Gender;
 import java.util.List;
 import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -30,14 +32,22 @@ public class AccountEntity extends PersonalInfo{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     
+    @Column(length = 50)
     private String username;
+    
+    @Column(length = 50)
     private String password;
+    
     private boolean status;
     
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
     private List<VoteEntity> votes;
     
-    @ManyToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    private List<FavoriteEntity> favorites;
+    
+    @ManyToMany(fetch = FetchType.EAGER ,cascade = {CascadeType.PERSIST,
+        CascadeType.MERGE})
     @JoinTable(name = "account_role",
             joinColumns = @JoinColumn(name = "accountId"),
             inverseJoinColumns = @JoinColumn(name = "roleId"))
@@ -46,13 +56,21 @@ public class AccountEntity extends PersonalInfo{
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
     private List<CustomerEntity> customers;
 
-    public AccountEntity(int id, String username, String password, boolean status, List<VoteEntity> votes, Set<RoleEntity> roles, List<CustomerEntity> customers, String name, String phone, String address, String email, Gender gender) {
+    public AccountEntity(){
+        super();
+    }
+    public AccountEntity(String name, String phone, String address, String email, Gender gender) {
+        super(name, phone, address, email, gender);
+    }
+
+    public AccountEntity(int id, String username, String password, boolean status, List<VoteEntity> votes, List<FavoriteEntity> favorites, Set<RoleEntity> roles, List<CustomerEntity> customers, String name, String phone, String address, String email, Gender gender) {
         super(name, phone, address, email, gender);
         this.id = id;
         this.username = username;
         this.password = password;
         this.status = status;
         this.votes = votes;
+        this.favorites = favorites;
         this.roles = roles;
         this.customers = customers;
     }
@@ -162,4 +180,13 @@ public class AccountEntity extends PersonalInfo{
     public void setCustomers(List<CustomerEntity> customers) {
         this.customers = customers;
     }
+
+    public List<FavoriteEntity> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(List<FavoriteEntity> favorites) {
+        this.favorites = favorites;
+    }
+    
 }

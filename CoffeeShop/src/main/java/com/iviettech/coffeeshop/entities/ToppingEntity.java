@@ -5,23 +5,23 @@
  */
 package com.iviettech.coffeeshop.entities;
 
-import java.util.List;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 /**
  *
- * @author PC
+ * @author admin
  */
 @Entity
-@Table(name="category")
-public class CategoryEntity {
+@Table(name = "topping")
+public class ToppingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -29,24 +29,21 @@ public class CategoryEntity {
     @Column(length = 100)
     private String name;
     
+    private double price;
     private boolean status;
     
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    private List<ProductEntity> products;
+    @ManyToMany(mappedBy = "toppings", fetch = FetchType.LAZY)
+    private Set<OrderDetailEntity> orderDetails;
 
-    public CategoryEntity() {
+    public ToppingEntity() {
     }
 
-<<<<<<< HEAD
-    
-    
-    public CategoryEntity(String name, String status, List<ProductEntity> product) {
-=======
-    public CategoryEntity(String name, boolean status, List<ProductEntity> products) {
->>>>>>> 9fbd6c4cfdc3e9b269926029e7efc30d9a53a20a
+    public ToppingEntity(int id, String name, double price, boolean status, Set<OrderDetailEntity> orderDetails) {
+        this.id = id;
         this.name = name;
+        this.price = price;
         this.status = status;
-        this.products = products;
+        this.orderDetails = orderDetails;
     }
 
     public int getId() {
@@ -65,7 +62,15 @@ public class CategoryEntity {
         this.name = name;
     }
 
-    public boolean getStatus() {
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public boolean isStatus() {
         return status;
     }
 
@@ -73,12 +78,13 @@ public class CategoryEntity {
         this.status = status;
     }
 
-    public List<ProductEntity> getProducts() {
-        return products;
+    public Set<OrderDetailEntity> getOrderDetails() {
+        return orderDetails;
     }
 
-    public void setProducts(List<ProductEntity> products) {
-        this.products = products;
+    public void setOrderDetails(Set<OrderDetailEntity> orderDetails) {
+        this.orderDetails = orderDetails;
     }
-    
+
+
 }

@@ -6,8 +6,9 @@
 package com.iviettech.coffeeshop.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -18,52 +19,38 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "vote")
-@IdClass(AccountProductId.class)
 public class VoteEntity {
-    @Id
-    private int productId;
     
     @Id
-    private int accountId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     
     private int star;
     
     @ManyToOne
-    @JoinColumn(name = "productId", insertable = false, updatable = false)
+    @JoinColumn(name = "product_id", insertable = false, updatable = false)
     private ProductEntity product;
     
     @ManyToOne
-    @JoinColumn(name = "accountId", insertable = false, updatable = false)
+    @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private AccountEntity account;
-    
-    public VoteEntity(int productId, int accountId, int star) {
-        this.productId = productId;
-        this.accountId = accountId;
-        this.star = star;
+
+    public VoteEntity() {
     }
 
-    public VoteEntity(int productId, int accountId, int star, ProductEntity product, AccountEntity account) {
-        this.productId = productId;
-        this.accountId = accountId;
+    public VoteEntity(int id, int star, ProductEntity product, AccountEntity account) {
+        this.id = id;
         this.star = star;
         this.product = product;
         this.account = account;
-    }    
-    
-    public int getProductId() {
-        return productId;
     }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
+    public int getId() {
+        return id;
     }
 
-    public int getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(int accountId) {
-        this.accountId = accountId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getStar() {
@@ -89,5 +76,6 @@ public class VoteEntity {
     public void setAccount(AccountEntity account) {
         this.account = account;
     }
+    
     
 }

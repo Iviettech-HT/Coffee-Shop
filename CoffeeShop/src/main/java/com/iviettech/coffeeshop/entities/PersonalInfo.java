@@ -25,8 +25,12 @@ public abstract class PersonalInfo {
     private String email;
     
     @Enumerated(EnumType.STRING)
+    @Column(length = 6)
     private Gender gender = Gender.MALE;
 
+    public PersonalInfo() {
+    }
+    
     public PersonalInfo(String name, String phone, String address, String email, Gender gender) {
         this.name = name;
         this.phone = phone;

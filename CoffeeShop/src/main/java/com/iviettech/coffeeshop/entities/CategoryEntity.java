@@ -36,14 +36,9 @@ public class CategoryEntity {
 
     public CategoryEntity() {
     }
+    
 
-<<<<<<< HEAD
-    
-    
-    public CategoryEntity(String name, String status, List<ProductEntity> product) {
-=======
     public CategoryEntity(String name, boolean status, List<ProductEntity> products) {
->>>>>>> 9fbd6c4cfdc3e9b269926029e7efc30d9a53a20a
         this.name = name;
         this.status = status;
         this.products = products;

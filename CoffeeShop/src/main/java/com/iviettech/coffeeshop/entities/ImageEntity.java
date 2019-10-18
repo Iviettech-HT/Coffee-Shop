@@ -35,15 +35,8 @@ public class ImageEntity {
 
     public ImageEntity() {
     }
-<<<<<<< HEAD
-        
     
-    public ImageEntity(String path, String name, ProductEntity product) {
-=======
-    
-    public ImageEntity(int id, String path, ProductEntity product) {
-        this.id = id;
->>>>>>> 9fbd6c4cfdc3e9b269926029e7efc30d9a53a20a
+    public ImageEntity( String path, ProductEntity product) {
         this.path = path;
         this.product = product;
     }

@@ -41,7 +41,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 @RequestMapping("/admin")
 public class AdminCotroller {
-<<<<<<< HEAD
 
     @Autowired
     private CategoryService categoryService;
@@ -140,14 +139,4 @@ public class AdminCotroller {
     public String test(Model model) {
         return "admin/tesst";
     }
-
-=======
-    @Autowired
-    CategoryService categoryService;
-    
-    @RequestMapping(value = {"/*","/home"})
-    public String viewAdmin(Model model){
-        return "admin/home";
-    }
->>>>>>> 9fbd6c4cfdc3e9b269926029e7efc30d9a53a20a
 }

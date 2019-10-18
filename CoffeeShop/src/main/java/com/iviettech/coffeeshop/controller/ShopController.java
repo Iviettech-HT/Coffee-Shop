@@ -26,7 +26,7 @@ public class ShopController {
     
     @RequestMapping(value = {"/*","/home"})
     public String viewHome(Model model, HttpServletRequest request){
-        ArrayList<CategoryEntity> categories = (ArrayList) categoryService.getAllCategories();
+        ArrayList<CategoryEntity> categories = (ArrayList) categoryService.getCategories();
         model.addAttribute("categories", categories);
         return "home";
     }

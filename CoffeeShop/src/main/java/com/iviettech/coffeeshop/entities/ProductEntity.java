@@ -74,16 +74,9 @@ public class ProductEntity {
     public ProductEntity() {
     }
 
-<<<<<<< HEAD
-    public ProductEntity() {
-    }
-    
-    
 
-    public ProductEntity(String name, int quantity, double price, boolean status, CategoryEntity category, List<ImageEntity> images, Set<PromotionEntity> promotions, List<OrderDetailEntity> orderDetails, List<VoteEntity> votes) {
-=======
     public ProductEntity(String name, double price, boolean status, CategoryEntity category, List<ImageEntity> images, Set<PromotionEntity> promotions, Set<SizeEntity> sizes, List<VoteEntity> votes, List<FavoriteEntity> favorites) {
->>>>>>> 9fbd6c4cfdc3e9b269926029e7efc30d9a53a20a
+
         this.name = name;
         this.price = price;
         this.status = status;

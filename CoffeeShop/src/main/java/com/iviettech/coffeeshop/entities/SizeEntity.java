@@ -6,6 +6,7 @@
 package com.iviettech.coffeeshop.entities;
 
 import com.iviettech.coffeeshop.enums.Size;
+import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,7 +25,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="size")
-public class SizeEntity {
+public class SizeEntity implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -32,7 +33,7 @@ public class SizeEntity {
     @Enumerated(EnumType.STRING)
     @Column(length = 2)
     private Size size;
-    private double percent;
+    private double addition;
     
     @ManyToMany(mappedBy = "sizes", fetch = FetchType.LAZY)
     private Set<ProductEntity> products;
@@ -40,10 +41,10 @@ public class SizeEntity {
     public SizeEntity() {
     }
 
-    public SizeEntity(int id, Size size, double percent, Set<ProductEntity> products) {
+    public SizeEntity(int id, Size size, double addition, Set<ProductEntity> products) {
         this.id = id;
         this.size = size;
-        this.percent = percent;
+        this.addition = addition;
         this.products = products;
     }
 
@@ -63,12 +64,12 @@ public class SizeEntity {
         this.size = size;
     }
 
-    public double getPercent() {
-        return percent;
+    public double getAddition() {
+        return addition;
     }
 
-    public void setPercent(double percent) {
-        this.percent = percent;
+    public void setAddition(double addition) {
+        this.addition = addition;
     }
 
     public Set<ProductEntity> getProducts() {

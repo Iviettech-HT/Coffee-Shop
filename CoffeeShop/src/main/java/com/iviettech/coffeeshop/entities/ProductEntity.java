@@ -5,6 +5,7 @@
  */
 package com.iviettech.coffeeshop.entities;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.Column;
@@ -26,7 +27,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "product")
-public class ProductEntity {
+public class ProductEntity implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

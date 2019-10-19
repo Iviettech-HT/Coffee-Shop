@@ -6,6 +6,7 @@
 package com.iviettech.coffeeshop.entities;
 
 import com.iviettech.coffeeshop.enums.Role;
+import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,7 +24,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "role")
-public class RoleEntity {
+public class RoleEntity implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

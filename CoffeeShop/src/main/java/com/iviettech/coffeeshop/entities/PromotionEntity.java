@@ -5,6 +5,7 @@
  */
 package com.iviettech.coffeeshop.entities;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 import javax.persistence.Entity;
@@ -24,7 +25,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Entity
 @Table(name="promotion")
-public class PromotionEntity {
+public class PromotionEntity implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     

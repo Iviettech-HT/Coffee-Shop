@@ -6,6 +6,7 @@
 package com.iviettech.coffeeshop.entities;
 
 import com.iviettech.coffeeshop.enums.Size;
+import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -28,7 +29,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "orderDetail")
-public class OrderDetailEntity {
+public class OrderDetailEntity implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

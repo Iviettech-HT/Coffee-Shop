@@ -37,4 +37,8 @@ public interface ProductRepository extends CrudRepository<ProductEntity, Integer
     @Query(value = "SELECT DISTINCT p FROM ProductEntity p INNER JOIN FETCH p.sizes s "
             + "WHERE p.id = ?1 ")
     public ProductEntity getProductById(int id);
+    
+    @Query(value = "SELECT DISTINCT p FROM ProductEntity p INNER JOIN FETCH p.sizes s "
+            + "WHERE p.id = ?1 AND s.id = ?2")
+    public ProductEntity getProductByIdAndSizeId(int id, int sizeId);
 }

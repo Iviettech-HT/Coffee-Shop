@@ -6,6 +6,7 @@
 package com.iviettech.coffeeshop.entities;
 
 import com.iviettech.coffeeshop.enums.Gender;
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -16,7 +17,7 @@ import javax.persistence.MappedSuperclass;
  * @author admin
  */
 @MappedSuperclass
-public abstract class PersonalInfo {
+public abstract class PersonalInfo implements Serializable{
     private String name;
     private String phone;
     private String address;

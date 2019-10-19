@@ -38,7 +38,8 @@ public class ProductEntity implements Serializable{
     
     private double price;
     private boolean status;
-
+    private String description;
+    
     @ManyToOne
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
@@ -75,10 +76,11 @@ public class ProductEntity implements Serializable{
     public ProductEntity() {
     }
 
-    public ProductEntity(String name, double price, boolean status, CategoryEntity category, List<ImageEntity> images, Set<PromotionEntity> promotions, Set<SizeEntity> sizes, List<VoteEntity> votes, List<FavoriteEntity> favorites) {
+    public ProductEntity(String name, double price, boolean status, String description, CategoryEntity category, List<ImageEntity> images, Set<PromotionEntity> promotions, Set<SizeEntity> sizes, List<VoteEntity> votes, List<FavoriteEntity> favorites) {
         this.name = name;
         this.price = price;
         this.status = status;
+        this.description = description;
         this.category = category;
         this.images = images;
         this.promotions = promotions;
@@ -167,5 +169,12 @@ public class ProductEntity implements Serializable{
         this.favorites = favorites;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
 }

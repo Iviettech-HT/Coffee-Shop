@@ -37,8 +37,7 @@ public class ImageEntity implements Serializable{
     public ImageEntity() {
     }
     
-    public ImageEntity(int id, String path, ProductEntity product) {
-        this.id = id;
+    public ImageEntity( String path, ProductEntity product) {
         this.path = path;
         this.product = product;
     }

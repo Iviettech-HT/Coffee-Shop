@@ -37,6 +37,7 @@ public class CategoryEntity implements Serializable{
 
     public CategoryEntity() {
     }
+    
 
     public CategoryEntity(String name, boolean status, List<ProductEntity> products) {
         this.name = name;

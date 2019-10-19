@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CategoryService {
+
     @Autowired
     CategoryRepository categoryRepository;
 //    public CategoryEntity getCategory(String name){
@@ -25,5 +26,9 @@ public class CategoryService {
     
     public List<CategoryEntity> getCategories(){
         return (List<CategoryEntity>) categoryRepository.findAll();
+    }
+
+    public void addCategory(CategoryEntity category) {
+        categoryRepository.save(category);
     }
 }

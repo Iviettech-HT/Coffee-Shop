@@ -5,6 +5,7 @@
  */
 package com.iviettech.coffeeshop.services;
 
+import com.iviettech.coffeeshop.entities.ImageEntity;
 import com.iviettech.coffeeshop.entities.ProductEntity;
 import com.iviettech.coffeeshop.entities.PromotionEntity;
 import com.iviettech.coffeeshop.repositories.ImageRepository;
@@ -37,7 +38,7 @@ public class ProductService {
     VoteRepository voteRepository;
     @Autowired
     PromotionRepository promotionRepository;
-
+    
     public ProductEntity getProductByIdAndSizeId(int id, int sizeId) {
         ProductEntity product = productRepository.getProductByIdAndSizeId(id, sizeId);
         
@@ -47,7 +48,18 @@ public class ProductService {
         return product;
     }
 
-    public List<ProductEntity> getProducts(int CategoryId) {
+    public List<ProductEntity> getProducts(){
+        
+        List<ProductEntity> products = (List<ProductEntity>) productRepository.getAll();
+        
+        for (ProductEntity product : products) {
+            product.setImages(imageRepository.getImagesByProductId(product.getId()));
+            product.setVotes(voteRepository.getVotesByProductId(product.getId()));
+            product.setPromotions(promotionRepository.getPromotionsByProductId(product.getId(), new Date()));
+        }
+        return products;
+    }
+    public List<ProductEntity> getProducts(int CategoryId){
         return productRepository.getProductsByCategoryId(CategoryId);
     }
 
@@ -77,5 +89,21 @@ public class ProductService {
             product.setPromotions(promotionRepository.getPromotionsByProductId(product.getId(), new Date()));
         }
         return products;
+    }
+
+    public ProductEntity addProduct(ProductEntity product){
+        List<ImageEntity> listImages = product.getImages();
+        product.setImages(null);
+        ProductEntity newProduct = productRepository.save(product);
+        for(ImageEntity image : listImages){
+            image.setProduct(newProduct);
+            imageRepository.save(image);
+        }
+        newProduct.setImages(listImages);
+        return newProduct;
+    }
+
+    public List<ProductEntity> findProducts() {
+        return (List<ProductEntity>) productRepository.findAll();
     }
 }

@@ -5,16 +5,15 @@
  */
 package com.iviettech.coffeeshop.repositories;
 
-import com.iviettech.coffeeshop.entities.CategoryEntity;
+import com.iviettech.coffeeshop.entities.SizeEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 /**
  *
-<<<<<<< HEAD
  * @author PC
  */
 @Repository
-public interface CategoryRepository extends
-        CrudRepository<CategoryEntity, Integer>{
+public interface SizeRepository extends CrudRepository<SizeEntity, Integer>{
+    
 }

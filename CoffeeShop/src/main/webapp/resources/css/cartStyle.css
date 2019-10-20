@@ -17,12 +17,10 @@ main {
     background-color: #e2e1e1ec;
     color: #000000b0;
 }
-
 .title {
     width: 40%;
     margin: 3vh;
 }
-
 .title>h1 {
     width: 100%;
     word-wrap: none;
@@ -32,7 +30,6 @@ main {
 
 
 }
-
 .list-product {
     width: 80%;
     margin: 2vh;
@@ -55,10 +52,12 @@ main {
 
 .list-product>table input {
     width: 20%;
+    border: 1px solid white;
+    border-radius: 5px;
 }
 .delete-product:hover{
     cursor: pointer;
-    color: #ce3232;
+    color: red;
 }
 .action{
     width: 80%;
@@ -76,9 +75,16 @@ main {
 
     transition: 0.3s;
 }
+.action__button > a{
+    transition: 0.3s;
+}
 .action__button:hover{
     cursor: pointer;
     background-color: #000000b0;
+
+    color: #e2e1e1c9;
+}
+.action__button:hover > a{
     color: #e2e1e1c9;
 }
 /* Responsive */

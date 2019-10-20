@@ -15,9 +15,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
-        <link rel="stylesheet" href="resources/css/style.css">
-        <link rel="stylesheet" href="resources/css/standard.css">
-        <link rel="shortcut icon" href="resources/images/landingPage/favicon.png">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/standard.css">
+        <link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/landingPage/favicon.png">
         <title>Teaffee Shop</title>
     </head>
     <body>
@@ -76,7 +76,7 @@
                 <c:forEach var="product" items="${products}">
                     <div class="product__item">
                         <img src="${product.images[0].path}" alt="product">
-                        <p class="product__item--name">${product.name}</p>
+                        <a href="<c:url value="/chi-tiet-san-pham/${product.id}"/>" class="product__item--name">${product.name}</a>
                         <c:if test="${product.promotions.size() > 0}">
                             <c:set var="totalDiscount" value="${product.price}"/>
                             <c:forEach var="promotion" items="${product.promotions}">
@@ -130,9 +130,50 @@
             </div>
         </div>
         <jsp:include page="include/footer.jsp"/>
+        <jsp:include page="include/script/standardScript.jsp"/>
 
-        <script src="resources/js/landingPage.js"></script>
-        <script src="resources/js/standard.js"></script>
-        <script src="resources/js/controlLandingPage.js"></script>
+        <script src="${pageContext.request.contextPath}/resources/js/landingPage.js"></script>
+        <script>
+            let product = document.getElementsByClassName('product')[0];
+            let searchBox = document.getElementById('search__box');
+            let searchBtn = document.getElementById('search__icon');
+            let xhttp = new XMLHttpRequest();
+            categoryItems = document.getElementsByClassName('category__item');
+
+            for (let categoryItem of categoryItems) {
+                categoryItem.addEventListener('click', function () {
+                    getAllProductByCategoryName(categoryItem.children[0].innerHTML)
+                });
+            }
+
+            searchBtn.onclick = () => {
+                console.log(searchBox.value);
+                xhttp.open('GET', '/CoffeeShop/tim-kiem-san-pham?name=' + searchBox.value)
+                xhttp.send();
+                xhttp.onreadystatechange = () => {
+                    if (xhttp.readyState == 4 && xhttp.status == 200) {
+                        product.innerHTML = xhttp.responseText;
+                    }
+                }
+                for (let i = 0; i < categoryItems.length; i++) {
+                    categoryItems[i].classList.remove('category__item--active');
+                    categoryItems[i].classList.remove('category__item--border');
+                }
+                if(!window.location.href.includes("#main"))
+                    window.location += '#main';
+                else
+                    window.location += '';
+            }
+
+            function getAllProductByCategoryName(name) {
+                xhttp.open('GET', '/CoffeeShop/list-san-pham?name=' + name);
+                xhttp.send();
+                xhttp.onreadystatechange = () => {
+                    if (xhttp.readyState == 4 && xhttp.status == 200) {
+                        product.innerHTML = xhttp.responseText;
+                    }
+                }
+            }
+        </script>
     </body>
 </html>

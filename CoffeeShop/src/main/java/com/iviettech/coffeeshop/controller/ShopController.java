@@ -8,13 +8,10 @@ package com.iviettech.coffeeshop.controller;
 import com.iviettech.coffeeshop.entities.OrderDetailEntity;
 import com.iviettech.coffeeshop.entities.ProductEntity;
 import com.iviettech.coffeeshop.entities.PromotionEntity;
-import com.iviettech.coffeeshop.entities.SizeEntity;
 import com.iviettech.coffeeshop.services.CategoryService;
 import com.iviettech.coffeeshop.services.ProductService;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -61,7 +58,14 @@ public class ShopController {
     public String viewCart(Model model) {
         return "cart/cart";
     }
-
+    
+    @RequestMapping(value = "/chi-tiet-san-pham/{productId}")
+    public String viewProductDetail(Model model,
+            @PathVariable("productId") int id){
+        model.addAttribute("product", productService.getProductById(id));
+        return "productDetail";
+    }
+    
     @RequestMapping(value = "/them-vao-gio-hang/{productId}/{sizeId}")
     public String addToCart(Model model,
             @PathVariable("productId") int productId,
@@ -107,7 +111,7 @@ public class ShopController {
         }
         request.getSession().setAttribute("orderDetails", orderDetails);
 
-        return "cart/cart";
+        return "redirect:/gio-hang";
     }
     
     @RequestMapping(value = "/xoa-san-pham")
@@ -121,12 +125,12 @@ public class ShopController {
         return "cart/cart";
     }
     
-    @RequestMapping(value = {"/dat-hang"})
+    @RequestMapping(value = "/dat-hang")
     public String viewCheckout(Model model) {
         return "cart/check-out";
     }
 
-    @RequestMapping(value = {"/list-san-pham"})
+    @RequestMapping(value = "/list-san-pham")
     public String getCategory(Model model,
             @RequestParam(name = "name") String nameCategory) {
         List<ProductEntity> products = null;
@@ -137,6 +141,12 @@ public class ShopController {
         }
 
         model.addAttribute("products", products);
+        return "ajax/listProduct";
+    }
+    @RequestMapping(value = "/tim-kiem-san-pham")
+    public String searchProducts(Model model,
+            @RequestParam(name = "name") String productName){
+        model.addAttribute("products", productService.searchProducts(productName));
         return "ajax/listProduct";
     }
 }

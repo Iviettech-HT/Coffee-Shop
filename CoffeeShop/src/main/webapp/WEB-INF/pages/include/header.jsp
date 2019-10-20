@@ -10,16 +10,16 @@
 
 <header>
     <div class="search">
-        <img src="${pageContext.request.contextPath}\resources\images\landingPage\logo.jpg" alt="logo" class="logo"
+        <img src="${pageContext.request.contextPath}/resources/images/landingPage/logo.jpg" alt="logo" class="logo"
              onclick="window.location = '<c:url value="/home"/>'" />
-        <input type="text" name="" placeholder="Tìm kiếm" />
-        <img src="${pageContext.request.contextPath}\resources\images\landingPage\search-icon.svg" alt="search" class="search__icon" />
+        <input type="text" name="" placeholder="Tìm kiếm" id="search__box"/>
+        <img src="${pageContext.request.contextPath}/resources/images/landingPage/search-icon.svg" alt="search" id="search__icon" />
     </div>
     <div class="control">
         <a href="#contact">LIÊN HỆ</a>
         <a>KHUYỄN MÃI</a>
         <a href="#">MENU</a>
-        <img src="${pageContext.request.contextPath}\resources\images\landingPage\cart_icon.svg" alt="cart" onclick="window.location = '<c:url value="/gio-hang"/>'" />
+        <img src="${pageContext.request.contextPath}/resources/images/landingPage/cart_icon.svg" alt="cart" onclick="window.location = '<c:url value="/gio-hang"/>'" />
         <div class="menu">
             <div class="line"></div>
             <div class="line"></div>

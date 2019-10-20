@@ -68,7 +68,7 @@
                                                 <td>${p.price}</td>
                                                 <td>${p.category.name}</td>
                                                 <td>
-                                                    <c:forEach var="s" items="p.sizes">
+                                                    <c:forEach var="s" items="${p.sizes}">
                                                         <p>${s.size}</p>
                                                     </c:forEach>
                                                 </td>
@@ -79,8 +79,10 @@
                                                 </td>
                                                 <td>${p.status}</td>
                                                 <td>
-                                                    <button type="button" class="btn btn-primary btn-sm">Edit</button>
-                                                    <button type="button" class="btn btn-primary btn-sm">Delete</button>
+                                                    <button class="btn btn-primary btn-sm" 
+                                                            onclick="location.href = '<c:url value="/edit-product"/>'">Edit</button>
+                                                    <button class="btn btn-primary btn-sm"
+                                                            onclick="location.href = '<c:url value="/delete-product"/>'">Delete</button>
                                                 </td>                                           
 
                                             </tr>

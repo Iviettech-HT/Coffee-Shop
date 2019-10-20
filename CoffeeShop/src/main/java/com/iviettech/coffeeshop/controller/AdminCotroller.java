@@ -67,7 +67,6 @@ public class AdminCotroller implements ResourceLoaderAware {
 
     @RequestMapping(value = {"/product"}, method = RequestMethod.GET)
     public String product(Model model) {
-        List<ProductEntity> product = productService.getProducts();
         model.addAttribute("products", productService.getProducts());
         return "admin/product";
     }
@@ -136,6 +135,12 @@ public class AdminCotroller implements ResourceLoaderAware {
     public void setResourceLoader(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
     }
+    
+    @RequestMapping(value={"/edit-product"})
+    public String editProduct(Model model){
+        return "admin/edit-product";
+    }
+    
 //-----Category---------------------------------
 
     @RequestMapping(value = {"/category"}, method = RequestMethod.GET)

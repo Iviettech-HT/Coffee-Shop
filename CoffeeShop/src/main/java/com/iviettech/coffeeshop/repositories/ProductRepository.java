@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProductRepository extends CrudRepository<ProductEntity, Integer>{
     @Query(value = "SELECT DISTINCT p FROM ProductEntity p INNER JOIN FETCH p.sizes s "
-            + "WHERE p.category.id = ?1")
+            + "WHERE p.id = ?1")
     public List<ProductEntity> getProductsByCategoryId(int id);
     
     @Query(value = "SELECT DISTINCT p FROM ProductEntity p INNER JOIN FETCH p.sizes s ")

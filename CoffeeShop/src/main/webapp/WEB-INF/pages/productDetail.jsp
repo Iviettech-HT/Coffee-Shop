@@ -15,7 +15,7 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/standard.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/productDetailStyle.css">
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/landingPage/favicon.png">
-        <title>Teaffee Shop</title>
+        <title>Teaffee ABC</title>
     </head>
     <body>
         <jsp:include page="include/header.jsp"/>

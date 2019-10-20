@@ -39,8 +39,9 @@
             </div>
             <div class="container-fluid">
                 <hr>
-                <div class="row-fluid">
-                    <div class="span6">
+                <div class="row-fluid "> 
+                    <div class="span3"></div>
+                    <div class="span6 align-self-center">
                         <div class="widget-box">
                             <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
                                 <h5>Personal-info</h5>

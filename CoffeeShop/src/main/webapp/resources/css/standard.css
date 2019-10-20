@@ -60,7 +60,7 @@ header img:hover{cursor: pointer;}
     outline: none;
 }
 
-.search__icon {
+#search__icon {
     width: 5%;
     padding: 1%;
     justify-self: center;
@@ -247,7 +247,7 @@ footer {
         flex: 1 1 auto;
         padding: 2% 2%;
     }
-    .search__icon{width: 8%;}
+    #search__icon{width: 8%;}
     .logo{width: 10%;}
     .control{align-items: center;}
     .control>a{display: none;}

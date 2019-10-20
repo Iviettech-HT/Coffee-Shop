@@ -13,18 +13,18 @@ import org.springframework.stereotype.Service;
 
 /**
  *
- * <<<<<<< HEAD
- * @a
- *
- * uthor PC
+ * @author admin
  */
 @Service
 public class CategoryService {
 
     @Autowired
-    private CategoryRepository categoryRepository;
-
-    public List<CategoryEntity> getCategories() {
+    CategoryRepository categoryRepository;
+//    public CategoryEntity getCategory(String name){
+//        
+//    }
+    
+    public List<CategoryEntity> getCategories(){
         return (List<CategoryEntity>) categoryRepository.findAll();
     }
 

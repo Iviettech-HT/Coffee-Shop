@@ -230,11 +230,11 @@ nav ul {
     position: relative;
 }
 
-.product__item>p {
+.product__item>p, .product__item>a {
+    display: block;
     margin: 10px 0;
     text-align: center;
 }
-
 .product__item>img {
     width: 100%;
     height: 400px;
@@ -243,6 +243,10 @@ nav ul {
     border-radius: 5px;
 }
 
+.product__item--name{
+    text-transform: uppercase;
+    font-weight: 600;
+}
 .product__info {
     width: 100%;
     height: 400px;

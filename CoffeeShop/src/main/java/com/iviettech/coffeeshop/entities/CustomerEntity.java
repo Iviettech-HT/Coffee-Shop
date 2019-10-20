@@ -6,6 +6,7 @@
 package com.iviettech.coffeeshop.entities;
 
 import com.iviettech.coffeeshop.enums.Gender;
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -23,7 +24,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "customer")
-public class CustomerEntity extends PersonalInfo{
+public class CustomerEntity extends PersonalInfo implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

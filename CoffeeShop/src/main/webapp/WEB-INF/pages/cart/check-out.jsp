@@ -127,6 +127,6 @@
             </div>
         </main>
         <jsp:include page="../include/footer.jsp"/>
-        <script src="resources/js/standard.js"></script>
+        <jsp:include page="../include/script/standardScript.jsp"/>
     </body>
 </html>

@@ -47,17 +47,21 @@
                                 <h5>Personal-info</h5>
                             </div>
                             <div class="widget-content nopadding">
-                                <mvc:form action="${pageContext.request.contextPath}/admin/${action}" method="post" class="form-horizontal" modelAttribute="product" enctype="multipart/form-data">
+                                <mvc:form action="${pageContext.request.contextPath}/admin/add-product" method="post" class="form-horizontal" modelAttribute="product" enctype="multipart/form-data">
+                                    <c:if test="${action eq 'edit-product'}">
+                                        <input type="hidden" name="id" value="${product.id}"  />
+                                    </c:if>
+
                                     <div class="control-group">
                                         <label class="control-label" >Product Name :</label>
                                         <div class="controls">
-                                            <input type="text" class="span11" name="name" placeholder="First name" />
+                                            <input type="text" class="span11" name="name" placeholder="First name" value="${product.name}"/>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label">Price :</label>
                                         <div class="controls">
-                                            <input type="text" class="span11" name="price" placeholder="Price" />
+                                            <input type="text" class="span11" name="price" placeholder="Price" value="${product.price}"/>
                                         </div>
                                     </div>
                                     <div class="control-group">
@@ -65,7 +69,12 @@
                                         <div class="controls">
                                             <select name="category.id" class="form-control">
                                                 <c:forEach var="c" items="${categories}">             
-                                                    <option value="${c.id}">${c.name}</option>                      
+                                                    <c:if test="${c.id == product.category.id}">
+                                                        <option value="${c.id}" selected>${c.name}</option>
+                                                    </c:if>
+                                                    <c:if test="${c.id != product.category.id}">
+                                                        <option value="${c.id}">${c.name}</option>
+                                                    </c:if>                     
                                                 </c:forEach>
                                             </select>
                                         </div>
@@ -73,20 +82,40 @@
                                     <div class="control-group">
                                         <label class="control-label">Status :</label>
                                         <div class="controls">
-                                            <input type="text" class="span11" name="status" value="true" />
-                                        </div>
+                                            <label>True
+                                                <input type="radio" name="status" value="true" />
+                                            </label> 
+                                            <label>False
+                                                <input type="radio" name="status" value="false" />
+                                            </label></div>
                                     </div>    
                                     <div class="control-group">
                                         <label class="control-label">Size :</label>
                                         <div class="controls">
                                             <c:forEach var="s" items="${sizes}">
-                                                <label>
-                                                    <input type="checkbox" name="sizeTemp" value="${s.id}"/>
-                                                ${s.size}
-                                                </label>
+                                                <c:set var="check" value="${false}"/>
+                                                <c:forEach var="size" items="${product.sizes}">
+                                                    <c:if test="${s.id == size.id}">
+                                                        <c:set var="check" value="${true}"/>
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${check}">
+                                                    <label>
+                                                        <input type="checkbox" name="sizeTemp" value="${s.id}" checked/>
+                                                        ${s.size}
+                                                    </label>
+                                                </c:if>
+                                                <c:if test="${!check}">
+                                                    <label>
+                                                        <input type="checkbox" name="sizeTemp" value="${s.id}" />
+                                                        ${s.size}
+                                                    </label>
+                                                </c:if>
                                             </c:forEach>
                                         </div>
                                     </div>
+
+
                                     <div class="control-group">
                                         <label class="control-label">Image :</label>
                                         <div class="controls">
@@ -102,6 +131,9 @@
                                     <div class="form-actions">
                                         <button type="submit" class="btn btn-success">Save</button>
                                     </div>
+                                    </label
+
+
                                 </mvc:form>
                             </div>
                         </div>

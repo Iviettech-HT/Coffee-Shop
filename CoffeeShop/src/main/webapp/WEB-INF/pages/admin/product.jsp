@@ -80,9 +80,9 @@
                                                 <td>${p.status}</td>
                                                 <td>
                                                     <button class="btn btn-primary btn-sm" 
-                                                            onclick="location.href = '<c:url value="/edit-product"/>'">Edit</button>
+                                                            onclick="location.href = '<c:url value="/admin/edit-product/${p.id}"/>'">Edit</button>
                                                     <button class="btn btn-primary btn-sm"
-                                                            onclick="location.href = '<c:url value="/delete-product"/>'">Delete</button>
+                                                            onclick="location.href = '<c:url value="/admin/delete-product/${p.id}"/>'">Delete</button>
                                                 </td>                                           
 
                                             </tr>

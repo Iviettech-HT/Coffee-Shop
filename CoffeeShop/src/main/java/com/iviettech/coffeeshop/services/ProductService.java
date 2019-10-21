@@ -137,4 +137,7 @@ public class ProductService {
         Collections.sort(lSizes, (a, b) -> Integer.compare(a.getId(), b.getId()));
         return new LinkedHashSet<SizeEntity>(lSizes);
     }
+    public void saveProduct(ProductEntity product) {
+        productRepository.save(product);
+    }
 }

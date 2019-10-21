@@ -28,6 +28,7 @@ import org.springframework.context.ResourceLoaderAware;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -136,9 +137,22 @@ public class AdminCotroller implements ResourceLoaderAware {
         this.resourceLoader = resourceLoader;
     }
     
-    @RequestMapping(value={"/edit-product"})
-    public String editProduct(Model model){
-        return "admin/edit-product";
+    @RequestMapping(value={"/edit-product/{id}"})
+    public String editProduct(Model model, @PathVariable("id") int Id){
+        ProductEntity product = productService.getProductById(Id);
+        model.addAttribute("product", product);
+        model.addAttribute("sizes", sizeService.findSizes());
+        model.addAttribute("categories", categoryService.getCategories());
+        model.addAttribute("action", "edit-product");
+        return "admin/add-product-form";
+    }
+    
+    @RequestMapping(value={"/delete-product/{id}"})
+    public String delteteProduct(Model model, @PathVariable("id") int Id){
+        ProductEntity product = productService.getProductById(Id);
+        product.setStatus(false);
+        productService.saveProduct(product);
+        return "redirect:/admin/product";
     }
     
 //-----Category---------------------------------

@@ -11,6 +11,7 @@ import com.iviettech.coffeeshop.entities.SizeEntity;
 import com.iviettech.coffeeshop.repositories.ImageRepository;
 import com.iviettech.coffeeshop.repositories.ProductRepository;
 import com.iviettech.coffeeshop.repositories.PromotionRepository;
+import com.iviettech.coffeeshop.repositories.SizeRepository;
 import com.iviettech.coffeeshop.repositories.VoteRepository;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +38,9 @@ public class ProductService {
     VoteRepository voteRepository;
     @Autowired
     PromotionRepository promotionRepository;
+    
+    @Autowired
+    private SizeRepository sizeRepository;
 
     public ProductEntity getProductByIdAndSizeId(int id, int sizeId) {
         ProductEntity product = productRepository.getProductByIdAndSizeId(id, sizeId);
@@ -58,10 +62,10 @@ public class ProductService {
     
     public List<ProductEntity> getProducts() {
 
-        List<ProductEntity> products = (List<ProductEntity>) productRepository.getAll();
+        List<ProductEntity> products = (List<ProductEntity>) productRepository.findAll();
 
         for (ProductEntity product : products) {
-            product.setSizes(this.sortSizes(product.getSizes()));
+            product.setSizes(sizeRepository.getSizesByProductId(product.getId()));
             product.setImages(imageRepository.getImagesByProductId(product.getId()));
             product.setVotes(voteRepository.getVotesByProductId(product.getId()));
             product.setPromotions(promotionRepository.getPromotionsByProductId(product.getId(), new Date()));

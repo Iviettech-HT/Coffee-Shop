@@ -8,6 +8,7 @@ package com.iviettech.coffeeshop.controller;
 import com.iviettech.coffeeshop.entities.CategoryEntity;
 import com.iviettech.coffeeshop.entities.ImageEntity;
 import com.iviettech.coffeeshop.entities.ProductEntity;
+import com.iviettech.coffeeshop.entities.PromotionEntity;
 import com.iviettech.coffeeshop.entities.SizeEntity;
 import com.iviettech.coffeeshop.services.ProductService;
 import java.io.BufferedOutputStream;
@@ -18,11 +19,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ResourceLoader;
 import com.iviettech.coffeeshop.services.CategoryService;
+import com.iviettech.coffeeshop.services.ImageService;
+import com.iviettech.coffeeshop.services.PromotionService;
 import com.iviettech.coffeeshop.services.SizeService;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletContext;
+import javax.ws.rs.POST;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.stereotype.Controller;
@@ -39,8 +45,6 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * @author admin
  */
-
-
 @Controller
 @RequestMapping("/admin")
 public class AdminCotroller implements ResourceLoaderAware {
@@ -51,16 +55,18 @@ public class AdminCotroller implements ResourceLoaderAware {
     private ProductService productService;
     @Autowired
     private SizeService sizeService;
-    
     @Autowired
-    private ServletContext context;    
-    
+    private PromotionService promotionService;
+    @Autowired
+    private ImageService imageService;
+
+    @Autowired
+    private ServletContext context;
+
     private ResourceLoader resourceLoader;
-    
-    
-    
+
 //-----Home----------------------------------------
-    @RequestMapping(value={"/*","/home"})
+    @RequestMapping(value = {"/*", "/home"})
     public String viewAdmin(Model model) {
         return "admin/home";
     }
@@ -68,6 +74,7 @@ public class AdminCotroller implements ResourceLoaderAware {
 
     @RequestMapping(value = {"/product"}, method = RequestMethod.GET)
     public String product(Model model) {
+        List<ProductEntity> product = productService.getProducts();
         model.addAttribute("products", productService.getProducts());
         return "admin/product";
     }
@@ -76,8 +83,8 @@ public class AdminCotroller implements ResourceLoaderAware {
     public String viewForm(Model model) {
         model.addAttribute("product", new ProductEntity());
         model.addAttribute("sizes", sizeService.findSizes());
-        model.addAttribute("categories", categoryService.getCategories());
-        model.addAttribute("action","add-product");
+        model.addAttribute("categories", categoryService.getCategoryByStatus());
+        model.addAttribute("action", "add-product");
         return "admin/add-product-form";
     }
 
@@ -88,18 +95,19 @@ public class AdminCotroller implements ResourceLoaderAware {
             @RequestParam("sizeTemp") List<Integer> sizeIds,
             @Value(value = "${pathSaveImage}") String pathSaveImages) {
         Set<SizeEntity> sizes = new HashSet<>();
-        for(int sizeId: sizeIds){
+        for (int sizeId : sizeIds) {
             SizeEntity size = sizeService.findSize(sizeId);
             sizes.add(size);
         }
         product.setSizes(sizes);
-        
+
         List<ImageEntity> listImage = new ArrayList<>();
-        
+
         String savedPath;
         if (images.length == 0) {
-            model.addAttribute("errorMessage", "Please upload image");
-            return "error";
+            product.setImages(listImage);
+            productService.addProduct(product);
+            return "redirect:/admin/product";
         }
         for (int i = 0; i < images.length; i++) {
             MultipartFile image = images[i];
@@ -136,25 +144,36 @@ public class AdminCotroller implements ResourceLoaderAware {
     public void setResourceLoader(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
     }
-    
-    @RequestMapping(value={"/edit-product/{id}"})
-    public String editProduct(Model model, @PathVariable("id") int Id){
-        ProductEntity product = productService.getProductById(Id);
-        model.addAttribute("product", product);
+
+    @RequestMapping(value = {"/edit-product/{id}"})
+    public String editProduct(Model model, @PathVariable("id") int Id) {
+        model.addAttribute("product", productService.getProductById(Id));
         model.addAttribute("sizes", sizeService.findSizes());
         model.addAttribute("categories", categoryService.getCategories());
         model.addAttribute("action", "edit-product");
         return "admin/add-product-form";
     }
-    
-    @RequestMapping(value={"/delete-product/{id}"})
-    public String delteteProduct(Model model, @PathVariable("id") int Id){
+
+    @RequestMapping(value = "/edit-product/{id}", method = RequestMethod.POST)
+    public String saveProduct(Model model, @PathVariable("id") int Id) {
+        ProductEntity product = productService.getProductById(Id);
+        productService.saveProduct(product);
+        return "redirect:admin/product";
+    }
+
+    @RequestMapping(value = {"/delete-image/{id}"})
+    public String deleteImage(Model model, @PathVariable("id") int Id) {
+        imageService.deleteImageByProductId(Id);
+        return "redirect:/admin/edit-product/" + Id;
+    }
+
+    @RequestMapping(value = {"/delete-product/{id}"})
+    public String delteteProduct(Model model, @PathVariable("id") int Id) {
         ProductEntity product = productService.getProductById(Id);
         product.setStatus(false);
         productService.saveProduct(product);
         return "redirect:/admin/product";
     }
-    
 //-----Category---------------------------------
 
     @RequestMapping(value = {"/category"}, method = RequestMethod.GET)
@@ -177,9 +196,107 @@ public class AdminCotroller implements ResourceLoaderAware {
         return "redirect:/admin/category";
     }
 
+    @RequestMapping(value = {"/edit-category/{id}"})
+    public String editCategory(Model model, @PathVariable("id") int id) {
+        model.addAttribute("category", categoryService.findCategory(id));
+        model.addAttribute("action", "edit-category");
+        return "admin/add-category-form";
+    }
+
+    @RequestMapping(value = {"/delete-category/{id}"})
+    public String delteteCategory(Model model, @PathVariable("id") int Id) {
+        CategoryEntity category = categoryService.findCategory(Id);
+        category.setStatus(false);
+        categoryService.addCategory(category);
+        return "redirect:/admin/category";
+    }
+
+//-----Promotion---------------------------------
+    @RequestMapping(value = {"/promotion"}, method = RequestMethod.GET)
+    public String viewPromotion(Model model) {
+        model.addAttribute("promotion", promotionService.findPromotion());
+        return "admin/promotion";
+    }
+
+    @RequestMapping(value = {"/add-promotion"})
+    public String addPromotion(Model model) {
+        model.addAttribute("category", new PromotionEntity());
+        model.addAttribute("action", "add-promotion");
+        return "admin/promotion-form";
+    }
+
+    @RequestMapping(value = "/add-promotion", method = RequestMethod.POST)
+    public String savePromotion(Model model,
+            @ModelAttribute("promotion") PromotionEntity promotion,
+            @RequestParam("file") MultipartFile image,
+            @Value(value = "${pathSaveImage}") String pathSaveImages) {
+
+        String savedPath;
+        try {
+            byte[] bytes = image.getBytes();
+
+            //Get path to resources
+            String pathUrl = context.getRealPath("/images");
+            int index = pathUrl.indexOf("target");
+            String pathFolder = pathUrl.substring(0, index) + pathSaveImages;
+            savedPath = "resources/images/landingPage/products/" + image.getOriginalFilename();
+            promotion.setImage(savedPath);
+            //Save file
+            File storedFile = new File(pathFolder + File.separator + image.getOriginalFilename());
+            BufferedOutputStream buffer = new BufferedOutputStream(new FileOutputStream(storedFile));
+
+            buffer.write(bytes);
+            buffer.close();
+
+        } catch (IOException ex) {
+            model.addAttribute("errorMessage", "Error can't add product");
+            return "error";
+        }
+        promotionService.addPromotion(promotion);
+        return "redirect:/admin/promotion";
+    }
+
+    @RequestMapping(value = {"/edit-promotion/{id}"})
+    public String editPromotion(Model model, @PathVariable("id") int id) {
+        model.addAttribute("promotion", promotionService.getPromotion(id));
+        model.addAttribute("action", "add-promotion");
+        return "admin/promotion-form";
+    }
+
+    @RequestMapping(value = {"/delete-promotion/{id}"})
+    public String deltetePromotion(Model model, @PathVariable("id") int Id) {
+        PromotionEntity promotion = promotionService.getPromotion(Id);
+        promotion.setStatus(false);
+        promotionService.addPromotion(promotion);
+        return "redirect:/admin/promotion";
+    }
+
+    @RequestMapping(value = {"/promotionForProduct"}, method = RequestMethod.GET)
+    public String promotionForProduct(Model model) {
+        model.addAttribute("promotion", promotionService.findPromotion());
+        model.addAttribute("product", productService.findProducts());
+        model.addAttribute("action", "promotionForProduct");
+        return "admin/promotionForProduct";
+    }
+
+    @RequestMapping(value = {"/promotionForProduct"}, method = RequestMethod.POST)
+    public String savePromotionForProduct(Model model,
+            @ModelAttribute("promoition") PromotionEntity promotion,
+            @RequestParam("promotion.id") int Id,
+            @RequestParam("productTemp") List<Integer> prodpuctIds) {
+        Set<ProductEntity> products = new HashSet<>();
+        for (int productId : prodpuctIds) {
+            ProductEntity product = productService.getProductById(productId);
+            products.add(product);
+        }
+        promotion.setProducts(products);
+        return "redirect:admin/promotion";
+    }
+
     //----Test----------------
     @RequestMapping("/test")
-    public String test(Model model) {
+    public String test(Model model
+    ) {
         return "admin/tesst";
     }
 }

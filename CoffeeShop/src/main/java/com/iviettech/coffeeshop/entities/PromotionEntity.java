@@ -33,7 +33,7 @@ public class PromotionEntity implements Serializable{
     private String description;
     private double discount;
     private String image;
-    private String status;
+    private boolean status;
     
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
@@ -48,8 +48,8 @@ public class PromotionEntity implements Serializable{
 
     public PromotionEntity() {
     }
-    
-    public PromotionEntity(String description, double discount, String image, String status, Date startDate, Date endDate, Set<ProductEntity> products) {
+
+    public PromotionEntity(String description, double discount, String image, boolean status, Date startDate, Date endDate, Set<ProductEntity> products) {
         this.description = description;
         this.discount = discount;
         this.image = image;
@@ -58,6 +58,8 @@ public class PromotionEntity implements Serializable{
         this.endDate = endDate;
         this.products = products;
     }
+    
+    
 
     public int getId() {
         return id;
@@ -91,15 +93,15 @@ public class PromotionEntity implements Serializable{
         this.image = image;
     }
 
-    public String getStatus() {
+    public boolean isStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 
-    public Date getStartDate() {
+     public Date getStartDate() {
         return startDate;
     }
 

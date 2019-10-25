@@ -5,7 +5,12 @@
  */
 package com.iviettech.coffeeshop.repositories;
 
+import com.iviettech.coffeeshop.entities.ProductEntity;
 import com.iviettech.coffeeshop.entities.SizeEntity;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,4 +21,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SizeRepository extends CrudRepository<SizeEntity, Integer>{
     
+    @Query(value = "SELECT s FROM SizeEntity s JOIN s.products p where p.id = ?1")
+    public LinkedHashSet<SizeEntity> getSizesByProductId(int  id);
 }

@@ -83,7 +83,7 @@
                                         <label class="control-label">Status :</label>
                                         <div class="controls">
                                             <label>True
-                                                <input type="radio" name="status" value="true" />
+                                                <input type="radio" name="status" value="true" checked="checked"/>
                                             </label> 
                                             <label>False
                                                 <input type="radio" name="status" value="false" />
@@ -115,25 +115,54 @@
                                         </div>
                                     </div>
 
+                                    <c:if test="${action == 'edit-product'}">
+                                        <c:if test="${product.images.size() != 0}"> 
+                                            <div class="control-group">
 
-                                    <div class="control-group">
-                                        <label class="control-label">Image :</label>
-                                        <div class="controls">
-                                            <input type="file" name="file"/>
+                                                <div>
+                                                    <label class="control-label">Image :</label>
+                                                </div>
+
+                                                <c:forEach var="p" items="${product.images}">
+                                                    <div class="controls">
+                                                        <img src="${pageContext.request.contextPath}/${p.path}" alt="${product.name}" height="100px" width="100px"/>
+                                                        <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+
+                                                    </div>
+                                                </c:forEach>
+
+                                                <div class="control-group">
+                                                    <div class="span5"></div>
+                                                    <a class="btn-danger btn-xs" 
+                                                       href="<c:url value="/admin/delete-image/${product.id}"/>">Delete All Image</a>
+                                                </div>
+                                            </c:if>
+                                            <div class="control-group">
+                                                <label class="control-label">Number Image :</label>
+                                                <div class="controls">
+                                                    <input type="number"  name="number" id="number" class="form-control" min="0" onchange="addElementImage()"/>
+                                                </div>
+                                            </div>
+                                            <div id="images" class="control-group">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="control-group">
-                                        <label class="control-label">Image Small :</label>
-                                        <div class="controls">
-                                            <input type="file" name="file"/>
+
+                                    </c:if>
+                                    <c:if test="${action != 'edit-product'}">                                        
+                                        <div class="control-group">
+                                            <label class="control-label">Image :</label>
+                                            <div class="controls">
+                                                <input type="file" name="file" class="form-control"/>
+                                            </div>
+                                            <label class="control-label">Image Small:</label>
+                                            <div class="controls">
+                                                <input type="file" name="file" class="form-control"/>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-actions">
+                                    </c:if>
+                                    <div class="form-actions">                                        
                                         <button type="submit" class="btn btn-success">Save</button>
                                     </div>
-                                    </label
-
-
                                 </mvc:form>
                             </div>
                         </div>
@@ -172,27 +201,39 @@
         <script src="${pageContext.request.contextPath}/resources-management/js/matrix.tables.js"></script> 
 
         <script type="text/javascript">
-            // This function is called from the pop-up menus to transfer to
-            // a different page. Ignore if the value returned is a null string:
-            function goPage(newURL) {
+                                                            // This function is called from the pop-up menus to transfer to
+                                                            // a different page. Ignore if the value returned is a null string:
+                                                            function goPage(newURL) {
 
-                // if url is empty, skip the menu dividers and reset the menu selection to default
-                if (newURL != "") {
+                                                                // if url is empty, skip the menu dividers and reset the menu selection to default
+                                                                if (newURL != "") {
 
-                    // if url is "-", it is this page -- reset the menu:
-                    if (newURL == "-") {
-                        resetMenu();
-                    }
-                    // else, send page to designated URL            
-                    else {
-                        document.location.href = newURL;
-                    }
+                                                                    // if url is "-", it is this page -- reset the menu:
+                                                                    if (newURL == "-") {
+                                                                        resetMenu();
+                                                                    }
+                                                                    // else, send page to designated URL            
+                                                                    else {
+                                                                        document.location.href = newURL;
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            // resets the menu selection upon entry to this page:
+                                                            function resetMenu() {
+                                                                document.gomenu.selector.selectedIndex = 2;
+                                                            }
+        </script>
+        <script>
+            function addElementImage() {
+                var soluong = document.getElementById("number").value;
+                var text = "";
+                for (var i = 1; i <= soluong; i++) {
+                    text += '<label class="control-label">Image ' + i + '</label><div class="controls"><input type="file" name="file" class="form-control"/></div>';
                 }
-            }
-
-            // resets the menu selection upon entry to this page:
-            function resetMenu() {
-                document.gomenu.selector.selectedIndex = 2;
+                var div = document.getElementById('images');
+                div.innerHTML = text;
+                console.log(text);
             }
         </script>
     </body>

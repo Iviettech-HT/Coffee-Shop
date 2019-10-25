@@ -63,8 +63,10 @@
                                                 <td>${c.name}</td>
                                                 <td>${c.status}</td>
                                                 <td>
-                                                    <button type="button" class="btn btn-primary btn-sm">Edit</button>
-                                                    <button type="button" class="btn btn-primary btn-sm">Delete</button>
+                                                    <button type="button" class="btn btn-primary btn-sm"
+                                                            onclick="location.href = '<c:url value="/admin/edit-category/${c.id}"/>'">Edit</button>
+                                                    <button type="button" class="btn btn-primary btn-sm"
+                                                            onclick="location.href = '<c:url value="/admin/delete-category/${c.id}"/>'">Delete</button>
                                                 </td>                                           
 
                                             </tr>

@@ -5,10 +5,13 @@
  */
 package com.iviettech.coffeeshop.entities;
 
+import com.iviettech.coffeeshop.enums.OrderStatus;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -41,7 +44,9 @@ public class OrderEntity implements Serializable{
     private Date shippingDate;
     
     private double totalPrice;
-    private String status;
+    
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
     
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<OrderDetailEntity> orderDetails;
@@ -50,7 +55,7 @@ public class OrderEntity implements Serializable{
     @JoinColumn(name = "customerId")
     private CustomerEntity customer;
 
-    public OrderEntity(Date orderDate, Date shippingDate, double totalPrice, String status, List<OrderDetailEntity> orderDetails, CustomerEntity customer) {
+    public OrderEntity(Date orderDate, Date shippingDate, double totalPrice, OrderStatus status, List<OrderDetailEntity> orderDetails, CustomerEntity customer) {
         this.orderDate = orderDate;
         this.shippingDate = shippingDate;
         this.totalPrice = totalPrice;
@@ -91,11 +96,11 @@ public class OrderEntity implements Serializable{
         this.totalPrice = totalPrice;
     }
 
-    public String getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 

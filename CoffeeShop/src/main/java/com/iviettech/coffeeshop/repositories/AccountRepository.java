@@ -16,4 +16,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AccountRepository extends CrudRepository<AccountEntity, Integer>{
     public AccountEntity findByUsernameAndPassword(String username, String password);
+    public AccountEntity findByUsername(String username);
+    public AccountEntity findByEmail(String email);
+    public AccountEntity findByPhone(String phone);
 }

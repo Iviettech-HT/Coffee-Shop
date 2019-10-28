@@ -8,9 +8,19 @@ and open the template in the editor.
     Author     : admin
 */
 
+
+main{
+    width: 100%;
+    background: url('../images/landingPage/background-tree-simple.png') no-repeat;
+    background-position-x: 100%;
+    background-position-y: 100%;
+    background-size: contain;
+    
+    background-color: #ebfaeb;
+}
 .container-product-info{
     width: 100%;
-    height: 85vh;
+    height: 80vh;
     
     display: flex;
     flex-direction: row;
@@ -90,6 +100,7 @@ and open the template in the editor.
     font-weight: 600;
     font-size: 1.2em;
     text-transform: uppercase;
+    background-color: #ebfaeb;
     
     border: 2px solid #5bd75b;
     border-radius: 10px;
@@ -103,6 +114,36 @@ and open the template in the editor.
 .product-info__buy-button--active{
     cursor: pointer;
     background: #5bd75b;
+}
+
+#vote {
+    width: fit-content;
+    box-sizing: content-box;
+    height: 60px;
+    display: flex;
+    flex-direction: row-reverse;
+    border-radius: 10px;
+}
+
+.star {
+    line-height: 60px;
+    color: #a9a9a9;
+}
+
+.star:before {
+    content: '\2605';
+    width: 60px;
+    height: 60px;
+    font-size: 60px;
+}
+
+.star:hover,
+.star.selected,
+.star:hover~.star,
+.star.selected~.star {
+    cursor: pointer;
+    transition: color 0.3s ease;
+    color: #f2f20d;
 }
 
 @media only screen and (max-width: 700px){

@@ -19,6 +19,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PromotionRepository extends CrudRepository<PromotionEntity, Integer>{
     @Query(value = "SELECT pr FROM PromotionEntity pr INNER JOIN pr.products p "
-            + "WHERE p.id = ?1 AND pr.endDate > ?2")
+            + "WHERE p.id = ?1 AND pr.endDate >= ?2 AND pr.startDate <= ?2")
     public Set<PromotionEntity> getPromotionsByProductId(int id, Date now);
+    
+    @Query(value = "SELECT pr FROM PromotionEntity pr WHERE pr.endDate >= ?1 AND pr.startDate <= ?1")
+    public Set<PromotionEntity> getPromotionsAvailable(Date now);
 }

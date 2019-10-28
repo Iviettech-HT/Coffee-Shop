@@ -82,3 +82,11 @@ input{color: white;}
 	transition: 0.7s;
 	background-color:  #32b076; 
 }
+.messageError{
+    color: red;
+    margin: 2px 0 5px 0;
+    text-align: center;
+}
+.more-info{
+    padding: 10px 0;
+}

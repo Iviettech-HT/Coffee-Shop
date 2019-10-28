@@ -56,13 +56,27 @@
                         <a href='<c:url value="/dang-xuat"/>'>ĐĂNG XUẤT</a>
                     </li>
                 </sec:authorize>
-                <sec:authorize access="hasRole('ROLE_USER')">
-                    <li>
-                        <a href='<c:url value="/thong-tin-ca-nhan"/>'>HỒ SƠ</a>
-                    </li>
-                    <li>
-                        <a href='<c:url value="/dang-xuat"/>'>ĐĂNG XUẤT</a>
-                    </li>
+                <sec:authorize access="isAuthenticated()">
+                    <sec:authentication var="user" property="principal"/>
+                    <sec:authorize access="!${user.status}">    
+                        <li>
+                            <a href='<c:url value="/user/thong-tin-ca-nhan"/>'>HỒ SƠ</a>
+                        </li>
+                        <li>
+                            <a href='<c:url value="/xac-thuc-email?email=${user.email}"/>'>XÁC THỰC</a>
+                        </li>
+                        <li>
+                            <a href='<c:url value="/dang-xuat"/>'>ĐĂNG XUẤT</a>
+                        </li>
+                    </sec:authorize>
+                    <sec:authorize access="hasRole('ROLE_USER') && ${user.status}">
+                        <li>
+                            <a href='<c:url value="/user/thong-tin-ca-nhan"/>'>HỒ SƠ</a>
+                        </li>
+                        <li>
+                            <a href='<c:url value="/dang-xuat"/>'>ĐĂNG XUẤT</a>
+                        </li>
+                    </sec:authorize>
                 </sec:authorize>
             </ul>
         </div>

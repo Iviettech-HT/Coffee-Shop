@@ -64,5 +64,9 @@
         <param-name>pathSaveImage</param-name>
         <param-value>src/main/webapp/resources/images/landingPage/products/</param-value>
     </context-param>
+    <context-param> 
+        <param-name>fileForSend</param-name>
+        <param-value>/WEB-INF/pages/email/</param-value>
+    </context-param>
     
 </web-app>

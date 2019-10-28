@@ -36,6 +36,9 @@ public class CustomerEntity extends PersonalInfo implements Serializable{
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<OrderEntity> orders;
 
+    public CustomerEntity() {
+    }
+    
     public CustomerEntity(AccountEntity account, List<OrderEntity> orders, String name, String phone, String address, String email, Gender gender) {
         super(name, phone, address, email, gender);
         this.account = account;

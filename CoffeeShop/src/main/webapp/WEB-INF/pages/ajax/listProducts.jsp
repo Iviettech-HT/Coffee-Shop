@@ -9,9 +9,14 @@
 
 
 <c:forEach var="product" items="${products}">
-    <div class="product__item">
+    <div class="product__item" id="product${product.id}">
         <img src="${product.images[0].path}" alt="product">
-        <a href="<c:url value="/chi-tiet-san-pham/${product.id}"/>" class="product__item--name">${product.name}</a>
+        <a href="<c:url value="/chi-tiet-san-pham/${product.id}"/>" class="product__item--name">
+            ${product.name}
+            <c:if test="${product.status == false}">
+                <span style="color: #999; font-size: 0.8em;">(Đã hết)</span>
+            </c:if>
+        </a>
         <c:if test="${product.promotions.size() > 0}">
             <c:set var="totalDiscount" value="${product.price}"/>
             <c:forEach var="promotion" items="${product.promotions}">
@@ -45,10 +50,12 @@
                    class="size">Size ${size.size}</a>
             </c:forEach>
             <sec:authorize access="isAuthenticated()">
-                <a class="vote">Vote</a>
-            </sec:authorize>
-            <sec:authorize access="isAuthenticated()">
-                <a class="favorite">Thêm vào yêu thích</a>
+                <c:if test="${favorite == true}">
+                    <a onclick="deleteFavoriteProduct(${product.id})" class="delete-favorite">Delete</a>
+                </c:if>
+                <c:if test="${favorite == false}">
+                    <a href="<c:url value="/user/them-vao-yeu-thich/${product.id}"/>" class="favorite">Thêm vào yêu thích</a>
+                </c:if>
             </sec:authorize>
         </div>
     </div>

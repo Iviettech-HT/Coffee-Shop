@@ -5,9 +5,10 @@
  */
 package com.iviettech.coffeeshop.services;
 
-import com.iviettech.coffeeshop.entities.ImageEntity;
-import com.iviettech.coffeeshop.repositories.ImageRepository;
-import java.util.List;
+import com.iviettech.coffeeshop.entities.PromotionEntity;
+import com.iviettech.coffeeshop.repositories.PromotionRepository;
+import java.util.Date;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +17,11 @@ import org.springframework.stereotype.Service;
  * @author admin
  */
 @Service
-public class ImageService {
+public class PromotionService {
     @Autowired
-    private ImageRepository imageRepository;
+    private PromotionRepository promotionRepository;
     
-    public List<ImageEntity> getImagesByProductId(int productId){
-        return imageRepository.getImagesByProductId(productId);
+    public Set<PromotionEntity> getPromotionsAvailable(){
+        return promotionRepository.getPromotionsAvailable(new Date());
     }
 }

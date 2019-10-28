@@ -28,11 +28,11 @@ public class FavoriteEntity implements Serializable{
     private boolean status;
     
     @ManyToOne
-    @JoinColumn(name = "product_id", insertable = false, updatable = false)
+    @JoinColumn(name = "product_id")
     private ProductEntity product;
     
     @ManyToOne
-    @JoinColumn(name = "account_id", insertable = false, updatable = false)
+    @JoinColumn(name = "account_id")
     private AccountEntity account;
 
     public FavoriteEntity() {

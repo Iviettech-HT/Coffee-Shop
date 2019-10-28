@@ -11,14 +11,15 @@ import com.iviettech.coffeeshop.entities.SizeEntity;
 import com.iviettech.coffeeshop.repositories.ImageRepository;
 import com.iviettech.coffeeshop.repositories.ProductRepository;
 import com.iviettech.coffeeshop.repositories.PromotionRepository;
+import com.iviettech.coffeeshop.repositories.SizeRepository;
 import com.iviettech.coffeeshop.repositories.VoteRepository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.SortedSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,17 +31,25 @@ import org.springframework.stereotype.Service;
 public class ProductService {
 
     @Autowired
-    ProductRepository productRepository;
+    private ProductRepository productRepository;
     @Autowired
-    ImageRepository imageRepository;
+    private ImageRepository imageRepository;
     @Autowired
-    VoteRepository voteRepository;
+    private VoteRepository voteRepository;
     @Autowired
-    PromotionRepository promotionRepository;
-
+    private PromotionRepository promotionRepository;
+    @Autowired
+    private SizeRepository sizeRepository;
+    
+    public ProductEntity findProduct(int id){
+        return productRepository.findOne(id);
+    }
+    
     public ProductEntity getProductByIdAndSizeId(int id, int sizeId) {
-        ProductEntity product = productRepository.getProductByIdAndSizeId(id, sizeId);
-        product.setSizes(this.sortSizes(product.getSizes()));
+        ProductEntity product = productRepository.findOne(id);
+        Set<SizeEntity> sizes = new HashSet<>();
+        sizes.add(sizeRepository.findOne(sizeId));
+        product.setSizes(sizes);
         product.setImages(imageRepository.getImagesByProductId(product.getId()));
         product.setVotes(voteRepository.getVotesByProductId(product.getId()));
         product.setPromotions(promotionRepository.getPromotionsByProductId(product.getId(), new Date()));
@@ -48,8 +57,8 @@ public class ProductService {
     }
     
     public ProductEntity getProductById(int id){
-        ProductEntity product = productRepository.getProductById(id);
-        product.setSizes(this.sortSizes(product.getSizes()));
+        ProductEntity product = productRepository.findOne(id);
+        product.setSizes(sizeRepository.getSizesByProductId(product.getId()));
         product.setImages(imageRepository.getImagesByProductId(product.getId()));
         product.setVotes(voteRepository.getVotesByProductId(product.getId()));
         product.setPromotions(promotionRepository.getPromotionsByProductId(product.getId(), new Date()));
@@ -58,10 +67,10 @@ public class ProductService {
     
     public List<ProductEntity> getProducts() {
 
-        List<ProductEntity> products = (List<ProductEntity>) productRepository.getAll();
+        List<ProductEntity> products = (List<ProductEntity>) productRepository.findAll();
 
         for (ProductEntity product : products) {
-            product.setSizes(this.sortSizes(product.getSizes()));
+            product.setSizes(sizeRepository.getSizesByProductId(product.getId()));
             product.setImages(imageRepository.getImagesByProductId(product.getId()));
             product.setVotes(voteRepository.getVotesByProductId(product.getId()));
             product.setPromotions(promotionRepository.getPromotionsByProductId(product.getId(), new Date()));
@@ -69,14 +78,10 @@ public class ProductService {
         return products;
     }
 
-    public List<ProductEntity> getProducts(int CategoryId) {
-        return productRepository.getProductsByCategoryId(CategoryId);
-    }
-
-    public List<ProductEntity> getProducts(String name) {
+    public List<ProductEntity> getProductsByCategoryName(String name) {
         List<ProductEntity> products = productRepository.getProductsByCategoryName(name);
         for (ProductEntity product : products) {
-            product.setSizes(this.sortSizes(product.getSizes()));
+            product.setSizes(sizeRepository.getSizesByProductId(product.getId()));
             product.setImages(imageRepository.getImagesByProductId(product.getId()));
             product.setVotes(voteRepository.getVotesByProductId(product.getId()));
             product.setPromotions(promotionRepository.getPromotionsByProductId(product.getId(), new Date()));
@@ -84,11 +89,22 @@ public class ProductService {
         return products;
     }
     
+    public List<ProductEntity> getFavoriteProducts(int accountId){
+        List<ProductEntity> products = productRepository.getFavoriteProducts(accountId);
+        for (ProductEntity product : products) {
+            product.setSizes(sizeRepository.getSizesByProductId(product.getId()));
+            product.setImages(imageRepository.getImagesByProductId(product.getId()));
+            product.setVotes(voteRepository.getVotesByProductId(product.getId()));
+            product.setPromotions(promotionRepository.getPromotionsByProductId(product.getId(), new Date()));
+        }
+        return products;
+    } 
+    
     public List<ProductEntity> searchProducts(String name){
         name = '%' + name + '%';
         List<ProductEntity> products = productRepository.getProductsByName(name);
         for (ProductEntity product : products) {
-            product.setSizes(this.sortSizes(product.getSizes()));
+            product.setSizes(sizeRepository.getSizesByProductId(product.getId()));
             product.setImages(imageRepository.getImagesByProductId(product.getId()));
             product.setVotes(voteRepository.getVotesByProductId(product.getId()));
             product.setPromotions(promotionRepository.getPromotionsByProductId(product.getId(), new Date()));
@@ -102,12 +118,12 @@ public class ProductService {
 
         for (Integer productId : productIds) {
             ProductEntity product = new ProductEntity();
-            product = productRepository.getProductById(productId);
-            product.setSizes(this.sortSizes(product.getSizes()));
+            product = productRepository.findOne(productId);
             products.add(product);
         }
 
         for (ProductEntity product : products) {
+            product.setSizes(sizeRepository.getSizesByProductId(product.getId()));
             product.setImages(imageRepository.getImagesByProductId(product.getId()));
             product.setVotes(voteRepository.getVotesByProductId(product.getId()));
             product.setPromotions(promotionRepository.getPromotionsByProductId(product.getId(), new Date()));
@@ -129,12 +145,5 @@ public class ProductService {
 
     public List<ProductEntity> findProducts() {
         return (List<ProductEntity>) productRepository.findAll();
-    }
-
-    private Set<SizeEntity> sortSizes(Set<SizeEntity> sizes) {
-        List<SizeEntity> lSizes = new ArrayList<>(sizes);
-
-        Collections.sort(lSizes, (a, b) -> Integer.compare(a.getId(), b.getId()));
-        return new LinkedHashSet<SizeEntity>(lSizes);
     }
 }

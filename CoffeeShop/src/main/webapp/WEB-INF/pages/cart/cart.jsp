@@ -3,7 +3,7 @@
     Created on : Oct 7, 2019, 11:56:33 PM
     Author     : admin
 --%>
-
+<%@taglib prefix="mvc" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -49,12 +49,17 @@
                                     </td>
                                     <td>${orderDetail.product.name}</td>
                                     <td>${orderDetail.unitPrice}00</td>
-                                    <td><input type="number" value="${orderDetail.quantity}"></td>
+                                    <td>
+                                        <input type="number" value="${orderDetail.quantity}" class="quantity-input">
+                                        <a href="" class="update-quantity">ok</a>
+                                    </td>
                                     <td>${orderDetail.price}00</td>
                                     <td>${orderDetail.size}</td>
-                                    <td></td>
                                     <td>
-                                        <a href="<c:url value="/xoa-san-pham?pos=${position}"/>" class="delete-product">XÓA</a>
+                                        <p class="add-topping action-order-detail" onclick="addTopping(${position})">XEM</p>
+                                    </td>
+                                    <td>
+                                        <a href="<c:url value="/xoa-san-pham?pos=${position}"/>" class="delete-product action-order-detail">XÓA</a>
                                     </td>
                                 </tr>
                                 <c:set var="totalPrice" value="${totalPrice + orderDetail.price}"/>
@@ -62,7 +67,7 @@
                             </c:forEach>
                             <tr>
                                 <td colspan="8">
-                                    <h2>Total price: ${totalPrice}00 VNĐ</h2>
+                                    <h2>Tổng: ${totalPrice}00 VNĐ</h2>
                                 </td>
                             </tr>
                         </tbody>
@@ -75,9 +80,31 @@
                     <div class="action__button main__element--background">
                         <a href="<c:url value="/dat-hang"/>">Đặt hàng</a>
                     </div>
-                    <div class="action__button main__element--background">
-                        <a>Cập nhật giỏ hàng</a>
-                    </div>
+                </div>
+                <div class="container-toppings main__element--background">
+                    <mvc:form action="${pageContext.request.contextPath}/them-topping" method="POST">
+                        <input type="hidden" value="0" name="orderDetailPosition" id="orderDetailPositionForAddTopping"/>
+                        <table>
+                            <tr>
+                                <th>Chọn Topping:</th>
+                            </tr>
+                            <c:forEach var="topping" items="${toppings}">
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" value="${topping.id}" name="topping" 
+                                               id="topping${topping.id}" class="topping"/>
+                                        <label for="topping${topping.id}">${topping.name}(${topping.price}00)</label>
+                                    </td>
+                                </tr>
+                                <c:set var="countTopping" value="${countTopping + 1}"/>
+                            </c:forEach>
+                            <tr>
+                                <th>
+                                    <input type="submit" value="OK"/>
+                                </th>
+                            </tr>
+                        </table>
+                    </mvc:form>
                 </div>
             </c:if>
             <c:if test="${empty sessionScope.orderDetails}">
@@ -86,6 +113,47 @@
                 </div>
             </c:if>
         </main>
+        <script type="text/javascript">
+            let orderDetailToppingInput = document.getElementById('orderDetailPositionForAddTopping');
+            let toppings = document.getElementsByClassName('topping');
+            let containerToppings = document.getElementsByClassName('container-toppings')[0];
+            let quantityInput = document.getElementsByClassName('quantity-input');
+            let updateQuantity = document.getElementsByClassName('update-quantity');
+            
+            for(let i = 0 ; i < quantityInput.length ; i++){
+                quantityInput[i].oninput = ()=>{
+                    console.log('test');
+                    updateQuantity[i].style.display  = 'inline-block';
+                    updateQuantity[i].href = '<c:url value="/thay-doi-so-luong/"/>' + i + '/' + quantityInput[i].value;
+                }
+            }
+            
+            function addTopping(orderDetailPosition) {
+                orderDetailToppingInput.value = orderDetailPosition;
+                let xhttp = new XMLHttpRequest();
+                xhttp.open('GET', '${pageContext.request.contextPath}/tim-ids-topping/' + orderDetailPosition);
+                xhttp.send();
+                xhttp.onreadystatechange = () => {
+                    if (xhttp.readyState == 4 && xhttp.status == 200) {
+                        containerToppings.style.display = 'flex';
+                        for (let topping of toppings)
+                            topping.checked = false;
+                        if (xhttp.responseText != "") {
+                            console.log(xhttp.responseText);
+                            let toppingIds = JSON.parse(xhttp.responseText);
+
+                            for (let toppingId of toppingIds)
+                                document.getElementById('topping' + toppingId).checked = true;
+                        }
+                    }
+                }
+            }
+
+            containerToppings.onclick = function () {
+                if (event.target === this)
+                    containerToppings.style.display = 'none';
+            };
+        </script>
         <jsp:include page="../include/footer.jsp"/>
         <jsp:include page="../include/script/standardScript.jsp"/>
     </body>

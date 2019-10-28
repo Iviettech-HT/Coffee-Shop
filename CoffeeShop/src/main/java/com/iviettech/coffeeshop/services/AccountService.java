@@ -22,4 +22,35 @@ public class AccountService {
     public AccountEntity findAccount(String username, String password){
         return accountRepository.findByUsernameAndPassword(username, password);
     }
+    
+    public boolean isExistedUsername(String username){
+        AccountEntity accountEntity = accountRepository.findByUsername(username);
+        if(accountEntity != null)
+            return true;
+        return false;
+    }
+    
+    public boolean isExistedEmail(String email){
+        AccountEntity accountEntity = accountRepository.findByEmail(email);
+        if(accountEntity != null)
+            return true;
+        return false;
+    }
+    
+    public boolean isExistedPhone(String phone){
+        AccountEntity accountEntity = accountRepository.findByPhone(phone);
+        if(accountEntity != null)
+            return true;
+        return false;
+    }
+    
+    public AccountEntity addAccount(AccountEntity account){
+        return accountRepository.save(account);
+    }
+    
+    public AccountEntity updateAccountStatus(String email, boolean status){
+        AccountEntity account = accountRepository.findByEmail(email);
+        account.setStatus(status);
+        return accountRepository.save(account);
+    }
 }

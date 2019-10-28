@@ -29,11 +29,11 @@ public class VoteEntity implements Serializable{
     private int star;
     
     @ManyToOne
-    @JoinColumn(name = "product_id", insertable = false, updatable = false)
+    @JoinColumn(name = "product_id")
     private ProductEntity product;
     
     @ManyToOne
-    @JoinColumn(name = "account_id", insertable = false, updatable = false)
+    @JoinColumn(name = "account_id")
     private AccountEntity account;
 
     public VoteEntity() {

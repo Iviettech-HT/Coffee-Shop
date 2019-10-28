@@ -1,5 +1,6 @@
 main {
     height: fit-content;
+    padding-bottom: 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -41,6 +42,7 @@ main {
 
 .list-product {
     width: 70%;
+    height: fit-content;
     margin: 0 2vh;
 }
 
@@ -58,6 +60,9 @@ main {
 .list-product>table td>img {
     width: 50px;
 }
+.list-product topping{
+    text-align: left;
+}
 .personal-info{width: 30%;}
 .personal-info > form{width: 100% ; height: 100%;}
 .personal-info > form > table{
@@ -68,36 +73,50 @@ main {
 .personal-info input{
     width: 100%;
     height: 30px;
-    border: 1px solid white;
+    padding: 0 5px;
+    border: 1.5px solid white;
+    border-radius: 10px;
+}
+.personal-info input:focus, .personal-info select:focus{
+    outline: none;
+    border-color: #3399ff;
 }
 .personal-info > form > table  tr{
     margin: 15px;
 }
-
+.personal-info select{
+    height: 30px;
+    padding: 0 5px;
+    border: 1.5px solid white;
+    border-radius: 10px;
+}
 .delete-product:hover{
     cursor: pointer;
     color: #ce3232;
 }
 .action{
-    width: 80%;
-    margin: 2vh; 
 
     display: flex;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
+    justify-content: center;
 }
 .action__button {
+    width: 30%;
+    padding: 10px 0;
     margin: 1%;
-    padding: 1%;
-    word-wrap: none;
     font-weight: 700;
-
+    text-align: center;
     transition: 0.3s;
 }
 .action__button:hover{
     cursor: pointer;
     background-color: #000000b0;
+}
+.action__button a {
+    transition: 0.3s;
+}
+.action__button:hover a, .action__button:hover label{
     color: #e2e1e1c9;
+    cursor: pointer;
 }
 /* Responsive */
 @media only screen and (max-width: 768px) {
@@ -113,9 +132,18 @@ main {
 
 @media only screen and (max-width: 426px) {
     .title{width: 80%;}
-    .list-product{width: 90%;}
+    .list-product{width: 100%;}
     .list-product>table img{display: none;}
     .list-product>table input {
         width: 35%;
+    }
+}
+
+@media only screen and (max-width: 320px) {
+    .container-info{
+        padding: 2px;
+    }
+    .main__element--background{
+        border-radius: 10px;
     }
 }

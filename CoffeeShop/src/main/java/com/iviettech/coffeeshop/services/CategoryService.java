@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 public class CategoryService {
 
     @Autowired
-    CategoryRepository categoryRepository;
+    private CategoryRepository categoryRepository;
 //    public CategoryEntity getCategory(String name){
 //        
 //    }

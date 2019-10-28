@@ -5,9 +5,9 @@
  */
 package com.iviettech.coffeeshop.services;
 
-import com.iviettech.coffeeshop.entities.ImageEntity;
-import com.iviettech.coffeeshop.repositories.ImageRepository;
-import java.util.List;
+import com.iviettech.coffeeshop.entities.RoleEntity;
+import com.iviettech.coffeeshop.enums.Role;
+import com.iviettech.coffeeshop.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +16,15 @@ import org.springframework.stereotype.Service;
  * @author admin
  */
 @Service
-public class ImageService {
+public class RoleService {
     @Autowired
-    private ImageRepository imageRepository;
+    RoleRepository roleRepository;
     
-    public List<ImageEntity> getImagesByProductId(int productId){
-        return imageRepository.getImagesByProductId(productId);
+    public RoleEntity findRole(int id){
+        return roleRepository.findOne(id);
+    }
+    
+    public RoleEntity getRole(Role role){
+        return roleRepository.findByRole(role);
     }
 }

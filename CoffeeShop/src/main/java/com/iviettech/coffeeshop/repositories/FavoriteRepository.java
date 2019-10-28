@@ -5,18 +5,17 @@
  */
 package com.iviettech.coffeeshop.repositories;
 
-import com.iviettech.coffeeshop.entities.SizeEntity;
-import java.util.LinkedHashSet;
+import com.iviettech.coffeeshop.entities.FavoriteEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 /**
  *
- * @author PC
+ * @author admin
  */
 @Repository
-public interface SizeRepository extends CrudRepository<SizeEntity, Integer>{
-    @Query("SELECT s FROM SizeEntity s JOIN s.products p WHERE p.id = ?1")
-    public LinkedHashSet<SizeEntity> getSizesByProductId(int id);
+public interface FavoriteRepository extends CrudRepository<FavoriteEntity, Integer>{
+    @Query(value = "SELECT f.id FROM FavoriteEntity f WHERE f.account.id = ?1 AND f.product.id = ?2")
+    public int getFavoriteIdByAccountAndProductId(int accountId, int productId);
 }

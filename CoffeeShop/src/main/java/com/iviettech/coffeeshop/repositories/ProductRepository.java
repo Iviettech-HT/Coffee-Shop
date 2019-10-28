@@ -14,16 +14,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductRepository extends CrudRepository<ProductEntity, Integer>{
-    @Query(value = "SELECT DISTINCT p FROM ProductEntity p INNER JOIN FETCH p.sizes s "
-            + "WHERE p.id = ?1")
-    public List<ProductEntity> getProductsByCategoryId(int id);
     
-    @Query(value = "SELECT DISTINCT p FROM ProductEntity p INNER JOIN FETCH p.sizes s ")
-    public List<ProductEntity> getAll();
-    
-    @Query(value = "SELECT DISTINCT p FROM ProductEntity p INNER JOIN FETCH p.sizes s "
-            + "WHERE p.category.name = ?1 "
-            + "ORDER BY p.name ")
+    @Query(value = "SELECT * FROM product p JOIN category c ON p.category_id = c.id WHERE c.name = ?1", nativeQuery = true)
     public List<ProductEntity> getProductsByCategoryName(String name);
     
     @Query(value = "SELECT p.id FROM product p "
@@ -31,19 +23,17 @@ public interface ProductRepository extends CrudRepository<ProductEntity, Integer
             + "ON p.id = v.product_id "
             + "GROUP BY p.id "
             + "ORDER BY AVG(v.star) DESC "
-            + "LIMIT 20 ", nativeQuery = true)
+            + "LIMIT 9 ", nativeQuery = true)
     public List<Integer> getBestProducts();
     
-    @Query(value = "SELECT DISTINCT p FROM ProductEntity p INNER JOIN FETCH p.sizes s "
-            + "WHERE p.name LIKE ?1")
+    @Query(value = "SELECT DISTINCT p FROM ProductEntity p WHERE p.name LIKE ?1")
     public List<ProductEntity> getProductsByName(String name);
     
-    @Query(value = "SELECT DISTINCT p FROM ProductEntity p INNER JOIN FETCH p.sizes s "
-            + "WHERE p.id = ?1 ")
-    public ProductEntity getProductById(int id);
-    
-    @Query(value = "SELECT DISTINCT p FROM ProductEntity p INNER JOIN FETCH p.sizes s "
+    @Query(value = "SELECT DISTINCT p FROM ProductEntity p JOIN p.sizes s "
             + "WHERE p.id = ?1 AND s.id = ?2")
     public ProductEntity getProductByIdAndSizeId(int id, int sizeId);
     
+    @Query(value = "SELECT DISTINCT p FROM ProductEntity p JOIN p.favorites f "
+            + "WHERE f.account.id = ?1 AND f.status = true")
+    public List<ProductEntity> getFavoriteProducts(int accountId);
 }

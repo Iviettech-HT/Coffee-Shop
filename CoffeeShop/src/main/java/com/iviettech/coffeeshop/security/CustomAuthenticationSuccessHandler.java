@@ -25,7 +25,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         
         boolean admin = false;
         
-        
         for (GrantedAuthority auth : a.getAuthorities()) {
             if ("ROLE_ADMIN".equals(auth.getAuthority())){
               admin = true;

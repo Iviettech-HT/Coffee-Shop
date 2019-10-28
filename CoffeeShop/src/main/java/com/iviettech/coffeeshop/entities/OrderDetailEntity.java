@@ -51,7 +51,7 @@ public class OrderDetailEntity implements Serializable{
     @JoinColumn(name = "orderId")
     private OrderEntity order;
     
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "topping_orderDetail",
             joinColumns = @JoinColumn(name = "orderDetail_id"),

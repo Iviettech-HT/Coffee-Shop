@@ -19,4 +19,11 @@ import org.springframework.stereotype.Repository;
 public interface VoteRepository extends CrudRepository<VoteEntity, Integer>{
     @Query(value = "SELECT v FROM VoteEntity v WHERE v.product.id = ?1")
     public List<VoteEntity> getVotesByProductId(int id);
+    
+    @Query(value = "SELECT v.id FROM VoteEntity v WHERE v.account.id = ?1 AND v.product.id = ?2")
+    public int getVoteIdByAccountAndProductId(int accountId, int productId);
+    
+    @Query(value = "SELECT AVG(v.star) FROM VoteEntity v "
+            + "WHERE v.product.id = ?1 ")
+    public double getAverageStarByProductId(int productId);
 }

@@ -5,18 +5,19 @@
  */
 package com.iviettech.coffeeshop.repositories;
 
-import com.iviettech.coffeeshop.entities.SizeEntity;
+import com.iviettech.coffeeshop.entities.ToppingEntity;
 import java.util.LinkedHashSet;
+import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 /**
  *
- * @author PC
+ * @author admin
  */
 @Repository
-public interface SizeRepository extends CrudRepository<SizeEntity, Integer>{
-    @Query("SELECT s FROM SizeEntity s JOIN s.products p WHERE p.id = ?1")
-    public LinkedHashSet<SizeEntity> getSizesByProductId(int id);
+public interface ToppingRepository extends CrudRepository<ToppingEntity, Integer>{
+    @Query(value = "SELECT t FROM ToppingEntity t WHERE t.id IN ?1")
+    public LinkedHashSet<ToppingEntity> getToppingsByIds(List<Integer> toppingIds);
 }

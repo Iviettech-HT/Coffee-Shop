@@ -29,20 +29,16 @@
             </div>
         </div>
         <main id="main">
-            <div class="sale">
-                <div class="sale__info">
-                    <h4>Title:</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. At, necessitatibus tempore sit impedit cupiditate incidunt eveniet ad possimus recusandae fugit. Quidem, dicta vitae nihil deleniti dolore dolorem voluptatibus reprehenderit laudantium.</p>
+            <c:if test="${!empty promotions}">
+                <div class="sale">
+                    <h4>Khuyến mãi:</h4>
+                    <c:forEach var="promotion" items="${promotions}">
+                        <div class="sale__info">
+                            <p>${promotion.description} <span>(Đến hết ${promotion.endDate})</span></p>
+                        </div>
+                    </c:forEach>
                 </div>
-                <div class="sale__info">
-                    <h4>Title:</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. At, necessitatibus tempore sit impedit cupiditate incidunt eveniet ad possimus recusandae fugit. Quidem, dicta vitae nihil deleniti dolore dolorem voluptatibus reprehenderit laudantium.</p>
-                </div>
-                <div class="sale__info">
-                    <h4>Title:</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. At, necessitatibus tempore sit impedit cupiditate incidunt eveniet ad possimus recusandae fugit. Quidem, dicta vitae nihil deleniti dolore dolorem voluptatibus reprehenderit laudantium.</p>
-                </div>
-            </div>
+            </c:if>
             <div class="filter">
                 <p class="spacing">Bộ Lọc:</p>
                 <div class="filter__selection">
@@ -66,17 +62,25 @@
                         </li>
                     </c:forEach>
                     <sec:authorize access="isAuthenticated()">
-                        <li class="category__item" style="color: #F66">
-                            <p>Yêu thích</p>
-                        </li>
+                        <sec:authentication var="user" property="principal"/>
+                        <sec:authorize access="${user.status}">
+                            <li class="category__item" style="color: #F66">
+                                <p>Yêu thích</p>
+                            </li>
+                        </sec:authorize>
                     </sec:authorize>
                 </ul>
             </nav>
             <div class="product">
                 <c:forEach var="product" items="${products}">
-                    <div class="product__item">
+                    <div class="product__item" id="product${product.id}">
                         <img src="${product.images[0].path}" alt="product">
-                        <a href="<c:url value="/chi-tiet-san-pham/${product.id}"/>" class="product__item--name">${product.name}</a>
+                        <a href="<c:url value="/chi-tiet-san-pham/${product.id}"/>" class="product__item--name">
+                            ${product.name}
+                            <c:if test="${product.status == false}">
+                                <span style="color: #999; font-size: 0.8em;">(Đã hết)</span>
+                            </c:if>
+                        </a>
                         <c:if test="${product.promotions.size() > 0}">
                             <c:set var="totalDiscount" value="${product.price}"/>
                             <c:forEach var="promotion" items="${product.promotions}">
@@ -110,25 +114,16 @@
                                    class="size">Size ${size.size}</a>
                             </c:forEach>
                             <sec:authorize access="isAuthenticated()">
-                                <a class="vote">Vote</a>
-                            </sec:authorize>
-                            <sec:authorize access="isAuthenticated()">
-                                <a class="favorite">Thêm vào yêu thích</a>
+                                <sec:authentication var="user" property="principal"/>
+                                <sec:authorize access="${user.status}">
+                                    <a href="<c:url value="/user/them-vao-yeu-thich/${product.id}#main"/>" class="favorite">Thêm vào yêu thích</a>
+                                </sec:authorize>
                             </sec:authorize>
                         </div>
                     </div>
                 </c:forEach>
             </div>
         </main>
-        <div id="container-vote">
-            <div id="vote">
-                <div class="star"></div>
-                <div class="star"></div>
-                <div class="star"></div>
-                <div class="star"></div>
-                <div class="star"></div>
-            </div>
-        </div>
         <jsp:include page="include/footer.jsp"/>
         <jsp:include page="include/script/standardScript.jsp"/>
 
@@ -137,7 +132,7 @@
             let product = document.getElementsByClassName('product')[0];
             let searchBox = document.getElementById('search__box');
             let searchBtn = document.getElementById('search__icon');
-            let xhttp = new XMLHttpRequest();
+            let xhttp;
             categoryItems = document.getElementsByClassName('category__item');
 
             for (let categoryItem of categoryItems) {
@@ -148,7 +143,8 @@
 
             searchBtn.onclick = () => {
                 console.log(searchBox.value);
-                xhttp.open('GET', '/CoffeeShop/tim-kiem-san-pham?name=' + searchBox.value)
+                xhttp = new XMLHttpRequest();
+                xhttp.open('GET', '${pageContext.request.contextPath}/tim-kiem-san-pham?name=' + searchBox.value, true)
                 xhttp.send();
                 xhttp.onreadystatechange = () => {
                     if (xhttp.readyState == 4 && xhttp.status == 200) {
@@ -159,18 +155,34 @@
                     categoryItems[i].classList.remove('category__item--active');
                     categoryItems[i].classList.remove('category__item--border');
                 }
-                if(!window.location.href.includes("#main"))
+                if (!window.location.href.includes("#main"))
                     window.location += '#main';
                 else
                     window.location += '';
             }
 
             function getAllProductByCategoryName(name) {
-                xhttp.open('GET', '/CoffeeShop/list-san-pham?name=' + name);
+                xhttp = new XMLHttpRequest();
+                name = name.toLowerCase();
+                if (name == 'yêu thích')
+                    xhttp.open('GET', '${pageContext.request.contextPath}/user/list-san-pham-yeu-thich', true);
+                else
+                    xhttp.open('GET', '${pageContext.request.contextPath}/list-san-pham?name=' + name, true);
                 xhttp.send();
                 xhttp.onreadystatechange = () => {
                     if (xhttp.readyState == 4 && xhttp.status == 200) {
                         product.innerHTML = xhttp.responseText;
+                    }
+                }
+            }
+
+            function deleteFavoriteProduct(productId) {
+                xhttp = new XMLHttpRequest();
+                xhttp.open('GET', '${pageContext.request.contextPath}/user/xoa-san-pham-yeu-thich/' + productId, true);
+                xhttp.send();
+                xhttp.onreadystatechange = () => {
+                    if (xhttp.readyState == 4 && xhttp.status == 200) {
+                        document.getElementById('product' + productId).style.display = 'none';
                     }
                 }
             }

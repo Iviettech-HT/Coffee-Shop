@@ -29,11 +29,13 @@
                 <input type="password" name="password" required id="password">
                 <label for="password">Mật khẩu</label>				
             </div>
+            <div class="group">
+                <p class= "messageError">${messageError}</p>
+            </div>
             <div class="button">
                 <input type="submit" name="submit" value="Đăng nhập">
             </div>
-            <div class="register">
-                <span>${messageError}</span>
+            <div class="more-info">
                 <h4>Nếu chưa có tài khoản vui lòng <a href='<c:url value="/dang-ky"/>'>Đăng ký</a>.
                     Trở về <a href="<c:url value="/home"/>">trang chủ</a></h4>
             </div>

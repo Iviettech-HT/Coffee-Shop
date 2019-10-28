@@ -47,8 +47,7 @@ public class AccountEntity extends PersonalInfo implements Serializable{
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
     private List<FavoriteEntity> favorites;
     
-    @ManyToMany(fetch = FetchType.EAGER ,cascade = {CascadeType.PERSIST,
-        CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "account_role",
             joinColumns = @JoinColumn(name = "accountId"),
             inverseJoinColumns = @JoinColumn(name = "roleId"))

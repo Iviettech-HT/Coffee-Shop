@@ -47,14 +47,7 @@ public class ProductEntity implements Serializable{
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<ImageEntity> images;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "promotion_product",
-            joinColumns = {
-                @JoinColumn(name = "product_id")},
-            inverseJoinColumns = {
-                @JoinColumn(name = "promotion_id")}
-    )
+    @ManyToMany(mappedBy = "products",fetch = FetchType.LAZY)
     private Set<PromotionEntity> promotions;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -88,6 +81,8 @@ public class ProductEntity implements Serializable{
         this.votes = votes;
         this.favorites = favorites;
     }
+
+    
 
     public int getId() {
         return id;
@@ -177,4 +172,5 @@ public class ProductEntity implements Serializable{
         this.description = description;
     }
 
+    
 }

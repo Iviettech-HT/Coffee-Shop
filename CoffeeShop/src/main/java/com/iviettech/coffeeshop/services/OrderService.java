@@ -23,14 +23,17 @@ import org.springframework.stereotype.Service;
 public class OrderService {
 
     @Autowired
-    OrderRepository orderRepository;
+    private OrderRepository orderRepository;
     @Autowired
-    CustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
     @Autowired
-    OrderDetailRepository orderDetailRepository;
+    private OrderDetailRepository orderDetailRepository;
 
     public OrderEntity findOrder(int id) {
         return orderRepository.findOne(id);
+    }
+    public List<OrderEntity> findOrders(){
+        return (List<OrderEntity>) orderRepository.findAll();
     }
 
     public OrderEntity addOrder(OrderEntity order) {

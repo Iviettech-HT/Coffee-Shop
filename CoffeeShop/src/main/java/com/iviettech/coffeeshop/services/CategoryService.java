@@ -20,15 +20,18 @@ public class CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
-//    public CategoryEntity getCategory(String name){
-//        
-//    }
-    
+   
     public List<CategoryEntity> getCategories(){
         return (List<CategoryEntity>) categoryRepository.findAll();
     }
 
     public void addCategory(CategoryEntity category) {
         categoryRepository.save(category);
+    }
+    public CategoryEntity findCategory(int id){
+        return (CategoryEntity) categoryRepository.findOne(id);
+    }
+    public List<CategoryEntity> getCategoryByStatus(){
+        return (List<CategoryEntity>) categoryRepository.getCategoryByStatus();
     }
 }

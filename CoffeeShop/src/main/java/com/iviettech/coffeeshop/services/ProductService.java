@@ -146,4 +146,14 @@ public class ProductService {
     public List<ProductEntity> findProducts() {
         return (List<ProductEntity>) productRepository.findAll();
     }
+
+    private Set<SizeEntity> sortSizes(Set<SizeEntity> sizes) {
+        List<SizeEntity> lSizes = new ArrayList<>(sizes);
+
+        Collections.sort(lSizes, (a, b) -> Integer.compare(a.getId(), b.getId()));
+        return new LinkedHashSet<SizeEntity>(lSizes);
+    }
+    public void saveProduct(ProductEntity product) {
+        productRepository.save(product);
+    }
 }

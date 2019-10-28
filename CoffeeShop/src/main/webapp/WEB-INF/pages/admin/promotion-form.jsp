@@ -47,14 +47,33 @@
                                 <h5>Personal-info</h5>
                             </div>
                             <div class="widget-content nopadding">
-                                <mvc:form action="${pageContext.request.contextPath}/admin/save-category" method="post" class="form-horizontal" modelAttribute="category">
-                                    <c:if test="${action eq 'edit-category'}">
-                                        <input type="hidden" name="id" value="${category.id}"  />
+                                <mvc:form action="${pageContext.request.contextPath}/admin/${action}" method="post" class="form-horizontal" modelAttribute="promotion" enctype="multipart/form-data">
+                                    <c:if test="${action eq 'edit-promotion'}">
+                                        <input type="hidden" name="id" value="${promotion.id}"  />
                                     </c:if>
                                     <div class="control-group">
-                                        <label class="control-label" >Category Name :</label>
+                                        <label class="control-label" >Description :</label>
                                         <div class="controls">
-                                            <input type="text" class="span11" name="name" placeholder="First name" value="${category.name}"/>
+                                            <input type="text" class="span11" name="description" placeholder="Description" value="${promotion.description}"/>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">Discount :</label>
+                                        <div class="controls">
+                                            <input type="text" class="span11" name="discount" placeholder="Discount" value="${promotion.discount}" />
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">Image :</label>
+                                        <div class="controls">
+                                            <c:if test="${action != 'edit-promotion'}">
+                                                <input type="file" name="file"/> 
+                                            </c:if>
+                                            <c:if test="${action eq 'edit-promotion'}"> 
+                                                <div class="col-sm-3 image" >
+                                                    <img src="${pageContext.request.contextPath}/${promotion.image}" height="50px" width="50px"/>
+                                                </div>
+                                            </c:if>   
                                         </div>
                                     </div>
                                     <div class="control-group">
@@ -68,8 +87,17 @@
                                             </label>
                                         </div>
                                     </div>
-
-
+                                    <div class="control-group">
+                                        <label class="control-label">Start Date :</label>
+                                        <div class="controls">
+                                            <input type="date" name="startDate" value="${promotion.startDate}"/>
+                                        </div>
+                                    </div><div class="control-group">
+                                        <label class="control-label">End Date :</label>
+                                        <div class="controls">
+                                            <input type="date" name="endDate" value="${promotion.endDate}"/>
+                                        </div>
+                                    </div>
                                     <div class="form-actions">
                                         <button type="submit" class="btn btn-success">Save</button>
                                     </div>

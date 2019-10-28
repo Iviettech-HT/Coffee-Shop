@@ -13,6 +13,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -43,9 +45,17 @@ public class PromotionEntity implements Serializable{
     @Temporal(TemporalType.DATE)
     private Date endDate;
     
-    @ManyToMany(mappedBy = "promotions",fetch = FetchType.LAZY)
+    
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "promotion_product",
+            joinColumns = {
+                @JoinColumn(name = "promotion_id")},
+            inverseJoinColumns = {
+                @JoinColumn(name = "product_id")}
+    )
     private Set<ProductEntity> products;
-
+    
     public PromotionEntity() {
     }
 
@@ -58,7 +68,7 @@ public class PromotionEntity implements Serializable{
         this.endDate = endDate;
         this.products = products;
     }
-   
+
     public int getId() {
         return id;
     }
@@ -99,7 +109,7 @@ public class PromotionEntity implements Serializable{
         this.status = status;
     }
 
-    public Date getStartDate() {
+     public Date getStartDate() {
         return startDate;
     }
 
@@ -122,6 +132,8 @@ public class PromotionEntity implements Serializable{
     public void setProducts(Set<ProductEntity> products) {
         this.products = products;
     }
+
+
 
     
 }

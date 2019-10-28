@@ -5,8 +5,9 @@
  */
 package com.iviettech.coffeeshop.repositories;
 
-import com.iviettech.coffeeshop.entities.ProductEntity;
 import com.iviettech.coffeeshop.entities.SizeEntity;
+import java.util.LinkedHashSet;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

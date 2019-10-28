@@ -304,13 +304,13 @@ public class AdminCotroller implements ResourceLoaderAware {
 //----Orders----------------------------------------------------------------------
     @RequestMapping("/order")
     public String getOrder(Model model, @PathVariable("id") int id){
-        model.addAttribute("orderDetail", orderService.getOrder());
+        model.addAttribute("orderDetail", orderService.findOrders());
         return "admin/order";
     }
     
     @RequestMapping("/orderDetail/{id}")
     public String getOrder(Model model){
-        model.addAttribute("order", orderService.getOrder());
+        model.addAttribute("order", orderService.findOrders());
         return "admin/order";
     }
     //----Test----------------

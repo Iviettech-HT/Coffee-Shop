@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%@taglib prefix="mvc" uri="http://www.springframework.org/tags/form"%>
 <html lang="en">
     <head>
         <title>Matrix Admin</title>
@@ -43,7 +44,7 @@
                             <div>
                                 <label class="control-label">Category :</label>
                                 <div class="controls">
-                                    <select name="promotion.id" class="form-control">
+                                    <select name="id" class="form-control">
                                         <c:forEach var="pr" items="${promotion}">
                                             <option value="${pr.id}">${pr.description}</option>
                                         </c:forEach>
@@ -78,7 +79,7 @@
                                         </tbody>
                                     </table>  
                                     <div class="form-actions">                                        
-                                        <button type="submit" class="btn btn-success">Save</button>
+                                        <input type="submit" class="btn btn-success" value="Save">
                                     </div>
                                 </div>
                             </div>

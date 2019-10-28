@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ResourceLoader;
 import com.iviettech.coffeeshop.services.CategoryService;
 import com.iviettech.coffeeshop.services.ImageService;
+import com.iviettech.coffeeshop.services.OrderDetailService;
+import com.iviettech.coffeeshop.services.OrderService;
 import com.iviettech.coffeeshop.services.PromotionService;
 import com.iviettech.coffeeshop.services.SizeService;
 import java.util.ArrayList;
@@ -59,6 +61,10 @@ public class AdminCotroller implements ResourceLoaderAware {
     private PromotionService promotionService;
     @Autowired
     private ImageService imageService;
+    @Autowired
+    private OrderService orderService;
+    @Autowired
+    private OrderDetailService orderDetailService;
 
     @Autowired
     private ServletContext context;
@@ -119,7 +125,7 @@ public class AdminCotroller implements ResourceLoaderAware {
                 int index = pathUrl.indexOf("target");
                 String pathFolder = pathUrl.substring(0, index) + pathSaveImages;
                 savedPath = "resources/images/landingPage/products/" + image.getOriginalFilename();
-                //create temporary ImageEntity
+                //create temporary ImageEntityz
                 ImageEntity imageTemp = new ImageEntity();
                 imageTemp.setPath(savedPath);
                 listImage.add(imageTemp);
@@ -282,17 +288,31 @@ public class AdminCotroller implements ResourceLoaderAware {
     @RequestMapping(value = {"/promotionForProduct"}, method = RequestMethod.POST)
     public String savePromotionForProduct(Model model,
             @ModelAttribute("promoition") PromotionEntity promotion,
-            @RequestParam("promotion.id") int Id,
             @RequestParam("productTemp") List<Integer> prodpuctIds) {
+        
+        promotion = promotionService.getPromotion(promotion.getId());
         Set<ProductEntity> products = new HashSet<>();
         for (int productId : prodpuctIds) {
             ProductEntity product = productService.getProductById(productId);
             products.add(product);
         }
         promotion.setProducts(products);
-        return "redirect:admin/promotion";
+        promotionService.addPromotion(promotion);
+        return "redirect:/admin/promotion";
     }
-
+    
+//----Orders----------------------------------------------------------------------
+    @RequestMapping("/order")
+    public String getOrder(Model model, @PathVariable("id") int id){
+        model.addAttribute("orderDetail", orderService.getOrder());
+        return "admin/order";
+    }
+    
+    @RequestMapping("/orderDetail/{id}")
+    public String getOrder(Model model){
+        model.addAttribute("order", orderService.getOrder());
+        return "admin/order";
+    }
     //----Test----------------
     @RequestMapping("/test")
     public String test(Model model

@@ -66,10 +66,14 @@
                                     <div class="control-group">
                                         <label class="control-label">Image :</label>
                                         <div class="controls">
-                                            <!--                                            <input type="file" name="file"/>-->
-                                            <div class="col-sm-3 image" >
-                                                <img src="${pageContext.request.contextPath}/${promotion.image}" height="50px" width="50px"/>
-                                            </div>
+                                            <c:if test="${action != 'edit-promotion'}">
+                                                <input type="file" name="file"/> 
+                                            </c:if>
+                                            <c:if test="${action eq 'edit-promotion'}"> 
+                                                <div class="col-sm-3 image" >
+                                                    <img src="${pageContext.request.contextPath}/${promotion.image}" height="50px" width="50px"/>
+                                                </div>
+                                            </c:if>   
                                         </div>
                                     </div>
                                     <div class="control-group">

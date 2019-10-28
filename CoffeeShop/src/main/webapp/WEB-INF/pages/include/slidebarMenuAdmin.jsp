@@ -16,25 +16,7 @@
                 <li><a href="<c:url value = "/admin/promotionForProduct"/>">Promotion for Product</a></li>
             </ul>
         </li>
-        <li><a href="buttons.html"><i class="icon icon-tint"></i> <span>Buttons &amp; icons</span></a></li>
-        <li><a href="interface.html"><i class="icon icon-pencil"></i> <span>Eelements</span></a></li>
-        <li class="submenu"> <a href="#"><i class="icon icon-file"></i> <span>Addons</span> <span class="label label-important">5</span></a>
-            <ul>
-                <li><a href="index2.html">Dashboard2</a></li>
-                <li><a href="gallery.html">Category</a></li>
-                <li><a href="calendar.html">Product</a></li>
-                <li><a href="invoice.html">Invoice</a></li>
-                <li><a href="chat.html">Chat option</a></li>
-            </ul>
-        </li>
-        <li class="submenu"> <a href="#"><i class="icon icon-info-sign"></i> <span>Error</span> <span class="label label-important">4</span></a>
-            <ul>
-                <li><a href="error403.html">Error 403</a></li>
-                <li><a href="error404.html">Error 404</a></li>
-                <li><a href="error405.html">Error 405</a></li>
-                <li><a href="error500.html">Error 500</a></li>
-            </ul>
-        </li>
-
+        <li><a href="<c:url value = "/admin/order"/>"><i class="icon icon-tint"></i> Orders</a></li>
+        <li><a href="<c:url value = "/admin/order"/>"><i class="icon icon-tint"></i> Orders</a></li>
     </ul>
 </div>

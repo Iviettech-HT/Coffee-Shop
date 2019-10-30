@@ -6,6 +6,7 @@
 package com.iviettech.coffeeshop.repositories;
 
 import com.iviettech.coffeeshop.entities.ProductEntity;
+import java.util.LinkedHashSet;
 import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 
@@ -36,4 +37,8 @@ public interface ProductRepository extends CrudRepository<ProductEntity, Integer
     @Query(value = "SELECT DISTINCT p FROM ProductEntity p JOIN p.favorites f "
             + "WHERE f.account.id = ?1 AND f.status = true")
     public List<ProductEntity> getFavoriteProducts(int accountId);
+    
+    @Query(value = "SELECT p FROM ProductEntity p JOIN p.promotions pr WHERE pr.id = ?1")
+    public LinkedHashSet<ProductEntity> getProductByPromotionId(int id);
+    
 }

@@ -14,12 +14,14 @@ import com.iviettech.coffeeshop.repositories.OrderRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author admin
  */
 @Service
+@Transactional
 public class OrderService {
 
     @Autowired
@@ -35,7 +37,8 @@ public class OrderService {
     public List<OrderEntity> findOrders(){
         return (List<OrderEntity>) orderRepository.findAll();
     }
-
+    
+    @Transactional(rollbackFor = Exception.class)
     public OrderEntity addOrder(OrderEntity order) {
         CustomerEntity customer = order.getCustomer();
         List<OrderDetailEntity> orderDetails = order.getOrderDetails();

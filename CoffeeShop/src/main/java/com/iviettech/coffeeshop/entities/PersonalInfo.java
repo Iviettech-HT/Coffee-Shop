@@ -22,7 +22,7 @@ public abstract class PersonalInfo implements Serializable{
     private String phone;
     private String address;
     
-    @Column(length = 100, unique = true)
+    @Column(length = 100)
     private String email;
     
     @Enumerated(EnumType.STRING)

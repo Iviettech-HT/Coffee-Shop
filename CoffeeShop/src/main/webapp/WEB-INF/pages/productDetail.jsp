@@ -6,6 +6,7 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -41,14 +42,17 @@
                         <c:forEach var="promotion" items="${product.promotions}">
                             <c:set var="totalDiscount" value="${totalDiscount*(1 - promotion.discount)}"/>
                         </c:forEach>
+                        
+                        <p class="product-info__price--promotion">
+                        <fmt:formatNumber type="number" pattern="###,###" value="${product.price}"/>đ
+                        </p>
                         <p class="product-info__price">
-                            ${product.price}00 VNĐ
-                            <span style="color: red">(-${Math.round((product.price-totalDiscount)*10)}00)</span>
+                            <fmt:formatNumber type="number" pattern="###,###" value="${Math.round(totalDiscount)}"/>đ
                         </p>
                     </c:if>
                     <c:if test="${product.promotions.size() == 0}">
                         <p class="product-info__price">
-                            ${product.price}00 VNĐ
+                        <fmt:formatNumber type="number" pattern="###,###" value="${product.price}"/>đ
                         </p>
                     </c:if>
                     <div class="product-info__sizes">

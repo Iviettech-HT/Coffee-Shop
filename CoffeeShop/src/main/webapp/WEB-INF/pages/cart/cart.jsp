@@ -5,6 +5,7 @@
 --%>
 <%@taglib prefix="mvc" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -48,12 +49,16 @@
                                         <img src="${pageContext.request.contextPath}/${orderDetail.product.images[0].path}" alt="${orderDetail.product.name}">
                                     </td>
                                     <td>${orderDetail.product.name}</td>
-                                    <td>${orderDetail.unitPrice}00</td>
                                     <td>
-                                        <input type="number" value="${orderDetail.quantity}" class="quantity-input">
+                                        <fmt:formatNumber type="number" pattern="###,###" value="${orderDetail.unitPrice}"/>đ
+                                    </td>
+                                    <td>
+                                        <input type="number" value="${orderDetail.quantity}" class="quantity-input" min="1">
                                         <a href="" class="update-quantity">ok</a>
                                     </td>
-                                    <td>${orderDetail.price}00</td>
+                                    <td>
+                                        <fmt:formatNumber type="number" pattern="###,###" value="${orderDetail.price}"/>đ
+                                    </td>
                                     <td>${orderDetail.size}</td>
                                     <td>
                                         <p class="add-topping action-order-detail" onclick="addTopping(${position})">XEM</p>
@@ -67,7 +72,7 @@
                             </c:forEach>
                             <tr>
                                 <td colspan="8">
-                                    <h2>Tổng: ${totalPrice}00 VNĐ</h2>
+                                    <h2>Tổng: <fmt:formatNumber type="number" pattern="###,###" value=" ${totalPrice}"/>đ</h2>
                                 </td>
                             </tr>
                         </tbody>
@@ -93,7 +98,7 @@
                                     <td>
                                         <input type="checkbox" value="${topping.id}" name="topping" 
                                                id="topping${topping.id}" class="topping"/>
-                                        <label for="topping${topping.id}">${topping.name}(${topping.price}00)</label>
+                                        <label for="topping${topping.id}">${topping.name}(${topping.price})</label>
                                     </td>
                                 </tr>
                                 <c:set var="countTopping" value="${countTopping + 1}"/>

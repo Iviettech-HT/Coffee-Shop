@@ -154,7 +154,7 @@ public class ShopController {
                     unitPriceTemp *= (1 - promotion.getDiscount());
                 }
 
-                unitPriceTemp = Math.round(unitPriceTemp * 10) / 10.0;
+                unitPriceTemp = Math.round(unitPriceTemp/100)*100;
             }
             orderDetail.setUnitPrice(unitPriceTemp);
 
@@ -222,7 +222,7 @@ public class ShopController {
     }
 
     @RequestMapping(value = "/dat-hang")
-    public String viewCheckout(Model model,HttpSession session) {
+    public String viewCheckout(Model model, HttpSession session) {
         List<OrderDetailEntity> orderDetails = (List<OrderDetailEntity>) session.getAttribute("orderDetails");
         for (OrderDetailEntity orderDetail : orderDetails) {
             StringBuilder toppingStr = new StringBuilder();
@@ -243,14 +243,59 @@ public class ShopController {
     public String addOrder(HttpSession session,
             @ModelAttribute(name = "customer") CustomerEntity customer,
             @RequestParam(name = "totalPrice") double totalPrice,
+            @Value(value = "${fileForSend}") String fileForSend,
             Authentication a) {
-        if(a.getPrincipal() != null){
+        if (a.getPrincipal() != null) {
             customer.setAccount((AccountEntity) a.getPrincipal());
         }
         List<OrderDetailEntity> orderDetails = (List<OrderDetailEntity>) session.getAttribute("orderDetails");
         OrderEntity order = new OrderEntity(new Date(), new Date(), totalPrice, OrderStatus.MAKING, orderDetails, customer);
-        
         orderService.addOrder(order);
+//        Send mail order
+        fileForSend += "emailSendOrder.html";
+        textHtml = new StringBuilder();
+        File f = new File(context.getRealPath(fileForSend));
+        try (
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(
+                                new FileInputStream(f), "UTF-8"));) {
+
+            String line;
+            int check = 1;
+            while ((line = reader.readLine()) != null) {
+                //Custom name at Line 16 for total price and 17 for empty
+                if (check == 2) {
+                    textHtml.append("Tổng cộng:"+order.getTotalPrice());
+                } else if (check == 3) {
+                    textHtml.append("<table>");
+                    textHtml.append("<tr><td>Tên</td><td>Đơn giá</td><td>Số lượng</td><td>Giá</td><td>Size</td><td>Topping</td></tr>");
+                    for(OrderDetailEntity orderDetail : orderDetails){
+                        textHtml.append(String.format("<tr><td>%s</td><td>%f</td><td>%d</td><td>%f</td><td>%s</td><td>%s</td></tr>", 
+                                orderDetail.getProduct().getName(), orderDetail.getUnitPrice(), orderDetail.getQuantity(),
+                                orderDetail.getPrice(), orderDetail.getSize().toString(), orderDetail.getTopping()));
+                    }
+                    
+                    textHtml.append("</table>");
+                } else {
+                    textHtml.append(line);
+                }
+                check++;
+            }
+            MimeMessagePreparator preparator = new MimeMessagePreparator() {
+                @Override
+                public void prepare(MimeMessage mm) throws Exception {
+                    MimeMessageHelper helper = new MimeMessageHelper(mm, false, "UTF-8");
+                    helper.setSubject("Coffe Shop Order");
+                    helper.setTo(customer.getEmail());
+                    helper.setText(textHtml.toString(), true);
+                }
+            };
+            jvs.send(preparator);
+            textHtml = new StringBuilder();
+        } catch (Exception ex) {
+            Logger.getLogger(ShopController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         session.removeAttribute("orderDetails");
         return "orderSuccess";
     }
@@ -393,7 +438,7 @@ public class ShopController {
             int check = 1;
             while ((line = reader.readLine()) != null) {
                 //Custom name at Line 35
-                if (check == 17) {
+                if (check == 2) {
                     textHtml.append(mailCode);
                 } else {
                     textHtml.append(line);

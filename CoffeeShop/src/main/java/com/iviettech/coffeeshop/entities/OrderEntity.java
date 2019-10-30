@@ -39,7 +39,7 @@ public class OrderEntity implements Serializable{
     @Temporal(TemporalType.DATE)
     private Date orderDate;
     
-    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @Temporal(TemporalType.TIMESTAMP)
     private Date shippingDate;
     
@@ -55,6 +55,9 @@ public class OrderEntity implements Serializable{
     @JoinColumn(name = "customerId")
     private CustomerEntity customer;
 
+    public OrderEntity() {
+    }
+    
     public OrderEntity(Date orderDate, Date shippingDate, double totalPrice, OrderStatus status, List<OrderDetailEntity> orderDetails, CustomerEntity customer) {
         this.orderDate = orderDate;
         this.shippingDate = shippingDate;

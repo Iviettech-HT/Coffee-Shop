@@ -59,6 +59,13 @@ main{
     font-size: 1.1em;
     font-weight: 600;
 }
+.product-info__price--promotion{
+    text-decoration: line-through; 
+    font-size: 1em; 
+    font-weight: 600;
+    color: grey;
+    margin-bottom: 10px;
+}
 .product-info__sizes{
     margin: 10% 0;
     

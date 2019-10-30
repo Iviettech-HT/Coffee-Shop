@@ -7,6 +7,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="mvc" uri="http://www.springframework.org/tags/form"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -51,9 +52,13 @@
                                             <img src="${pageContext.request.contextPath}/${orderDetail.product.images[0].path}" alt="${orderDetail.product.name}">
                                         </td>
                                         <td>${orderDetail.product.name}</td>
-                                        <td>${orderDetail.unitPrice}00</td>
+                                        <td>
+                                            <fmt:formatNumber type="number" pattern="###,###" value="${orderDetail.unitPrice}"/>đ
+                                        </td>
                                         <td>${orderDetail.quantity}</td>
-                                        <td>${orderDetail.price}00</td>
+                                        <td>
+                                            <fmt:formatNumber type="number" pattern="###,###" value="${orderDetail.price}"/>đ
+                                        </td>
                                         <td>${orderDetail.size}</td>
                                         <td class="toppings">
                                             <c:forTokens var="topping" items="${orderDetail.topping}" delims=",">
@@ -65,7 +70,9 @@
                                 </c:forEach>
                                 <tr>
                                     <td colspan="8">
-                                        <h2>Tổng: ${totalPrice}00 VNĐ</h2>
+                                        <h2>Tổng: 
+                                            <fmt:formatNumber type="number" pattern="###,###" value=" ${totalPrice}"/>đ
+                                        </h2>
                                     </td>
                                 </tr>
                             </tbody>

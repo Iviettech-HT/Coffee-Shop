@@ -4,7 +4,7 @@
     Author     : admin
 --%>
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -87,13 +87,17 @@
                                 <c:set var="totalDiscount" value="${totalDiscount*(1 - promotion.discount)}"/>
                             </c:forEach>
                             <p class="product__item--price">
-                                ${product.price}00 vnđ
-                                <span style="color: red">(-${Math.round((product.price-totalDiscount)*10)}00)</span>
+                                <fmt:formatNumber type="number" pattern="###,###" value="${product.price}"/>đ
+                                <span style="color: red">
+                                    (-<fmt:formatNumber type="number" 
+                                                      pattern="###,###" 
+                                                      value="${Math.round(product.price-totalDiscount)}"/>đ)
+                                </span>
                             </p>
                         </c:if>
                         <c:if test="${product.promotions.size() == 0}">
                             <p class="product__item--price">
-                                ${product.price}00 vnđ
+                                <fmt:formatNumber type="number" pattern="###,###" value="${product.price}"/>đ
                             </p>
                         </c:if>
                         <p class="product__item--vote">

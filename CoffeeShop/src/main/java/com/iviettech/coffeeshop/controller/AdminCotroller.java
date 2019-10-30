@@ -224,6 +224,13 @@ public class AdminCotroller implements ResourceLoaderAware {
         return "admin/promotion";
     }
 
+    @RequestMapping(value = {"/detail-promotion/{id}"})
+    public String promotionDetail(Model model, @PathVariable("id") int id) {
+        model.addAttribute("promotion", promotionService.findPromotionById(id));
+        model.addAttribute("products", productService.getProductByPromotionId(id));
+        return "admin/promotion-detail";
+    }
+
     @RequestMapping(value = {"/add-promotion"})
     public String addPromotion(Model model) {
         model.addAttribute("category", new PromotionEntity());
@@ -277,9 +284,9 @@ public class AdminCotroller implements ResourceLoaderAware {
         return "redirect:/admin/promotion";
     }
 
-    @RequestMapping(value = {"/promotionForProduct"}, method = RequestMethod.GET)
-    public String promotionForProduct(Model model) {
-        model.addAttribute("promotion", promotionService.findPromotion());
+    @RequestMapping(value = {"/promotionForProduct/{id}"}, method = RequestMethod.GET)
+    public String promotionForProduct(Model model, @PathVariable("id") int Id) {
+        model.addAttribute("promotion", promotionService.findPromotionById(Id));
         model.addAttribute("product", productService.findProducts());
         model.addAttribute("action", "promotionForProduct");
         return "admin/promotionForProduct";
@@ -287,11 +294,17 @@ public class AdminCotroller implements ResourceLoaderAware {
 
     @RequestMapping(value = {"/promotionForProduct"}, method = RequestMethod.POST)
     public String savePromotionForProduct(Model model,
-            @ModelAttribute("promoition") PromotionEntity promotion,
-            @RequestParam("productTemp") List<Integer> prodpuctIds) {
-        
-        promotion = promotionService.getPromotion(promotion.getId());
+            @RequestParam("id") int id,
+            @RequestParam(name = "productTemp", required = false) List<Integer> prodpuctIds) {
+        PromotionEntity promotion = promotionService.findPromotionById(id);
         Set<ProductEntity> products = new HashSet<>();
+        try {
+            prodpuctIds.size();
+        } catch (Exception ex) {
+            promotion.setProducts(products);
+            promotionService.addPromotion(promotion);
+            return "redirect:/admin/promotion";
+        }
         for (int productId : prodpuctIds) {
             ProductEntity product = productService.getProductById(productId);
             products.add(product);
@@ -300,19 +313,20 @@ public class AdminCotroller implements ResourceLoaderAware {
         promotionService.addPromotion(promotion);
         return "redirect:/admin/promotion";
     }
-    
+
 //----Orders----------------------------------------------------------------------
     @RequestMapping("/order")
-    public String getOrder(Model model, @PathVariable("id") int id){
+    public String getOrder(Model model) {
         model.addAttribute("orderDetail", orderService.findOrders());
         return "admin/order";
     }
-    
+
     @RequestMapping("/orderDetail/{id}")
-    public String getOrder(Model model){
+    public String getOrderDetails(Model model) {
         model.addAttribute("order", orderService.findOrders());
         return "admin/order";
     }
+
     //----Test----------------
     @RequestMapping("/test")
     public String test(Model model

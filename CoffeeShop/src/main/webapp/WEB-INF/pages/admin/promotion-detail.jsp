@@ -32,60 +32,61 @@
 
         <div id="content">
             <div id="content-header">
-                <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Promotion</a> </div>
-                <h1>Promotion</h1>
+                <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Product</a> </div>
+                <h1>Product</h1>
             </div>
             <div class="container-fluid">
                 <hr>
                 <div class="row-fluid">
                     <div class="span12">
-                        <div>
-                            <button class="btn btn-primary"
-                                    onclick="location.href = '<c:url value="/admin/add-promotion"/>'">Add Promotion</button>
-                        </div>
                         <div class="widget-box">
-
                             <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
-                                <h5>Category table</h5>
+                                <h5>Product table</h5>
                             </div>
                             <div class="widget-content nopadding">
                                 <table class="table table-bordered data-table">
                                     <thead>
                                         <tr>
+                                            <th>Name</th>                                            
+                                            <th>Price</th>
+                                            <th>Category</th>                                            
+                                            <th>Size</th>
                                             <th>Description</th>
-                                            <th>Discount</th>
                                             <th>Image</th>
-                                            <th>Start Date</th>
-                                            <th>End Date</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="pr" items="${promotion}">
+                                        <c:forEach var="p" items="${products}">
+                                            <c:set var="i" value="1"/>
                                             <tr class="gradeU">
-                                                <td>${pr.description}</td>
-                                                <td>${pr.discount}</td>
+                                                <td>${p.name}</td>
+                                                <td>${p.price*1.0} VNĐ</td>
+                                                <td>${p.category.name}</td>
+                                                <td>
+                                                    <c:forEach var="s" items="${p.sizes}"> 
+                                                        <c:if test="${i == p.sizes.size()}">
+                                                            ${s.size}
+                                                        </c:if>
+                                                        <c:if test="${i != p.sizes.size()}">
+                                                            ${s.size},
+                                                        </c:if>
+                                                        <c:set var="i" value="${i+1}"/>
+                                                    </c:forEach>
+                                                </td>
+                                                <th>Description</th>
                                                 <td>
                                                     <div class="col-sm-3 image" >
-                                                        <img src="${pageContext.request.contextPath}/${pr.image}" height="50px" width="50px"/>
+                                                        <img src="${pageContext.request.contextPath}/${p.images[0].path}" alt="${product.name}" height="50px" width="50px"/>
                                                     </div>
                                                 </td>
-                                                <td>${pr.startDate}</td>
-                                                <td>${pr.endDate}</td>
-                                                <td>${pr.status}</td>
+                                                <td>${p.status}</td>
                                                 <td>
-                                                    <div>
-                                                        <button type="button" class="btn btn-primary btn-sm"
-                                                                onclick="location.href = '<c:url value="/admin/edit-promotion/${pr.id}"/>'">Edit</button>
-                                                        <button type="button" class="btn btn-primary btn-sm"
-                                                                onclick="location.href = '<c:url value="/admin/delete-promotion/${pr.id}"/>'">Delete</button>
-                                                        <button type="button" class="btn btn-primary btn-sm"
-                                                                onclick="location.href = '<c:url value="/admin/promotionForProduct/${pr.id}"/>'">Add Product</button>
-                                                        <button type="button" class="btn btn-primary btn-sm"
-                                                                onclick="location.href = '<c:url value="/admin/detail-promotion/${pr.id}"/>'">Detail</button>
-
-                                                    </div>
+                                                    <button class="btn btn-primary btn-sm" 
+                                                            onclick="location.href = '<c:url value="/admin/edit-product/${p.id}"/>'">Edit</button>
+                                                    <button class="btn btn-primary btn-sm"
+                                                            onclick="location.href = '<c:url value="/admin/delete-product/${p.id}"/>'">Delete</button>
                                                 </td>                                           
 
                                             </tr>

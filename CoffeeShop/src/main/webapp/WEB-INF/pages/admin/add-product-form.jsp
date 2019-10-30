@@ -35,7 +35,7 @@
         <div id="content">
             <div id="content-header">
                 <div id="breadcrumb"> <a href="index.html" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="tip-bottom">Form elements</a> <a href="#" class="current">Common elements</a> </div>
-                <h1>Common Form Elements</h1>
+                <h1>Products</h1>
             </div>
             <div class="container-fluid">
                 <hr>
@@ -133,18 +133,25 @@
 
                                                 <div class="control-group">
                                                     <div class="span5"></div>
-                                                    <a class="btn-danger btn-xs" 
-                                                       href="<c:url value="/admin/delete-image/${product.id}"/>">Delete All Image</a>
+                                                    <!--                                                    <a class="btn btn-xs" id="change-image" >Change Image</a>-->
+                                                    <div>
+                                                        <a class="btn-danger btn-xs" href = '<c:url value="/admin/delete-image/${product.id}"/>'">Add Product</a>
+                                                    </div>
+                                                </div>
+                                                <div class="text"></div>
+                                            </c:if>
+                                            <c:if test="${product.images.size() == 0}"> 
+                                                <div class="control-group">
+                                                    <label class="control-label">Image :</label>
+                                                    <div class="controls">
+                                                        <input type="file" name="file" class="form-control"/>
+                                                    </div>
+                                                    <label class="control-label">Image Small:</label>
+                                                    <div class="controls">
+                                                        <input type="file" name="file" class="form-control"/>
+                                                    </div>
                                                 </div>
                                             </c:if>
-                                            <div class="control-group">
-                                                <label class="control-label">Number Image :</label>
-                                                <div class="controls">
-                                                    <input type="number"  name="number" id="number" class="form-control" min="0" onchange="addElementImage()"/>
-                                                </div>
-                                            </div>
-                                            <div id="images" class="control-group">
-                                            </div>
                                         </div>
 
                                     </c:if>
@@ -160,6 +167,9 @@
                                             </div>
                                         </div>
                                     </c:if>
+                                    <div class="control-group" id="box-upload">
+
+                                    </div>
                                     <div class="form-actions">                                        
                                         <button type="submit" class="btn btn-success">Save</button>
                                     </div>
@@ -200,41 +210,6 @@
         <script src="${pageContext.request.contextPath}/resources-management/js/jquery.dataTables.min.js"></script> 
         <script src="${pageContext.request.contextPath}/resources-management/js/matrix.tables.js"></script> 
 
-        <script type="text/javascript">
-                                                            // This function is called from the pop-up menus to transfer to
-                                                            // a different page. Ignore if the value returned is a null string:
-                                                            function goPage(newURL) {
 
-                                                                // if url is empty, skip the menu dividers and reset the menu selection to default
-                                                                if (newURL != "") {
-
-                                                                    // if url is "-", it is this page -- reset the menu:
-                                                                    if (newURL == "-") {
-                                                                        resetMenu();
-                                                                    }
-                                                                    // else, send page to designated URL            
-                                                                    else {
-                                                                        document.location.href = newURL;
-                                                                    }
-                                                                }
-                                                            }
-
-                                                            // resets the menu selection upon entry to this page:
-                                                            function resetMenu() {
-                                                                document.gomenu.selector.selectedIndex = 2;
-                                                            }
-        </script>
-        <script>
-            function addElementImage() {
-                var soluong = document.getElementById("number").value;
-                var text = "";
-                for (var i = 1; i <= soluong; i++) {
-                    text += '<label class="control-label">Image ' + i + '</label><div class="controls"><input type="file" name="file" class="form-control"/></div>';
-                }
-                var div = document.getElementById('images');
-                div.innerHTML = text;
-                console.log(text);
-            }
-        </script>
     </body>
 </html>

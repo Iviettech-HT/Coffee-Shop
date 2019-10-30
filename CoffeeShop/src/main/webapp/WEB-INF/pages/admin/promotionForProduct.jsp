@@ -34,23 +34,16 @@
         <div id="content">
             <div id="content-header">
                 <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Product</a> </div>
-                <h1>Product</h1>
+                <h1>Promotion</h1>
             </div>
             <div class="container-fluid">
                 <hr>
                 <div class="row-fluid">
                     <div class="span12"> 
-                        <mvc:form action="${pageContext.request.contextPath}/admin/${action}" method="post" class="form-horizontal" modelAttribute="promotion">
-                            <div>
-                                <label class="control-label">Category :</label>
-                                <div class="controls">
-                                    <select name="id" class="form-control">
-                                        <c:forEach var="pr" items="${promotion}">
-                                            <option value="${pr.id}">${pr.description}</option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-                            </div>
+                        <mvc:form action="${pageContext.request.contextPath}/admin/${action}" method="post" class="form-horizontal">
+                            <c:if test="${action eq 'promotionForProduct'}">
+                                <input type="hidden" name="id" value="${promotion.id}"  />
+                            </c:if>
                             <div class="widget-content nopadding">   
                                 <div class="widget-box">
 
@@ -61,7 +54,7 @@
                                     <table class="table table-bordered data-table table-striped with-check">
                                         <thead>
                                             <tr>
-                                                <th><input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" /></th>
+                                                <th></th>
                                                 <th>Name</th>
                                                 <th>Category</th>
                                                 <th>Price</th>
@@ -70,7 +63,18 @@
                                         <tbody>
                                             <c:forEach var="p" items="${product}">
                                                 <tr class="gradeU">
-                                                    <td><input type="checkbox" name="productTemp" value="${p.id}"/></td>
+                                                        <c:set var="check" value="${false}"/>
+                                                        <c:forEach var="pr" items="${promotion.products}">
+                                                            <c:if test="${p.id == pr.id}">
+                                                                <c:set var="check" value="${true}"/>
+                                                            </c:if>
+                                                        </c:forEach>
+                                                        <c:if test="${check}">
+                                                            <td><input type="checkbox" name="productTemp" value="${p.id}" checked/></td>
+                                                            </c:if>
+                                                            <c:if test="${!check}">
+                                                            <td><input type="checkbox" name="productTemp" value="${p.id}"/></td>
+                                                            </c:if>
                                                     <td>${p.name}</td>
                                                     <td>${p.category.name}</td>
                                                     <td>${p.price}</td>

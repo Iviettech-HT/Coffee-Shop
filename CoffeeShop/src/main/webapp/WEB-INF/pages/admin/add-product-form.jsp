@@ -127,7 +127,6 @@
                                                     <div class="controls">
                                                         <img src="${pageContext.request.contextPath}/${p.path}" alt="${product.name}" height="100px" width="100px"/>
                                                         <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-
                                                     </div>
                                                 </c:forEach>
 
@@ -166,9 +165,9 @@
                                                 <input type="file" name="file" class="form-control"/>
                                             </div>
                                         </div>
-                                    </c:if>
-                                    <div class="control-group" id="box-upload">
-
+                                    </c:if>   
+                                    <div class="control-group">
+                                        <label style="text-align: center;"><span>${messageError}</span></label>                                                                             
                                     </div>
                                     <div class="form-actions">                                        
                                         <button type="submit" class="btn btn-success">Save</button>

@@ -28,8 +28,8 @@ public class PromotionService {
     @Autowired
     private ProductRepository productRepository;
 
-    public List<PromotionEntity> findPromotion() {
-        return (List<PromotionEntity>) promotionRepository.findAll();
+    public LinkedHashSet<PromotionEntity> findPromotion() {
+        return (LinkedHashSet<PromotionEntity>) promotionRepository.findAll();
     }
 
     public PromotionEntity findPromotionById(int id) {

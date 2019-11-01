@@ -39,43 +39,39 @@
             <div class="container-fluid">
                 <hr>
                 <div class="row-fluid">
-                    <div class="span12"> 
-                        <mvc:form action="${pageContext.request.contextPath}/admin/${action}" method="post" class="form-horizontal">
-                            <c:if test="${action eq 'promotionForProduct'}">
-                                <input type="hidden" name="id" value="${promotion.id}"  />
-                            </c:if>
-                            <div class="widget-content nopadding">   
-                                <div class="widget-box">
+                    <div class="span12">                   
+                            <div class="widget-box">
 
-                                    <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
-                                        <h5>Product table</h5>
-                                    </div>
-
-                                    <table class="table table-bordered data-table table-striped with-check">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Category</th>
-                                                <th>Price</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <c:forEach var="p" items="${products}">
-                                                <tr class="gradeU">                                                     
-                                                    <td>${p.name}</td>
-                                                    <td>${p.category.name}</td>
-                                                    <td>${p.price}</td>
-                                                </tr>
-                                            </c:forEach>
-                                        </tbody>
-                                    </table>  
-                                    <div class="form-actions">                                        
-                                        <input type="submit" class="btn btn-success" value="Save">
-                                    </div>
+                                <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
+                                    <h5>Promotion: ${promotion.description}(-${promotion.discount*100}%)</h5>
                                 </div>
-                            </div>
 
-                        </mvc:form>
+                                <table class="table table-bordered data-table table-striped with-check">
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Name</th>
+                                            <th>Category</th>
+                                            <th>Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:set var="stt" value="1"/>
+                                        <c:forEach var="p" items="${products}">
+                                            <tr class="gradeU">    
+                                                <td>${stt}</td>
+                                                <td>${p.name}</td>
+                                                <td>${p.category.name}</td>
+                                                <td>${p.price}</td>
+                                            </tr>
+                                            <c:set var="stt" value="${stt+1}" />
+                                        </c:forEach>
+                                    </tbody>
+                                </table>  
+
+                            </div>
+             
+
                     </div>
 
                 </div>

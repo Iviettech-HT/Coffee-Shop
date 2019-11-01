@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="mvc" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <html lang="en">
     <head>
@@ -14,7 +14,7 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/resources-management/css/matrix-style.css" />
         <link rel="stylesheet" href="${pageContext.request.contextPath}/resources-management/css/matrix-media.css" />
         <link href="${pageContext.request.contextPath}/resources-management/css/font-awesome.css" rel="stylesheet" />
-
+        
         <link rel="stylesheet" href="<c:url value="/webjars/font-awesome/4.6.2/css/font-awesome.css"/>"/>
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
     </head>
@@ -36,44 +36,34 @@
                 <h1>Orders</h1>
             </div>
             <div class="container-fluid">
-                <hr>  
-                <mvc:form action="${pageContext.request.contextPath}/admin/searchOrder"  class="form-horizontal">
-                    <input type="date" name="startDate" id="startDate"/> to <input type="date" name="endDate" id="endDate"/>
-                    <button type="submit" class="btn btn-success">Search</button> 
-                    <button type="submit" class="btn btn-success">Export File</button> 
-                </mvc:form>
+                <hr>
                 <div class="row-fluid">
                     <div class="span12">
                         <div class="widget-box">
 
                             <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
-                                <h5> Order</h5>
+                                <h5>Category table</h5>
                             </div>
                             <div class="widget-content nopadding">
                                 <table class="table table-bordered data-table">
                                     <thead>
                                         <tr>    
-                                            <th>Customer name</th>
-                                            <th>Order Date</th>
-                                            <th>Shipping Date</th>
-                                            <th>Total Price</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
+                                            <th>Product</th>
+                                            <th>Quantity</th>
+                                            <th>Topping</th>
+                                            <th>Price</th>
+                                            <th>Unit Price</th>
+                                           
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="o" items="${order}">
+                                        <c:forEach var="od" items="${orderDetail}">
                                             <tr class="gradeU">
-                                                <td>${o.customer.name}</td>
-                                                <td>${o.orderDate}</td>
-                                                <td>${o.shippingDate}</td>
-                                                <td>${o.totalPrice}</td>
-                                                <td>${o.status}</td>
-                                                <td>
-                                                    <button type="button" class="btn btn-primary btn-sm"
-                                                            onclick="location.href = '<c:url value="/admin/orderDetail/${o.id}"/>'">Order Detail</button>
-                                                </td>                                           
-
+                                                <td>${od.product.name}</td>
+                                                <td>${od.quantity}</td>
+                                                <td>${od.topping}</td>
+                                                <td>${od.price}</td>
+                                                <td>${od.unitPrice}</td>                                                
                                             </tr>
                                         </c:forEach>
                                     </tbody>

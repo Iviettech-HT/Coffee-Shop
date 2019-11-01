@@ -7,6 +7,7 @@ package com.iviettech.coffeeshop.controller;
 
 import com.iviettech.coffeeshop.entities.CategoryEntity;
 import com.iviettech.coffeeshop.entities.ImageEntity;
+import com.iviettech.coffeeshop.entities.OrderEntity;
 import com.iviettech.coffeeshop.entities.ProductEntity;
 import com.iviettech.coffeeshop.entities.PromotionEntity;
 import com.iviettech.coffeeshop.entities.SizeEntity;
@@ -24,7 +25,12 @@ import com.iviettech.coffeeshop.services.OrderDetailService;
 import com.iviettech.coffeeshop.services.OrderService;
 import com.iviettech.coffeeshop.services.PromotionService;
 import com.iviettech.coffeeshop.services.SizeService;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Formatter;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
@@ -111,20 +117,20 @@ public class AdminCotroller implements ResourceLoaderAware {
             messageError = "Vui lòng không bỏ trống tên!!!";
             isValidated = false;
         } else {
-            if (images.length != 0) {
-                if (images[0].getOriginalFilename().isEmpty() || images[1].getOriginalFilename().isEmpty()) {
-                    messageError = "Vui lòng không bỏ trống ảnh!!!";
-                    isValidated = false;
-                } else {
-                    if (sizeIds == null) {
-                        messageError = "Vui lòng không bỏ trống size!!!";
+            if (sizeIds == null) {
+                messageError = "Vui lòng không bỏ trống size!!!";
+                isValidated = false;
+            } else {
+                if (images.length != 0) {
+                    if (images[0].getOriginalFilename().isEmpty() || images[1].getOriginalFilename().isEmpty()) {
+                        messageError = "Vui lòng không bỏ trống ảnh!!!";
                         isValidated = false;
                     } else {
-                        product.setSizes(sizes);
                         for (int sizeId : sizeIds) {
                             SizeEntity size = sizeService.findSize(sizeId);
                             sizes.add(size);
                         }
+                        product.setSizes(sizes);
                         for (int i = 0; i < images.length; i++) {
                             MultipartFile image = images[i];
                             try {
@@ -374,23 +380,33 @@ public class AdminCotroller implements ResourceLoaderAware {
 
 //----Orders----------------------------------------------------------------------
     @RequestMapping("/order")
-    public String getOrder(Model model
-    ) {
-        model.addAttribute("orderDetail", orderService.findOrders());
-        return "admin/order";
-    }
-
-    @RequestMapping("/orderDetail/{id}")
-    public String getOrderDetails(Model model
-    ) {
+    public String getOrder(Model model) {
         model.addAttribute("order", orderService.findOrders());
         return "admin/order";
     }
 
+    @RequestMapping("/orderDetail/{id}")
+    public String getOrderDetails(Model model, @PathVariable("id") int Id) {
+        model.addAttribute("orderDetail", orderDetailService.findByOrderId(Id));
+        return "admin/orderDetail";
+    }
+
+    @RequestMapping(value = {"/searchOrder"})
+    public String searchOrder(Model model,
+            @RequestParam("startDate") String startDate,
+            @RequestParam("endDate") String endDate) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date d = sdf.parse(startDate);
+        Date e = sdf.parse(endDate);
+        List<OrderEntity> o = orderService.getOrderByDate(d, e);
+        model.addAttribute("order", orderService.getOrderByDate(d, e));
+
+        return "admin/searchOrder";
+    }
+
     //----Test----------------
     @RequestMapping("/test")
-    public String test(Model model
-    ) {
+    public String test(Model model) {
         return "admin/tesst";
     }
 }

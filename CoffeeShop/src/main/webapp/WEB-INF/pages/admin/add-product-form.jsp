@@ -134,7 +134,7 @@
                                                     <div class="span5"></div>
                                                     <!--                                                    <a class="btn btn-xs" id="change-image" >Change Image</a>-->
                                                     <div>
-                                                        <a class="btn-danger btn-xs" href = '<c:url value="/admin/delete-image/${product.id}"/>'">Add Product</a>
+                                                        <a class="btn-danger btn-xs" href = '<c:url value="/admin/delete-image/${product.id}"/>'>Delete Product</a>
                                                     </div>
                                                 </div>
                                                 <div class="text"></div>

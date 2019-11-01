@@ -6,6 +6,10 @@
 package com.iviettech.coffeeshop.repositories;
 
 import com.iviettech.coffeeshop.entities.OrderEntity;
+import com.mysql.cj.x.protobuf.MysqlxCrud.Order;
+import java.util.Date;
+import java.util.List;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,5 +19,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface OrderRepository extends CrudRepository<OrderEntity, Integer>{
-    
+    public List<OrderEntity> findByOrderDateBetween(Date startDate, Date endDate);
 }

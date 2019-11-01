@@ -245,7 +245,7 @@ public class ShopController {
             @RequestParam(name = "totalPrice") double totalPrice,
             @Value(value = "${fileForSend}") String fileForSend,
             Authentication a) {
-        if (a.getPrincipal() != null) {
+        if (a != null) {
             customer.setAccount((AccountEntity) a.getPrincipal());
         }
         List<OrderDetailEntity> orderDetails = (List<OrderDetailEntity>) session.getAttribute("orderDetails");

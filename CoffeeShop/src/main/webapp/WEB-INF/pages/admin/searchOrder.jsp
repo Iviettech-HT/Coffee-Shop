@@ -37,7 +37,7 @@
             </div>
             <div class="container-fluid">
                 <hr>  
-                <mvc:form action="${pageContext.request.contextPath}/admin/searchOrder"  class="form-horizontal">
+                <mvc:form action="${pageContext.request.contextPath}/admin/searchOrder" method="post" class="form-horizontal">
                     <input type="date" name="startDate" id="startDate"/> to <input type="date" name="endDate" id="endDate"/>
                     <button type="submit" class="btn btn-success">Search</button> 
                     <button type="submit" class="btn btn-success">Export File</button> 

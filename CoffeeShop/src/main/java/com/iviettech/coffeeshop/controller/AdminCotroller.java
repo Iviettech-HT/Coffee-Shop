@@ -7,6 +7,7 @@ package com.iviettech.coffeeshop.controller;
 
 import com.iviettech.coffeeshop.entities.CategoryEntity;
 import com.iviettech.coffeeshop.entities.ImageEntity;
+import com.iviettech.coffeeshop.entities.OrderEntity;
 import com.iviettech.coffeeshop.entities.ProductEntity;
 import com.iviettech.coffeeshop.entities.PromotionEntity;
 import com.iviettech.coffeeshop.entities.SizeEntity;
@@ -24,11 +25,17 @@ import com.iviettech.coffeeshop.services.OrderDetailService;
 import com.iviettech.coffeeshop.services.OrderService;
 import com.iviettech.coffeeshop.services.PromotionService;
 import com.iviettech.coffeeshop.services.SizeService;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Formatter;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.mail.Message;
 import javax.servlet.ServletContext;
 import javax.ws.rs.POST;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,62 +104,95 @@ public class AdminCotroller implements ResourceLoaderAware {
     @RequestMapping(value = "/add-product", method = RequestMethod.POST)
     public String addProduct(Model model,
             @ModelAttribute("product") ProductEntity product,
-            @RequestParam("file") MultipartFile[] images,
-            @RequestParam("sizeTemp") List<Integer> sizeIds,
+            @RequestParam(name = "file", required = false) MultipartFile[] images,
+            @RequestParam(name = "sizeTemp", required = false) List<Integer> sizeIds,
             @Value(value = "${pathSaveImage}") String pathSaveImages) {
         Set<SizeEntity> sizes = new HashSet<>();
-        for (int sizeId : sizeIds) {
-            SizeEntity size = sizeService.findSize(sizeId);
-            sizes.add(size);
-        }
-        product.setSizes(sizes);
 
         List<ImageEntity> listImage = new ArrayList<>();
-
         String savedPath;
-        if (images.length == 0) {
-            product.setImages(listImage);
-            productService.addProduct(product);
-            return "redirect:/admin/product";
-        }
-        for (int i = 0; i < images.length; i++) {
-            MultipartFile image = images[i];
-            try {
-                byte[] bytes = image.getBytes();
+        String messageError = "";
+        boolean isValidated = true;
+        if (product.getName().isEmpty()) {
+            messageError = "Vui lòng không bỏ trống tên!!!";
+            isValidated = false;
+        } else {
+            if (sizeIds == null) {
+                messageError = "Vui lòng không bỏ trống size!!!";
+                isValidated = false;
+            } else {
+                if (images.length != 0) {
+                    if (images[0].getOriginalFilename().isEmpty() || images[1].getOriginalFilename().isEmpty()) {
+                        messageError = "Vui lòng không bỏ trống ảnh!!!";
+                        isValidated = false;
+                    } else {
+                        for (int sizeId : sizeIds) {
+                            SizeEntity size = sizeService.findSize(sizeId);
+                            sizes.add(size);
+                        }
+                        product.setSizes(sizes);
+                        for (int i = 0; i < images.length; i++) {
+                            MultipartFile image = images[i];
+                            try {
+                                byte[] bytes = image.getBytes();
 
                 //Get path to resources
                 String pathUrl = context.getRealPath("/images");
                 int index = pathUrl.indexOf("target");
                 String pathFolder = pathUrl.substring(0, index) + pathSaveImages;
-                savedPath = "resources/images/landingPage/products/" + System.currentTimeMillis() + "_" + image.getOriginalFilename();
+                savedPath = "resources/images/landingPage/products/" + image.getOriginalFilename();
                 //create temporary ImageEntityz
                 ImageEntity imageTemp = new ImageEntity();
                 imageTemp.setPath(savedPath);
                 listImage.add(imageTemp);
                 //Save file
-                File storedFile = new File(pathFolder + File.separator + System.currentTimeMillis() + "_" + image.getOriginalFilename());
+                File storedFile = new File(pathFolder + File.separator + image.getOriginalFilename());
                 BufferedOutputStream buffer = new BufferedOutputStream(new FileOutputStream(storedFile));
 
-                buffer.write(bytes);
-                buffer.close();
+                                buffer.write(bytes);
+                                buffer.close();
 
-            } catch (IOException ex) {
-                model.addAttribute("errorMessage", "Error can't add product");
-                return "error";
+                            } catch (IOException ex) {
+                                model.addAttribute("errorMessage", "Error can't add product");
+                                return "error";
+                            }
+                        }
+                    }
+                }
             }
         }
-        product.setImages(listImage);
-        productService.addProduct(product);
-        return "redirect:/admin/product";
+        if (isValidated) {
+            product.setImages(listImage);
+            model.addAttribute("product", product);
+            productService.addProduct(product);
+            return "redirect:/admin/product";
+        } else {
+            if (product.getId() == 0) {
+                model.addAttribute("messageError", messageError);
+                model.addAttribute("sizes", sizeService.findSizes());
+                model.addAttribute("categories", categoryService.getCategories());
+            } else {
+                model.addAttribute("messageError", messageError);
+                model.addAttribute("product", productService.getProductById(product.getId()));
+                model.addAttribute("sizes", sizeService.findSizes());
+                model.addAttribute("categories", categoryService.getCategories());
+                model.addAttribute("action", "edit-product");
+            }
+            return "admin/add-product-form";
+        }
+
     }
 
     @Override
-    public void setResourceLoader(ResourceLoader resourceLoader) {
+    public void setResourceLoader(ResourceLoader resourceLoader
+    ) {
         this.resourceLoader = resourceLoader;
     }
 
     @RequestMapping(value = {"/edit-product/{id}"})
-    public String editProduct(Model model, @PathVariable("id") int Id) {
+    public String editProduct(Model model,
+            @PathVariable("id") int Id
+    ) {
         model.addAttribute("product", productService.getProductById(Id));
         model.addAttribute("sizes", sizeService.findSizes());
         model.addAttribute("categories", categoryService.getCategories());
@@ -161,20 +201,26 @@ public class AdminCotroller implements ResourceLoaderAware {
     }
 
     @RequestMapping(value = "/edit-product/{id}", method = RequestMethod.POST)
-    public String saveProduct(Model model, @PathVariable("id") int Id) {
+    public String saveProduct(Model model,
+            @PathVariable("id") int Id
+    ) {
         ProductEntity product = productService.getProductById(Id);
         productService.saveProduct(product);
         return "redirect:admin/product";
     }
 
     @RequestMapping(value = {"/delete-image/{id}"})
-    public String deleteImage(Model model, @PathVariable("id") int Id) {
+    public String deleteImage(Model model,
+            @PathVariable("id") int Id
+    ) {
         imageService.deleteImageByProductId(Id);
         return "redirect:/admin/edit-product/" + Id;
     }
 
     @RequestMapping(value = {"/delete-product/{id}"})
-    public String delteteProduct(Model model, @PathVariable("id") int Id) {
+    public String delteteProduct(Model model,
+            @PathVariable("id") int Id
+    ) {
         ProductEntity product = productService.getProductById(Id);
         product.setStatus(false);
         productService.saveProduct(product);
@@ -183,13 +229,15 @@ public class AdminCotroller implements ResourceLoaderAware {
 //-----Category---------------------------------
 
     @RequestMapping(value = {"/category"}, method = RequestMethod.GET)
-    public String viewCategory(Model model) {
+    public String viewCategory(Model model
+    ) {
         model.addAttribute("category", categoryService.getCategories());
         return "admin/category";
     }
 
     @RequestMapping(value = {"/add-category"})
-    public String addCategory(Model model) {
+    public String addCategory(Model model
+    ) {
         model.addAttribute("category", new CategoryEntity());
         model.addAttribute("action", "save-category");
         return "admin/add-category-form";
@@ -197,20 +245,25 @@ public class AdminCotroller implements ResourceLoaderAware {
 
     @RequestMapping(value = "/save-category", method = RequestMethod.POST)
     public String saveCategory(Model model,
-            @ModelAttribute("category") CategoryEntity category) {
+            @ModelAttribute("category") CategoryEntity category
+    ) {
         categoryService.addCategory(category);
         return "redirect:/admin/category";
     }
 
     @RequestMapping(value = {"/edit-category/{id}"})
-    public String editCategory(Model model, @PathVariable("id") int id) {
+    public String editCategory(Model model,
+            @PathVariable("id") int id
+    ) {
         model.addAttribute("category", categoryService.findCategory(id));
         model.addAttribute("action", "edit-category");
         return "admin/add-category-form";
     }
 
     @RequestMapping(value = {"/delete-category/{id}"})
-    public String delteteCategory(Model model, @PathVariable("id") int Id) {
+    public String delteteCategory(Model model,
+            @PathVariable("id") int Id
+    ) {
         CategoryEntity category = categoryService.findCategory(Id);
         category.setStatus(false);
         categoryService.addCategory(category);
@@ -219,20 +272,23 @@ public class AdminCotroller implements ResourceLoaderAware {
 
 //-----Promotion---------------------------------
     @RequestMapping(value = {"/promotion"}, method = RequestMethod.GET)
-    public String viewPromotion(Model model) {
+    public String viewPromotion(Model model
+    ) {
         model.addAttribute("promotion", promotionService.findPromotion());
         return "admin/promotion";
     }
 
     @RequestMapping(value = {"/detail-promotion/{id}"})
-    public String promotionDetail(Model model, @PathVariable("id") int id) {
+    public String promotionDetail(Model model,
+            @PathVariable("id") int id) {
         model.addAttribute("promotion", promotionService.findPromotionById(id));
         model.addAttribute("products", productService.getProductByPromotionId(id));
         return "admin/promotion-detail";
     }
 
     @RequestMapping(value = {"/add-promotion"})
-    public String addPromotion(Model model) {
+    public String addPromotion(Model model
+    ) {
         model.addAttribute("category", new PromotionEntity());
         model.addAttribute("action", "add-promotion");
         return "admin/promotion-form";
@@ -242,7 +298,8 @@ public class AdminCotroller implements ResourceLoaderAware {
     public String savePromotion(Model model,
             @ModelAttribute("promotion") PromotionEntity promotion,
             @RequestParam("file") MultipartFile image,
-            @Value(value = "${pathSaveImage}") String pathSaveImages) {
+            @Value(value = "${pathSaveImage}") String pathSaveImages
+    ) {
 
         String savedPath;
         try {
@@ -270,14 +327,18 @@ public class AdminCotroller implements ResourceLoaderAware {
     }
 
     @RequestMapping(value = {"/edit-promotion/{id}"})
-    public String editPromotion(Model model, @PathVariable("id") int id) {
+    public String editPromotion(Model model,
+            @PathVariable("id") int id
+    ) {
         model.addAttribute("promotion", promotionService.getPromotion(id));
         model.addAttribute("action", "add-promotion");
         return "admin/promotion-form";
     }
 
     @RequestMapping(value = {"/delete-promotion/{id}"})
-    public String deltetePromotion(Model model, @PathVariable("id") int Id) {
+    public String deltetePromotion(Model model,
+            @PathVariable("id") int Id
+    ) {
         PromotionEntity promotion = promotionService.getPromotion(Id);
         promotion.setStatus(false);
         promotionService.addPromotion(promotion);
@@ -285,7 +346,9 @@ public class AdminCotroller implements ResourceLoaderAware {
     }
 
     @RequestMapping(value = {"/promotionForProduct/{id}"}, method = RequestMethod.GET)
-    public String promotionForProduct(Model model, @PathVariable("id") int Id) {
+    public String promotionForProduct(Model model,
+            @PathVariable("id") int Id
+    ) {
         model.addAttribute("promotion", promotionService.findPromotionById(Id));
         model.addAttribute("product", productService.findProducts());
         model.addAttribute("action", "promotionForProduct");
@@ -295,7 +358,8 @@ public class AdminCotroller implements ResourceLoaderAware {
     @RequestMapping(value = {"/promotionForProduct"}, method = RequestMethod.POST)
     public String savePromotionForProduct(Model model,
             @RequestParam("id") int id,
-            @RequestParam(name = "productTemp", required = false) List<Integer> prodpuctIds) {
+            @RequestParam(name = "productTemp", required = false) List<Integer> prodpuctIds
+    ) {
         PromotionEntity promotion = promotionService.findPromotionById(id);
         Set<ProductEntity> products = new HashSet<>();
         try {
@@ -317,20 +381,32 @@ public class AdminCotroller implements ResourceLoaderAware {
 //----Orders----------------------------------------------------------------------
     @RequestMapping("/order")
     public String getOrder(Model model) {
-        model.addAttribute("orderDetail", orderService.findOrders());
-        return "admin/order";
-    }
-
-    @RequestMapping("/orderDetail/{id}")
-    public String getOrderDetails(Model model) {
         model.addAttribute("order", orderService.findOrders());
         return "admin/order";
     }
 
+    @RequestMapping("/orderDetail/{id}")
+    public String getOrderDetails(Model model, @PathVariable("id") int Id) {
+        model.addAttribute("orderDetail", orderDetailService.findByOrderId(Id));
+        return "admin/orderDetail";
+    }
+
+    @RequestMapping(value = {"/searchOrder"})
+    public String searchOrder(Model model,
+            @RequestParam("startDate") String startDate,
+            @RequestParam("endDate") String endDate) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date d = sdf.parse(startDate);
+        Date e = sdf.parse(endDate);
+        List<OrderEntity> o = orderService.getOrderByDate(d, e);
+        model.addAttribute("order", orderService.getOrderByDate(d, e));
+
+        return "admin/searchOrder";
+    }
+
     //----Test----------------
     @RequestMapping("/test")
-    public String test(Model model
-    ) {
+    public String test(Model model) {
         return "admin/tesst";
     }
 }

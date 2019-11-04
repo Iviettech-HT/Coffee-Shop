@@ -48,7 +48,7 @@
                                 <div class="widget-box">
 
                                     <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
-                                        <h5>Product table</h5>
+                                        <h5>Promotion: ${promotion.description}(-${promotion.discount*100}%)</h5>
                                     </div>
 
                                     <table class="table table-bordered data-table table-striped with-check">

@@ -147,8 +147,8 @@ public class ProductService {
         return (List<ProductEntity>) productRepository.findAll();
     }
 
-    public List<ProductEntity> getProductByPromotionId(int id){
-        return (List<ProductEntity>) productRepository.getProductByPromotionId(id);
+    public LinkedHashSet<ProductEntity> getProductByPromotionId(int id){
+        return (LinkedHashSet<ProductEntity>) productRepository.getProductByPromotionId(id);
     }
     private Set<SizeEntity> sortSizes(Set<SizeEntity> sizes) {
         List<SizeEntity> lSizes = new ArrayList<>(sizes);

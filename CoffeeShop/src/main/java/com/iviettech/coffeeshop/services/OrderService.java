@@ -12,6 +12,7 @@ import com.iviettech.coffeeshop.enums.OrderStatus;
 import com.iviettech.coffeeshop.repositories.CustomerRepository;
 import com.iviettech.coffeeshop.repositories.OrderDetailRepository;
 import com.iviettech.coffeeshop.repositories.OrderRepository;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -70,7 +71,6 @@ public class OrderService {
         order.setOrderDetails(orderDetails);
         return order;
     }
-    
     public OrderEntity changeStatusToShipping(int orderId){
         OrderEntity order = orderRepository.findOne(orderId);
         order.setStatus(OrderStatus.SHIPPING);
@@ -82,4 +82,11 @@ public class OrderService {
         order.setStatus(OrderStatus.DONE);
         return orderRepository.save(order);
     }
+
+    public List<OrderEntity> getOrderByDate(Date startDate, Date endDate){
+        return (List<OrderEntity>) orderRepository.findByOrderDateBetween(startDate, endDate);
+    }
 }
+    
+    
+    

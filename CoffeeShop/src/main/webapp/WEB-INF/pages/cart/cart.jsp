@@ -61,7 +61,7 @@
                                     </td>
                                     <td>${orderDetail.size}</td>
                                     <td>
-                                        <p class="add-topping action-order-detail" onclick="addTopping(${position})">XEM</p>
+                                        <p class="add-topping action-order-detail" onclick="addTopping(${position})">THÊM</p>
                                     </td>
                                     <td>
                                         <a href="<c:url value="/xoa-san-pham?pos=${position}"/>" class="delete-product action-order-detail">XÓA</a>

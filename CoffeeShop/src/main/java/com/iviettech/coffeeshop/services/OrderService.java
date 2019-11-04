@@ -8,6 +8,7 @@ package com.iviettech.coffeeshop.services;
 import com.iviettech.coffeeshop.entities.CustomerEntity;
 import com.iviettech.coffeeshop.entities.OrderDetailEntity;
 import com.iviettech.coffeeshop.entities.OrderEntity;
+import com.iviettech.coffeeshop.enums.OrderStatus;
 import com.iviettech.coffeeshop.repositories.CustomerRepository;
 import com.iviettech.coffeeshop.repositories.OrderDetailRepository;
 import com.iviettech.coffeeshop.repositories.OrderRepository;
@@ -38,6 +39,14 @@ public class OrderService {
         return (List<OrderEntity>) orderRepository.findAll();
     }
     
+    public List<OrderEntity> getOrdersByStatus(OrderStatus status){
+        List<OrderEntity> orders = orderRepository.getByOrderStatus(status);
+        for(OrderEntity order : orders){
+            order.setOrderDetails(orderDetailRepository.findByOrderId(order.getId()));
+        }
+        return orders;
+    }
+    
     @Transactional(rollbackFor = Exception.class)
     public OrderEntity addOrder(OrderEntity order) {
         CustomerEntity customer = order.getCustomer();
@@ -60,5 +69,17 @@ public class OrderService {
         
         order.setOrderDetails(orderDetails);
         return order;
+    }
+    
+    public OrderEntity changeStatusToShipping(int orderId){
+        OrderEntity order = orderRepository.findOne(orderId);
+        order.setStatus(OrderStatus.SHIPPING);
+        return orderRepository.save(order);
+    }
+    
+    public OrderEntity changeStatusToDone(int orderId){
+        OrderEntity order = orderRepository.findOne(orderId);
+        order.setStatus(OrderStatus.DONE);
+        return orderRepository.save(order);
     }
 }

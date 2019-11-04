@@ -35,6 +35,12 @@
                         <table>
                             <thead>
                                 <tr>
+                                    <jsp:useBean id="now" class="java.util.Date"/>
+                                    <th colspan="7">Ngày đặt hàng:
+                                        <fmt:formatDate value="${now}" pattern="dd/MM/yyyy"/>
+                                    </th>
+                                </tr>
+                                <tr>
                                     <th></th>
                                     <th>Tên</th>
                                     <th>Đơn giá</th>
@@ -80,7 +86,7 @@
                     </div>
                     <div class="personal-info">
                         <mvc:form action="${pageContext.request.contextPath}/dat-hang" method="POST" modelAttribute="customer"
-                              class="main__element--background">
+                                  class="main__element--background">
                             <table>
                                 <tr>
                                     <td>
@@ -136,8 +142,16 @@
                                     </td>
                                     <td>
                                         <select name="gender" id="gender">
-                                            <option value="MALE">Nam</option>
-                                            <option value="FEMALE">Nữ</option>
+                                            <option value="MALE"
+                                                    <sec:authorize access="isAuthenticated()">
+                                                        <c:if test="${user.gender == 'MALE'}">selected</c:if>
+                                                    </sec:authorize>
+                                                    >Nam</option>
+                                            <option value="FEMALE"
+                                                    <sec:authorize access="isAuthenticated()">
+                                                        <c:if test="${user.gender == 'FEMALE'}">selected</c:if>
+                                                    </sec:authorize>
+                                                    >Nữ</option>
                                         </select>
                                     </td>
                                 </tr>

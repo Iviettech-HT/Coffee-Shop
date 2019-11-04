@@ -52,5 +52,12 @@
     } else {
         logo.src = '${pageContext.request.contextPath}/resources/images/landingPage/logo.jpg'
     }
-
+    
+    function displayMenu(){
+        document.getElementById("menu-show").style.display = 'flex';
+    }
+    document.getElementById("menu-show").onclick = function(e){
+        if(e.target == this)
+            document.getElementById("menu-show").style.display = 'none';
+    }
 </script>

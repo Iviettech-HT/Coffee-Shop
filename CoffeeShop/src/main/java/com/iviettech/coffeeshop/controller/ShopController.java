@@ -136,7 +136,8 @@ public class ShopController {
         boolean isExistProduct = false;
         for (OrderDetailEntity orderDetailTemp : orderDetails) {
             if (product.getId() == orderDetailTemp.getProduct().getId()
-                    && product.getSizes().iterator().next().getSize().equals(orderDetailTemp.getSize())) {
+                    && product.getSizes().iterator().next().getSize().equals(orderDetailTemp.getSize())
+                    && orderDetailTemp.getToppings() == null) {
                 isExistProduct = true;
                 orderDetailTemp.setQuantity(orderDetailTemp.getQuantity() + 1);
                 orderDetailTemp.setPrice(orderDetailTemp.getUnitPrice() * orderDetailTemp.getQuantity());
@@ -154,7 +155,7 @@ public class ShopController {
                     unitPriceTemp *= (1 - promotion.getDiscount());
                 }
 
-                unitPriceTemp = Math.round(unitPriceTemp/100)*100;
+                unitPriceTemp = Math.round(unitPriceTemp / 100) * 100;
             }
             orderDetail.setUnitPrice(unitPriceTemp);
 
@@ -210,9 +211,14 @@ public class ShopController {
             orderDetails.get(pos).setToppings(toppings);
 
             int totalToppingPrice = 0;
+            StringBuilder toppingStr = new StringBuilder();
             for (ToppingEntity topping : orderDetails.get(pos).getToppings()) {
+                toppingStr.append(topping.getName() + ",");
                 totalToppingPrice += topping.getPrice();
             }
+
+            toppingStr.deleteCharAt(toppingStr.length() - 1);
+            orderDetails.get(pos).setTopping(toppingStr.toString());
             orderDetails.get(pos).setPrice(orderDetails.get(pos).getPrice() + totalToppingPrice * orderDetails.get(pos).getQuantity());
             session.setAttribute("orderDetails", orderDetails);
         } catch (Exception ex) {
@@ -222,20 +228,8 @@ public class ShopController {
     }
 
     @RequestMapping(value = "/dat-hang")
-    public String viewCheckout(Model model, HttpSession session) {
-        List<OrderDetailEntity> orderDetails = (List<OrderDetailEntity>) session.getAttribute("orderDetails");
-        for (OrderDetailEntity orderDetail : orderDetails) {
-            StringBuilder toppingStr = new StringBuilder();
-            if (orderDetail.getToppings() != null) {
-                for (ToppingEntity topping : orderDetail.getToppings()) {
-                    toppingStr.append(topping.getName() + ",");
-                }
-                toppingStr.deleteCharAt(toppingStr.length() - 1);
-            }
-            orderDetail.setTopping(toppingStr.toString());
-        }
+    public String viewCheckout(Model model) {
         model.addAttribute("customer", new CustomerEntity());
-        session.setAttribute("orderDetails", orderDetails);
         return "cart/check-out";
     }
 
@@ -244,8 +238,9 @@ public class ShopController {
             @ModelAttribute(name = "customer") CustomerEntity customer,
             @RequestParam(name = "totalPrice") double totalPrice,
             @Value(value = "${fileForSend}") String fileForSend,
+            @Value(value = "${pathToResources}") String pathToResources,
             Authentication a) {
-        if (a.getPrincipal() != null) {
+        if (a != null) {
             customer.setAccount((AccountEntity) a.getPrincipal());
         }
         List<OrderDetailEntity> orderDetails = (List<OrderDetailEntity>) session.getAttribute("orderDetails");
@@ -265,16 +260,16 @@ public class ShopController {
             while ((line = reader.readLine()) != null) {
                 //Custom name at Line 16 for total price and 17 for empty
                 if (check == 2) {
-                    textHtml.append("Tổng cộng:"+order.getTotalPrice());
+                    textHtml.append("Tổng cộng:" + Math.round(order.getTotalPrice()) + "đ");
                 } else if (check == 3) {
                     textHtml.append("<table>");
                     textHtml.append("<tr><td>Tên</td><td>Đơn giá</td><td>Số lượng</td><td>Giá</td><td>Size</td><td>Topping</td></tr>");
-                    for(OrderDetailEntity orderDetail : orderDetails){
-                        textHtml.append(String.format("<tr><td>%s</td><td>%f</td><td>%d</td><td>%f</td><td>%s</td><td>%s</td></tr>", 
+                    for (OrderDetailEntity orderDetail : orderDetails) {
+                        textHtml.append(String.format("<tr><td>%s</td><td>%.0fđ</td><td>%d</td><td>%.0fđ</td><td>%s</td><td>%s</td></tr>",
                                 orderDetail.getProduct().getName(), orderDetail.getUnitPrice(), orderDetail.getQuantity(),
                                 orderDetail.getPrice(), orderDetail.getSize().toString(), orderDetail.getTopping()));
                     }
-                    
+
                     textHtml.append("</table>");
                 } else {
                     textHtml.append(line);
@@ -284,10 +279,17 @@ public class ShopController {
             MimeMessagePreparator preparator = new MimeMessagePreparator() {
                 @Override
                 public void prepare(MimeMessage mm) throws Exception {
-                    MimeMessageHelper helper = new MimeMessageHelper(mm, false, "UTF-8");
+                    MimeMessageHelper helper = new MimeMessageHelper(mm, true, "UTF-8");
                     helper.setSubject("Coffe Shop Order");
                     helper.setTo(customer.getEmail());
                     helper.setText(textHtml.toString(), true);
+                    // Get image from resources
+                    String pathUrl = context.getRealPath("/images");
+                    int index = pathUrl.indexOf("target");
+                    String pathImage = pathUrl.substring(0, index) + pathToResources + "/images/email/logo.jpg";
+                    
+                    //attach image into html
+                    helper.addInline("logoHeader", new File(pathImage));
                 }
             };
             jvs.send(preparator);

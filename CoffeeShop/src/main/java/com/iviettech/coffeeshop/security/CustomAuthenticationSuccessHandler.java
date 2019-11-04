@@ -17,24 +17,31 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
  *
  * @author admin
  */
-public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler{
-
+public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+    
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication a) throws IOException, ServletException {
         response.setStatus(HttpServletResponse.SC_OK);
         
         boolean admin = false;
+        boolean seller = false;
         
         for (GrantedAuthority auth : a.getAuthorities()) {
-            if ("ROLE_ADMIN".equals(auth.getAuthority())){
-              admin = true;
+            if (auth.getAuthority().contains("ROLE_ADMIN")) {
+                admin = true;
+                break;
             }
-        }   
+            if (auth.getAuthority().contains("ROLE_SELLER")) {
+                seller = true;
+            }
+        }        
         
-        if(admin){
-          response.sendRedirect(request.getContextPath()+"/admin/");
-        }else{
-          response.sendRedirect(request.getContextPath()+"/home");
+        if (admin) {
+            response.sendRedirect(request.getContextPath() + "/admin/");
+        } else if (seller) {
+            response.sendRedirect(request.getContextPath() + "/seller/");
+        } else {
+            response.sendRedirect(request.getContextPath() + "/home");
         }
     }
     

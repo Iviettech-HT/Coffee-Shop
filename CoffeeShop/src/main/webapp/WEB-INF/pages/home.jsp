@@ -87,7 +87,7 @@
                                 <c:set var="totalDiscount" value="${totalDiscount*(1 - promotion.discount)}"/>
                             </c:forEach>
                             <p class="product__item--price">
-                                <fmt:formatNumber type="number" pattern="###,###" value="${product.price}"/>đ
+                                <fmt:formatNumber type="number" pattern="###,###" value="${product.price}"/>đ   
                                 <span style="color: red">
                                     (-<fmt:formatNumber type="number" 
                                                       pattern="###,###" 
@@ -110,6 +110,7 @@
                             ${totalStar/countStar}
                             <span style="vertical-align: text-bottom">&#11088;</span>
                         </p>
+                        <c:if test="${product.status == true}">
                         <div class="product__info">
                             <img src="resources\images\landingPage\products\add-to-cart-icon.svg" alt="add-to-cart">
                             <p>Thêm vào giỏ</p>
@@ -124,6 +125,7 @@
                                 </sec:authorize>
                             </sec:authorize>
                         </div>
+                        </c:if>
                     </div>
                 </c:forEach>
             </div>

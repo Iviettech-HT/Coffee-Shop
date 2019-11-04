@@ -30,7 +30,23 @@ main{
 #go-to-top{
     width: 50px;
 }
-
+#menu-show{
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    
+    background-color: rgba(0,0,0,0.9);
+}
+#menu-show > img{
+    height: 90%;
+}
 header {
     width: 100%;
     height: 13vh;

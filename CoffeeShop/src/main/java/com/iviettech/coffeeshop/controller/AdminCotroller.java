@@ -124,13 +124,13 @@ public class AdminCotroller implements ResourceLoaderAware {
                 String pathUrl = context.getRealPath("/images");
                 int index = pathUrl.indexOf("target");
                 String pathFolder = pathUrl.substring(0, index) + pathSaveImages;
-                savedPath = "resources/images/landingPage/products/" + image.getOriginalFilename();
+                savedPath = "resources/images/landingPage/products/" + System.currentTimeMillis() + "_" + image.getOriginalFilename();
                 //create temporary ImageEntityz
                 ImageEntity imageTemp = new ImageEntity();
                 imageTemp.setPath(savedPath);
                 listImage.add(imageTemp);
                 //Save file
-                File storedFile = new File(pathFolder + File.separator + image.getOriginalFilename());
+                File storedFile = new File(pathFolder + File.separator + System.currentTimeMillis() + "_" + image.getOriginalFilename());
                 BufferedOutputStream buffer = new BufferedOutputStream(new FileOutputStream(storedFile));
 
                 buffer.write(bytes);

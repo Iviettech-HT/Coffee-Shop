@@ -31,6 +31,8 @@
         
         <security:intercept-url pattern="/user/*" 
                                 access="hasRole('ROLE_USER')" />
+        <security:intercept-url pattern="/seller/*" 
+                                access="hasRole('ROLE_SELLER')" />
         <security:intercept-url pattern="/admin/*" 
                                 access="hasRole('ROLE_ADMIN')" />
     </security:http>

@@ -18,7 +18,7 @@
     <div class="control">
         <a href="#contact">LIÊN HỆ</a>
         <a>KHUYỄN MÃI</a>
-        <a href="#">MENU</a>
+        <a href="#" onclick="displayMenu()">MENU</a>
         <img src="${pageContext.request.contextPath}/resources/images/landingPage/cart_icon.svg" alt="cart" onclick="window.location = '<c:url value="/gio-hang"/>'" />
         <div class="menu">
             <div class="line"></div>
@@ -26,7 +26,7 @@
             <div class="line"></div>
             <ul class="menu__sub">
                 <li class="menu-content-responsive">
-                    <a href="#">MENU</a>
+                    <a href="#" onclick="displayMenu()">MENU</a>
                 </li>
                 <li class="menu-content-responsive">
                     <a>KHUYỄN MÃI</a>
@@ -82,3 +82,6 @@
         </div>
     </div>
 </header>
+        <div id="menu-show">
+            <img src="${pageContext.request.contextPath}/resources/images/header/menu_teaffee.jpg" alt="Menu">
+        </div>

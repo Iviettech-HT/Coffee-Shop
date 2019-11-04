@@ -25,6 +25,22 @@
             .group input:focus ~ label, .group input:valid ~ label{
                 top: -10%;
             }
+            .group-select{
+                height: 40px;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                align-items: center;
+            }
+            .group-select__item{
+                color: #6495ED;
+            }
+            .group-select__item > input{
+                transform: scale(1.5);
+            }
+            .group-select__item > input:focus ~  label{
+                color: #28b65f;
+            }
         </style>
         <div id="form">
             <mvc:form action="${pageContext.request.contextPath}/dang-ky" method="POST" modelAttribute="account" 
@@ -41,6 +57,20 @@
                 <div class="group">
                     <input type="number" name="phone" value="${account.phone}" required id="phoneNumber" min="0">
                     <label for="phoneNumber">Số điện thoại</label>
+                </div>
+                <div class="group-select">
+                    <div class="group-select__item">
+                        <input type="radio" name="gender" value="MALE" id="MALE"
+                               <c:if test="${account.gender == 'MALE'}">checked</c:if>
+                               >
+                        <label for="MALE">Nam</label>
+                    </div>
+                    <div class="group-select__item">
+                        <input type="radio" name="gender" value="FEMALE" id="FEMALE"
+                               <c:if test="${account.gender == 'FEMALE'}">checked</c:if>
+                               >
+                        <label for="FEMALE">Nữ</label>
+                    </div>
                 </div>
                 <div class="group">
                     <input type="text" name="address" value="${account.address}" required id="address">

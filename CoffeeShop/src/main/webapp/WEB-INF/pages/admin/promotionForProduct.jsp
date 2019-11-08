@@ -33,7 +33,7 @@
 
         <div id="content">
             <div id="content-header">
-                <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Product</a> </div>
+                <div id="breadcrumb"> <a href = "<c:url value = "/admin/home"/>" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href = "<c:url value = "/admin/promotion"/>" class="tip-bottom">Promotion</a> <a href="#" class="current">Promotion for Product</a> </div>
                 <h1>Promotion</h1>
             </div>
             <div class="container-fluid">

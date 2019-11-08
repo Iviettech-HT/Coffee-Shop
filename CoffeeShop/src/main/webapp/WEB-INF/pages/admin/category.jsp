@@ -14,7 +14,7 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/resources-management/css/matrix-style.css" />
         <link rel="stylesheet" href="${pageContext.request.contextPath}/resources-management/css/matrix-media.css" />
         <link href="${pageContext.request.contextPath}/resources-management/css/font-awesome.css" rel="stylesheet" />
-        
+
         <link rel="stylesheet" href="<c:url value="/webjars/font-awesome/4.6.2/css/font-awesome.css"/>"/>
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
     </head>
@@ -32,7 +32,7 @@
 
         <div id="content">
             <div id="content-header">
-                <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Product</a> </div>
+                <div id="breadcrumb"> <a href = "<c:url value = "/admin/home"/>" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Category</a> </div>
                 <h1>Category</h1>
             </div>
             <div class="container-fluid">
@@ -59,14 +59,20 @@
                                     </thead>
                                     <tbody>
                                         <c:forEach var="c" items="${category}">
-                                            <tr class="gradeU">
+                                            <tr>
                                                 <td>${c.name}</td>
                                                 <td>${c.status}</td>
                                                 <td>
                                                     <button type="button" class="btn btn-primary btn-sm"
                                                             onclick="location.href = '<c:url value="/admin/edit-category/${c.id}"/>'">Edit</button>
-                                                    <button type="button" class="btn btn-primary btn-sm"
-                                                            onclick="location.href = '<c:url value="/admin/delete-category/${c.id}"/>'">Delete</button>
+                                                    <c:if test="${c.status == false}">
+                                                        <button type="button" class="btn btn-success btn-sm"
+                                                                onclick="location.href = '<c:url value="/admin/enable-category/${c.id}"/>'">Enable</button>
+                                                    </c:if>
+                                                    <c:if test="${c.status != false}">
+                                                        <button type="button" class="btn btn-sm btn-danger"
+                                                                onclick="location.href = '<c:url value="/admin/disable-category/${c.id}"/>'">Disable</button>
+                                                    </c:if>
                                                 </td>                                           
 
                                             </tr>

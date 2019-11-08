@@ -33,7 +33,7 @@
 
         <div id="content">
             <div id="content-header">
-                <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Product</a> </div>
+                <div id="breadcrumb"> <a href = "<c:url value = "/admin/home"/>" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href = "<c:url value = "/admin/promotion"/>" class="tip-bottom">Promotion</a> <a href="#" class="current">List Product</a> </div>
                 <h1>Promotion</h1>
             </div>
             <div class="container-fluid">
@@ -62,7 +62,7 @@
                                                 <td>${stt}</td>
                                                 <td>${p.name}</td>
                                                 <td>${p.category.name}</td>
-                                                <td>${p.price}</td>
+                                                <td>${p.price} VNĐ</td>
                                             </tr>
                                             <c:set var="stt" value="${stt+1}" />
                                         </c:forEach>

@@ -32,7 +32,7 @@
 
         <div id="content">
             <div id="content-header">
-                <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Promotion</a> </div>
+                <div id="breadcrumb"> <a href = "<c:url value = "/admin/home"/>" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Promotion</a> </div>
                 <h1>Promotion</h1>
             </div>
             <div class="container-fluid">
@@ -78,12 +78,18 @@
                                                     <div>
                                                         <button type="button" class="btn btn-primary btn-sm"
                                                                 onclick="location.href = '<c:url value="/admin/edit-promotion/${pr.id}"/>'">Edit</button>
-                                                        <button type="button" class="btn btn-primary btn-sm"
-                                                                onclick="location.href = '<c:url value="/admin/delete-promotion/${pr.id}"/>'">Delete</button>
-                                                        <button type="button" class="btn btn-primary btn-sm"
+                                                        <c:if test="${pr.status == false}">
+                                                            <button type="button" class="btn btn-success btn-sm"
+                                                                    onclick="location.href = '<c:url value="/admin/enable-promotion/${pr.id}"/>'">Enable</button>
+                                                        </c:if>
+                                                        <c:if test="${pr.status == true}">
+                                                            <button type="button" class="btn btn-danger btn-sm"
+                                                                    onclick="location.href = '<c:url value="/admin/disable-promotion/${pr.id}"/>'">Disable</button>
+                                                        </c:if>
+                                                        <button type="button" class="btn btn-success btn-sm"
                                                                 onclick="location.href = '<c:url value="/admin/promotionForProduct/${pr.id}"/>'">Add Product</button>
                                                         <button type="button" class="btn btn-primary btn-sm"
-                                                                onclick="location.href = '<c:url value="/admin/detail-promotion/${pr.id}"/>'">Detail</button>
+                                                                onclick="location.href = '<c:url value="/admin/detail-promotion/${pr.id}"/>'">List Product</button>
 
                                                     </div>
                                                 </td>                                           

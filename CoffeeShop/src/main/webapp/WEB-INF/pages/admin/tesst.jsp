@@ -5,7 +5,8 @@ function toggle(source) {
     checkbox.checked = source.checked;
 }
 </script>
-
+   <h5> Order (<fmt:formatDate value="${s}" pattern="dd-MM-yyyy"/> to <fmt:formatDate value="${e}" pattern="dd-MM-yyyy"/>)</h5>
+                           
 <input type="checkbox" onClick="toggle(this)" /> Toggle All<br/>
 
 <input type="checkbox" name="foo" value="bar1"> Bar 1<br/>

@@ -34,7 +34,7 @@
 
         <div id="content">
             <div id="content-header">
-                <div id="breadcrumb"> <a href = "<c:url value = "/admin/home"/>" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href = "<c:url value = "/admin/product"/>" class="tip-bottom">Product</a> <a href="#" class="current"> Add Product</a> </div>
+                <div id="breadcrumb"> <a href = "<c:url value = "/admin/home"/>" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href = "<c:url value = "/admin/account"/>" class="tip-bottom">Account</a> <a href="#" class="current">Promote</a> </div>
                 <h1>Products</h1>
             </div>
             <div class="container-fluid">
@@ -47,38 +47,50 @@
                                 <h5>Personal-info</h5>
                             </div>
                             <div class="widget-content nopadding">
-                                <mvc:form action="${pageContext.request.contextPath}/admin/add-product" method="post" class="form-horizontal" modelAttribute="product" enctype="multipart/form-data">
-                                    <c:if test="${action eq 'edit-product'}">
-                                        <input type="hidden" name="id" value="${product.id}"  />
+                                <mvc:form action="${pageContext.request.contextPath}/admin/${action}" method="post" class="form-horizontal" modelAttribute="account">
+                                    <c:if test="${action eq 'update-promote-account'}">
+                                        <input type="hidden" name="id" value="${account.id}"  />
                                     </c:if>
 
                                     <div class="control-group">
-                                        <label class="control-label" >Product Name :</label>
+                                        <label class="control-label" >Customer Name :</label>
                                         <div class="controls">
-                                            <input type="text" class="span11" name="name" placeholder="First name" value="${product.name}"/>
+                                            <input type="text" class="span11" name="name"  value="${account.name}" disabled=""/>
                                         </div>
+                                            <input type="hidden" class="span11" name="name"  value="${account.name}" />
+                                        
                                     </div>
                                     <div class="control-group">
-                                        <label class="control-label">Price :</label>
+                                        <label class="control-label" >Phone :</label>
                                         <div class="controls">
-                                            <input type="text" class="span11" name="price" placeholder="Price" value="${product.price}"/>
+                                            <input type="text" class="span11" name="phone"  value="${account.phone}" disabled=""/>
                                         </div>
+                                            <input type="hidden" class="span11" name="phone"  value="${account.phone}"/>
                                     </div>
                                     <div class="control-group">
-                                        <label class="control-label">Category :</label>
+                                        <label class="control-label" >Address :</label>
                                         <div class="controls">
-                                            <select name="category.id" class="form-control">
-                                                <c:forEach var="c" items="${categories}">             
-                                                    <c:if test="${c.id == product.category.id}">
-                                                        <option value="${c.id}" selected>${c.name}</option>
-                                                    </c:if>
-                                                    <c:if test="${c.id != product.category.id}">
-                                                        <option value="${c.id}">${c.name}</option>
-                                                    </c:if>                     
-                                                </c:forEach>
-                                            </select>
+                                            <input type="text" class="span11" name="address"  value="${account.address}" disabled=""/>
                                         </div>
+                                            <input type="hidden" class="span11" name="address"  value="${account.address}"/>
                                     </div>
+                                    <div class="control-group">
+                                        <label class="control-label" >Email :</label>
+                                        <div class="controls">
+                                            <input type="text" class="span11" name="email"  value="${account.email}" disabled=""/>
+                                        </div>
+                                            <input type="hidden" class="span11" name="email"  value="${account.email}"/>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" >User Name :</label>
+                                        <div class="controls">
+                                            <input type="text" class="span11" name="username"  value="${account.username}" disabled=""/>
+                                        </div>
+                                        
+                                            <input type="hidden" class="span11" name="username"  value="${account.username}"/>
+                                            <input type="hidden" class="span11" name="password"  value="${account.password}"/>
+                                    </div>
+                                                                        
                                     <div class="control-group">
                                         <label class="control-label">Status :</label>
                                         <div class="controls">
@@ -87,91 +99,35 @@
                                             </label> 
                                             <label>False
                                                 <input type="radio" name="status" value="false" />
-                                            </label></div>
+                                            </label>
+                                        </div>
                                     </div>    
                                     <div class="control-group">
-                                        <label class="control-label">Size :</label>
+                                        <label class="control-label">Role :</label>
                                         <div class="controls">
-                                            <c:forEach var="s" items="${sizes}">
+                                            <c:forEach var="r" items="${roles}">
                                                 <c:set var="check" value="${false}"/>
-                                                <c:forEach var="size" items="${product.sizes}">
-                                                    <c:if test="${s.id == size.id}">
+                                                <c:forEach var="ar" items="${account.roles}">
+                                                    <c:if test="${r.id == ar.id}">
                                                         <c:set var="check" value="${true}"/>
                                                     </c:if>
                                                 </c:forEach>
-                                                <c:if test="${check}">
+                                                <c:if test="${check && r.role != 'ROLE_ADMIN'}"  >
                                                     <label>
-                                                        <input type="checkbox" name="sizeTemp" value="${s.id}" checked/>
-                                                        ${s.size}
+                                                        <input type="checkbox" name="roleTemp" value="${r.id}" checked/>
+                                                        ${r.role}
                                                     </label>
                                                 </c:if>
                                                 <c:if test="${!check}">
                                                     <label>
-                                                        <input type="checkbox" name="sizeTemp" value="${s.id}" />
-                                                        ${s.size}
+                                                        <input type="checkbox" name="roleTemp" value="${r.id}" />
+                                                        ${r.role}
                                                     </label>
                                                 </c:if>
                                             </c:forEach>
                                         </div>
                                     </div>
-                                    <div class="control-group">
-                                        <label class="control-label" >Description :</label>
-                                        <div class="controls">
-                                            <textarea class="span11" name="description" placeholder="Description" style="height: 100px">${product.description}</textarea>
-                                        </div>
-                                    </div>
 
-                                    <c:if test="${action == 'edit-product'}">
-                                        <c:if test="${product.images.size() != 0}"> 
-                                            <div class="control-group">
-
-                                                <div>
-                                                    <label class="control-label">Image :</label>
-                                                </div>
-
-                                                <c:forEach var="p" items="${product.images}">
-                                                    <div class="controls">
-                                                        <img src="${pageContext.request.contextPath}/${p.path}" alt="${product.name}" height="100px" width="100px"/>
-                                                        <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                                    </div>
-                                                </c:forEach>
-
-                                                <div class="control-group">
-                                                    <div class="span5"></div>
-                                                    <!--                                                    <a class="btn btn-xs" id="change-image" >Change Image</a>-->
-                                                    <div>
-                                                        <a class="btn-danger btn-xs" href = '<c:url value="/admin/delete-image/${product.id}"/>'>Delete Product</a>
-                                                    </div>
-                                                </div>
-                                                <div class="text"></div>
-                                            </c:if>
-                                            <c:if test="${product.images.size() == 0}"> 
-                                                <div class="control-group">
-                                                    <label class="control-label">Image :</label>
-                                                    <div class="controls">
-                                                        <input type="file" name="file" class="form-control"/>
-                                                    </div>
-                                                    <label class="control-label">Image Small:</label>
-                                                    <div class="controls">
-                                                        <input type="file" name="file" class="form-control"/>
-                                                    </div>
-                                                </div>
-                                            </c:if>
-                                        </div>
-
-                                    </c:if>
-                                    <c:if test="${action != 'edit-product'}">                                        
-                                        <div class="control-group">
-                                            <label class="control-label">Image :</label>
-                                            <div class="controls">
-                                                <input type="file" name="file" class="form-control"/>
-                                            </div>
-                                            <label class="control-label">Image Small:</label>
-                                            <div class="controls">
-                                                <input type="file" name="file" class="form-control"/>
-                                            </div>
-                                        </div>
-                                    </c:if>   
                                     <div class="control-group">
                                         <label style="text-align: center;"><span>${messageError}</span></label>                                                                             
                                     </div>

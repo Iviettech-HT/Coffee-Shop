@@ -8,9 +8,11 @@ package com.iviettech.coffeeshop.services;
 import com.iviettech.coffeeshop.entities.CustomerEntity;
 import com.iviettech.coffeeshop.entities.OrderDetailEntity;
 import com.iviettech.coffeeshop.entities.OrderEntity;
+import com.iviettech.coffeeshop.enums.OrderStatus;
 import com.iviettech.coffeeshop.repositories.CustomerRepository;
 import com.iviettech.coffeeshop.repositories.OrderDetailRepository;
 import com.iviettech.coffeeshop.repositories.OrderRepository;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,9 @@ public class OrderService {
     private OrderDetailRepository orderDetailRepository;
 
     public OrderEntity findOrder(int id) {
-        return orderRepository.findOne(id);
+        OrderEntity order = orderRepository.findOne(id);
+        order.setOrderDetails(orderDetailRepository.findByOrderId(id));
+        return order;
     }
     public List<OrderEntity> findOrders(){
         return (List<OrderEntity>) orderRepository.findAll();
@@ -65,6 +69,20 @@ public class OrderService {
     
     public List<OrderEntity> getOrderByDate(Date startDate, Date endDate){
         return (List<OrderEntity>) orderRepository.findByOrderDateBetween(startDate, endDate);
+    }
+    
+    public List<OrderEntity> getOrderByStatus(String status){
+        return (List<OrderEntity>) orderRepository.getNewOrder(status);
+    }
+    
+    public List<OrderEntity> searchOrder(Date startDate,Date endDate, List<OrderStatus> os){
+            List<String> orderStatus = new ArrayList<>();
+            for(OrderStatus  order : os){
+                orderStatus.add(order.toString());
+            }
+            List<OrderEntity> orders = orderRepository.findByOrderDateBetweenAndStatusIn(startDate, endDate,os);          
+            
+        return orders;
     }
     
 }

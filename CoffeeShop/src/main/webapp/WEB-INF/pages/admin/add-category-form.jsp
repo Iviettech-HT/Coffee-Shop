@@ -34,7 +34,7 @@
 
         <div id="content">
             <div id="content-header">
-                <div id="breadcrumb"> <a href="index.html" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="tip-bottom">Form elements</a> <a href="#" class="current">Common elements</a> </div>
+                <div id="breadcrumb"> <a href = "<c:url value = "/admin/home"/>" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href = "<c:url value = "/admin/category"/>" class="tip-bottom">Category</a> <a href="#" class="current">Add Category</a> </div>
                 <h1>Category</h1>
             </div>
             <div class="container-fluid">
@@ -68,7 +68,9 @@
                                             </label>
                                         </div>
                                     </div>
-
+                                    <div class="control-group">
+                                        <label style="text-align: center;"><span>${messageError}</span></label>                                                                             
+                                    </div>
 
                                     <div class="form-actions">
                                         <button type="submit" class="btn btn-success">Save</button>

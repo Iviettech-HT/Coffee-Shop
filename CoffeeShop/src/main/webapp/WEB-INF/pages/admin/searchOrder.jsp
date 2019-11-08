@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="mvc" uri="http://www.springframework.org/tags/form"%>
+
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <html lang="en">
     <head>
@@ -32,22 +34,47 @@
 
         <div id="content">
             <div id="content-header">
-                <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Product</a> </div>
+                <div id="breadcrumb"> <a href = "<c:url value = "/admin/home"/>" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Search</a> </div>
                 <h1>Orders</h1>
             </div>
             <div class="container-fluid">
                 <hr>  
-                <mvc:form action="${pageContext.request.contextPath}/admin/searchOrder" method="post" class="form-horizontal">
-                    <input type="date" name="startDate" id="startDate"/> to <input type="date" name="endDate" id="endDate"/>
-                    <button type="submit" class="btn btn-success">Search</button> 
-                    <button type="submit" class="btn btn-success">Export File</button> 
+                <mvc:form action="${pageContext.request.contextPath}/admin/searchOrder"  class="form-horizontal">
+                    <div class="span5">
+                        <div class="span6">
+                            <h5>Date</h5>
+                        </div>
+                        <div class="span6">                        
+                            <input type="date" name="startDate" id="startDate"/> 
+                            <span>to</span> 
+                            <input type="date" name="endDate" id="endDate"/>
+                        </div>
+                    </div>
+                    <div class="span4">
+                        <div class="span6">
+                            <h5>Status</h5>
+                        </div>
+                        <div class="span6">
+                            <c:forEach var="os" items="${os}">  
+                                <div class="span2">
+                                    <input type="checkbox" name="osTemp" value="${os.toString()}"/><span>${os.toString()}</span>
+                                </div>
+                            </c:forEach>
+                        </div>
+                    </div>
+                    <div  class="span7">
+                        <div class="span1"></div>    
+                        <button type="submit" class="btn btn-success">Search Order Date</button> 
+                        <button type="submit" class="btn btn-success">Export File</button> 
+                    </div>
                 </mvc:form>
                 <div class="row-fluid">
                     <div class="span12">
                         <div class="widget-box">
 
                             <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
-                                <h5> Order</h5>
+                                <h5> Order (<fmt:formatDate value="${s}" pattern="dd-MM-yyyy"/> to <fmt:formatDate value="${e}" pattern="dd-MM-yyyy"/>)</h5>
+
                             </div>
                             <div class="widget-content nopadding">
                                 <table class="table table-bordered data-table">
@@ -62,24 +89,39 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <c:set var="check" value="0"/>                                       
                                         <c:forEach var="o" items="${order}">
                                             <tr class="gradeU">
                                                 <td>${o.customer.name}</td>
                                                 <td>${o.orderDate}</td>
                                                 <td>${o.shippingDate}</td>
-                                                <td>${o.totalPrice}</td>
+                                                <td>${o.totalPrice} VNĐ</td>
                                                 <td>${o.status}</td>
                                                 <td>
                                                     <button type="button" class="btn btn-primary btn-sm"
                                                             onclick="location.href = '<c:url value="/admin/orderDetail/${o.id}"/>'">Order Detail</button>
-                                                </td>                                           
+                                                    <c:if test="${o.status != 'DONE' && o.status != 'CANCELED' }">
+                                                        <button type="button" class="btn btn-primary btn-sm"
+                                                                onclick="location.href = '<c:url value="/admin/change-order/${o.id}"/>'">Change</button>
+                                                        <button type="button" class="btn btn-danger btn-sm"
+                                                                onclick="location.href = '<c:url value="/admin/cancel-order/${o.id}"/>'">Cancel</button>
 
+                                                    </c:if>
+                                                </td>                                           
+                                                <c:if test="${o.status == 'DONE'}">
+                                                    <c:set var="check" value="1"/>
+                                                </c:if>
                                             </tr>
                                         </c:forEach>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
+                        <c:if test="${check == 1}">
+                            <div class="span9" >
+                                <div><h4>Doanh Thu: ${total}</h4></div> <hr/>                 
+                            </div>  
+                        </c:if>
                     </div>
                 </div>
             </div>

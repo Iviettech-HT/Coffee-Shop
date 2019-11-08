@@ -6,6 +6,7 @@
 package com.iviettech.coffeeshop.repositories;
 
 import com.iviettech.coffeeshop.entities.OrderEntity;
+import com.iviettech.coffeeshop.enums.OrderStatus;
 import com.mysql.cj.x.protobuf.MysqlxCrud.Order;
 import java.util.Date;
 import java.util.List;
@@ -20,4 +21,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrderRepository extends CrudRepository<OrderEntity, Integer>{
     public List<OrderEntity> findByOrderDateBetween(Date startDate, Date endDate);
+    
+    @Query(value = "SELECT * FROM Orders WHERE status like ?1", nativeQuery = true)
+    public List<OrderEntity> getNewOrder(String status);   
+
+    public List<OrderEntity> findByOrderDateBetweenAndStatusIn(Date startDate, Date endDate,List<OrderStatus> os);
 }

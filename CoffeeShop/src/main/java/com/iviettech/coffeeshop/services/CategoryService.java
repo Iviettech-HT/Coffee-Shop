@@ -26,6 +26,7 @@ public class CategoryService {
     }
 
     public void addCategory(CategoryEntity category) {
+        category.setProducts(null);
         categoryRepository.save(category);
     }
     public CategoryEntity findCategory(int id){

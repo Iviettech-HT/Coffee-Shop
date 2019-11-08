@@ -7,6 +7,8 @@ package com.iviettech.coffeeshop.services;
 
 import com.iviettech.coffeeshop.entities.AccountEntity;
 import com.iviettech.coffeeshop.repositories.AccountRepository;
+import com.iviettech.coffeeshop.repositories.RoleRepository;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,8 @@ import org.springframework.stereotype.Service;
 public class AccountService {
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
+    private RoleRepository roleRepository;
     
     public AccountEntity findAccount(String username, String password){
         return accountRepository.findByUsernameAndPassword(username, password);
@@ -52,5 +56,18 @@ public class AccountService {
         AccountEntity account = accountRepository.findByEmail(email);
         account.setStatus(status);
         return accountRepository.save(account);
+    }
+    
+    public List<AccountEntity> findAllAccount(){
+        List<AccountEntity> accounts = (List<AccountEntity>) accountRepository.findAll();
+        for (AccountEntity account : accounts) {
+            account.setRoles(roleRepository.findByAccountId(account.getId()));
+        }
+        return accounts;
+        
+    }
+    
+    public AccountEntity findAccountById(int id){
+        return (AccountEntity) accountRepository.findOne(id);
     }
 }

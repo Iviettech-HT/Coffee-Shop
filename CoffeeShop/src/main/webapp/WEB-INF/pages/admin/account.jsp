@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <html lang="en">
@@ -32,72 +32,72 @@
 
         <div id="content">
             <div id="content-header">
-                <div id="breadcrumb"> <a href = "<c:url value = "/admin/home"/>" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Product</a> </div>
-                <h1>Product</h1>
+                <div id="breadcrumb"> <a href = "<c:url value = "/admin/home"/>" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Account</a> </div>
+                <h1>Account</h1>
             </div>
             <div class="container-fluid">
                 <hr>
                 <div class="row-fluid">
-                    <div class="span12">
-                        <div>
-                            <button class="btn btn-primary"
-                                    onclick="location.href = '<c:url value="/admin/add-product"/>'">Add Product</button>
-                        </div>
+                    <div class="span12">                        
                         <div class="widget-box">
-
                             <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
-                                <h5>Product table</h5>
+                                <h5>Account table</h5>
                             </div>
                             <div class="widget-content nopadding">
                                 <table class="table table-bordered data-table">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>                                            
-                                            <th>Price</th>
-                                            <th>Category</th>                                            
-                                            <th>Size</th>
-                                            <th>Description</th>
-                                            <th>Image</th>
+                                            <th>Customer Name</th>                                            
+                                            <th>Phone</th>
+                                            <th>Address</th>                                            
+                                            <th>Email</th>
+                                            <th>Gender</th>
+                                            <th>User Name </th>                                            
+                                            <th>Role</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="p" items="${products}">
+                                        <c:forEach var="a" items="${account}">
                                             <c:set var="i" value="1"/>
                                             <tr class="gradeU">
-                                                <td>${p.name}</td>
-                                                <td>${p.price*1.0} VNĐ</td>
-                                                <td>${p.category.name}</td>
+                                                <td>${a.name}</td>
+                                                <td>${a.phone}</td>
+                                                <td>${a.address}</td>
+                                                <td>${a.email}</td>  
+                                                <td>${a.gender}</td> 
+                                                <td>${a.username}</td>                                                
                                                 <td>
-                                                    <c:forEach var="s" items="${p.sizes}"> 
-                                                        <c:if test="${i == p.sizes.size()}">
-                                                            ${s.size}
+                                                    <c:forEach var="r" items="${a.roles}">
+                                                        <c:if test="${i == a.roles.size()}">
+                                                            <span>${r.role}</span>
                                                         </c:if>
-                                                        <c:if test="${i != p.sizes.size()}">
-                                                            ${s.size},
+                                                        <c:if test="${i != a.roles.size()}">
+                                                            <span>${r.role},</span>
                                                         </c:if>
                                                         <c:set var="i" value="${i+1}"/>
                                                     </c:forEach>
-                                                </td>
-                                                <td>${p.description}</td>
+                                                </td> 
+                                                <td>${a.status}</td>
                                                 <td>
-                                                    <div class="col-sm-3 image" >
-                                                        <img src="${pageContext.request.contextPath}/${p.images[0].path}" alt="${product.name}" height="50px" width="50px"/>
-                                                    </div>
-                                                </td>
-                                                <td>${p.status}</td>
-                                                <td>
-                                                    <button class="btn btn-primary btn-sm" 
-                                                            onclick="location.href = '<c:url value="/admin/edit-product/${p.id}"/>'">Edit</button>
-                                                    <c:if test="${p.status == false}">
-                                                        <button class="btn btn-success btn-sm"
-                                                                onclick="location.href = '<c:url value="/admin/enable-product/${p.id}"/>'">Enable</button>
-                                                    </c:if>
-                                                    <c:if test="${p.status != false}">
-                                                        <button class="btn btn-danger btn-sm"
-                                                                onclick="location.href = '<c:url value="/admin/disable-product/${p.id}"/>'">Disable</button>
-                                                    </c:if>
+                                                    <c:set var="test" value="${true}"/>
+                                                    <c:forEach var="r" items="${a.roles}">
+                                                        <c:if test="${r.role != 'ROLE_ADMIN'}">
+                                                            <c:set var="test" value="${false}"/>                                                            
+                                                        </c:if>
+                                                    </c:forEach>
+                                                    <c:if test="${test == false}">
+                                                        <button class="btn btn-primary btn-sm" onclick="location.href = '<c:url value="/admin/promote-account/${a.id}"/>'">Promote</button>
+                                                        <c:if test="${a.status != true}">  
+                                                            <button class="btn btn-primary btn-sm"
+                                                                    onclick="location.href = '<c:url value="/admin/enable-account/${a.id}"/>'">Enable</button>
+                                                        </c:if>
+                                                        <c:if test="${a.status == true}"> 
+                                                            <button class="btn btn-primary btn-sm"
+                                                                    onclick="location.href = '<c:url value="/admin/disable-account/${a.id}"/>'">Disable</button>
+                                                        </c:if>
+                                                    </c:if> 
                                                 </td>                                           
 
                                             </tr>

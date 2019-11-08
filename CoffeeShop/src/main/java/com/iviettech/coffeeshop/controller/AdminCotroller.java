@@ -90,7 +90,7 @@ public class AdminCotroller implements ResourceLoaderAware {
 //-----Home----------------------------------------
     @RequestMapping(value = {"/*", "/home"})
     public String viewAdmin(Model model) {
-        model.addAttribute("order", orderService.getOrderByStatus(OrderStatus.NEW.toString()));
+        model.addAttribute("order", orderService.getOrdersByStatus(OrderStatus.NEW));
         return "admin/home";
     }
 //-----Product--------------------------------------------
@@ -448,25 +448,25 @@ public class AdminCotroller implements ResourceLoaderAware {
 
     @RequestMapping("/new-order")
     public String getNewOrder(Model model) {
-        model.addAttribute("order", orderService.getOrderByStatus(OrderStatus.NEW.toString()));
+        model.addAttribute("order", orderService.getOrdersByStatus(OrderStatus.NEW));
         return "admin/order";
     }
 
     @RequestMapping("/making-order")
     public String getMakingOrder(Model model) {
-        model.addAttribute("order", orderService.getOrderByStatus(OrderStatus.MAKING.toString()));
+        model.addAttribute("order", orderService.getOrdersByStatus(OrderStatus.MAKING));
         return "admin/order";
     }
 
     @RequestMapping("/shipping-order")
     public String getShipingOrder(Model model) {
-        model.addAttribute("order", orderService.getOrderByStatus(OrderStatus.SHIPPING.toString()));
+        model.addAttribute("order", orderService.getOrdersByStatus(OrderStatus.SHIPPING));
         return "admin/order";
     }
 
     @RequestMapping("/cancel-order")
     public String getCancelOrder(Model model) {
-        model.addAttribute("order", orderService.getOrderByStatus(OrderStatus.CANCELED.toString()));
+        model.addAttribute("order", orderService.getOrdersByStatus(OrderStatus.CANCELED));
         return "admin/order";
     }
 
@@ -479,7 +479,7 @@ public class AdminCotroller implements ResourceLoaderAware {
             }
         }
         model.addAttribute("total", total);
-        model.addAttribute("order", orderService.getOrderByStatus(OrderStatus.DONE.toString()));
+        model.addAttribute("order", orderService.getOrdersByStatus(OrderStatus.DONE));
         return "admin/order";
     }
 

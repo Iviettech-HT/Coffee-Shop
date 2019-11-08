@@ -43,6 +43,14 @@ public class OrderService {
         return (List<OrderEntity>) orderRepository.findAll();
     }
     
+    public List<OrderEntity> getOrdersByStatus(OrderStatus status){
+        List<OrderEntity> orders = orderRepository.getByOrderStatus(status);
+        for(OrderEntity order : orders){
+            order.setOrderDetails(orderDetailRepository.findByOrderId(order.getId()));
+        }
+        return orders;
+    }
+    
     @Transactional(rollbackFor = Exception.class)
     public OrderEntity addOrder(OrderEntity order) {
         CustomerEntity customer = order.getCustomer();
@@ -66,15 +74,34 @@ public class OrderService {
         order.setOrderDetails(orderDetails);
         return order;
     }
+    public OrderEntity changeStatusToShipping(int orderId){
+        OrderEntity order = orderRepository.findOne(orderId);
+        order.setStatus(OrderStatus.SHIPPING);
+        order.setShippingDate(new Date());
+        return orderRepository.save(order);
+    }
+    
+    public OrderEntity changeStatusToDone(int orderId){
+        OrderEntity order = orderRepository.findOne(orderId);
+        order.setStatus(OrderStatus.DONE);
+        return orderRepository.save(order);
+    }
+    
+    public OrderEntity changeStatusToCanceled(int orderId){
+        OrderEntity order = orderRepository.findOne(orderId);
+        order.setStatus(OrderStatus.CANCELED);
+        return orderRepository.save(order);
+    }
+    
+    public OrderEntity changeStatusToMaking(int orderId){
+        OrderEntity order = orderRepository.findOne(orderId);
+        order.setStatus(OrderStatus.MAKING);
+        return orderRepository.save(order);
+    }
     
     public List<OrderEntity> getOrderByDate(Date startDate, Date endDate){
         return (List<OrderEntity>) orderRepository.findByOrderDateBetween(startDate, endDate);
     }
-    
-    public List<OrderEntity> getOrderByStatus(String status){
-        return (List<OrderEntity>) orderRepository.getNewOrder(status);
-    }
-    
     public List<OrderEntity> searchOrder(Date startDate,Date endDate, List<OrderStatus> os){
             List<String> orderStatus = new ArrayList<>();
             for(OrderStatus  order : os){
@@ -85,4 +112,19 @@ public class OrderService {
         return orders;
     }
     
+      public List<OrderEntity> getOrdersByAccountId(int accountId){
+        List<OrderEntity> orders = orderRepository.getByAccountId(accountId);
+        for(OrderEntity order : orders){
+            order.setOrderDetails(orderDetailRepository.findByOrderId(order.getId()));
+        }
+        return orders;
+    }
+    public  OrderEntity getOrderByIdAndAccountId(int orderId, int accountId){
+        return orderRepository.getByIdAndAccountId(orderId, accountId);
+    }
+    
+    public OrderEntity updateOrder(OrderEntity order){
+        return orderRepository.save(order);
+    }
+}
 }

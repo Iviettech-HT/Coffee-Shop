@@ -10,57 +10,72 @@
 
 
 
-<c:forEach var="product" items="${products}">
-    <div class="product__item" id="product${product.id}">
-        <img src="${product.images[0].path}" alt="product">
-        <a href="<c:url value="/chi-tiet-san-pham/${product.id}"/>" class="product__item--name">
-            ${product.name}
-            <c:if test="${product.status == false}">
-                <span style="color: #999; font-size: 0.8em;">(Đã hết)</span>
+<c:if test="${products.size() > 0}">
+    <c:forEach var="product" items="${products}">
+        <div class="product__item" id="product${product.id}">
+            <img src="${product.images[0].path}" alt="product">
+            <a href="<c:url value="/chi-tiet-san-pham/${product.id}"/>" class="product__item--name">
+                ${product.name}
+                <c:if test="${product.status == false}">
+                    <span style="color: #999; font-size: 0.8em;">(Đã hết)</span>
+                </c:if>
+            </a>
+            <c:if test="${product.promotions.size() > 0}">
+                <c:set var="totalDiscount" value="${product.price}"/>
+                <c:forEach var="promotion" items="${product.promotions}">
+                    <c:set var="totalDiscount" value="${totalDiscount*(1 - promotion.discount)}"/>
+                </c:forEach>
+                <p class="product__item--price">
+                    <fmt:formatNumber type="number" pattern="###,###" value="${product.price}"/>đ
+                    <span style="color: red">
+                        (-<fmt:formatNumber type="number" 
+                                          pattern="###,###" 
+                                          value="${Math.round(product.price-totalDiscount)}"/>đ)
+                    </span>
+                </p>
             </c:if>
-        </a>
-        <c:if test="${product.promotions.size() > 0}">
-            <c:set var="totalDiscount" value="${product.price}"/>
-            <c:forEach var="promotion" items="${product.promotions}">
-                <c:set var="totalDiscount" value="${totalDiscount*(1 - promotion.discount)}"/>
-            </c:forEach>
-            <p class="product__item--price">
-                <fmt:formatNumber type="number" pattern="###,###" value="${product.price}"/>đ
-                <span style="color: red">
-                    (-<fmt:formatNumber type="number" 
-                                      pattern="###,###" 
-                                      value="${Math.round(product.price-totalDiscount)}"/>đ)
-                </span>
+            <c:if test="${product.promotions.size() == 0}">
+                <p class="product__item--price">
+                    <fmt:formatNumber type="number" pattern="###,###" value="${product.price}"/>đ
+                </p>
+            </c:if>
+            <p class="product__item--vote">
+                <c:set var="countStar" value="0"/>
+                <c:set var="totalStar" value="0"/>
+                <c:forEach var="star" items="${product.votes}">
+                    <c:set var="countStar" value="${countStar + 1}"/>
+                    <c:set var="totalStar" value="${totalStar + star.star}"/>
+                </c:forEach>
+                ${totalStar/countStar}
+                <span style="vertical-align: text-bottom">&#11088;</span>
             </p>
-        </c:if>
-        <c:if test="${product.promotions.size() == 0}">
-            <p class="product__item--price">
-                <fmt:formatNumber type="number" pattern="###,###" value="${product.price}"/>đ
-            </p>
-        </c:if>
-        <p class="product__item--vote">
-            <c:set var="countStar" value="0"/>
-            <c:set var="totalStar" value="0"/>
-            <c:forEach var="star" items="${product.votes}">
-                <c:set var="countStar" value="${countStar + 1}"/>
-                <c:set var="totalStar" value="${totalStar + star.star}"/>
-            </c:forEach>
-            ${totalStar/countStar}
-            <span style="vertical-align: text-bottom">&#11088;</span>
-        </p>
-        <div class="product__info">
-            <img src="resources\images\landingPage\products\add-to-cart-icon.svg" alt="add-to-cart">
-            <p>Thêm vào giỏ</p>
-            <c:forEach var="size" items="${product.sizes}">
-                <a href="<c:url value="/them-vao-gio-hang/${product.id}/${size.id}"/>" 
-                   class="size">Size ${size.size}</a>
-            </c:forEach>
-            <sec:authorize access="isAuthenticated()">
-                <sec:authentication var="user" property="principal"/>
-                <sec:authorize access="${user.status}">
-                    <a href="<c:url value="/user/them-vao-yeu-thich/${product.id}#main"/>" class="favorite">Thêm vào yêu thích</a>
-                </sec:authorize>
-            </sec:authorize>
+
+            <c:if test="${product.status == true}">
+                <div class="product__info">
+                    <img src="resources\images\landingPage\products\add-to-cart-icon.svg" alt="add-to-cart">
+                    <p>Thêm vào giỏ</p>
+                    <c:forEach var="size" items="${product.sizes}">
+                        <a href="<c:url value="/them-vao-gio-hang/${product.id}/${size.id}"/>" 
+                           class="size">Size ${size.size}</a>
+                    </c:forEach>
+                    <sec:authorize access="isAuthenticated()">
+                        <sec:authentication var="user" property="principal"/>
+                        <sec:authorize access="${user.status}">
+                            <c:if test="${!favorite}">
+                                <p class="favorite" id="btn-favorite-${product.id}" onclick="addToFavoriteProduct(${product.id})">Thêm vào yêu thích</p>
+                            </c:if>
+                            <c:if test="${favorite}">
+                                <p class="favorite" 
+                                   onclick="deleteFavoriteProduct(${product.id})">Xóa khỏi yêu thích</p>
+                            </c:if>
+                        </sec:authorize>
+                    </sec:authorize>
+                </div>
+            </c:if>
         </div>
-    </div>
-</c:forEach>
+    </c:forEach>
+</c:if>
+
+<c:if test="${products.size() == 0 || products == null}">
+    <h2>Không có sản phẩm nào</h2>
+</c:if>

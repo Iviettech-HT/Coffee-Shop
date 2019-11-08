@@ -7,11 +7,15 @@ package com.iviettech.coffeeshop.controller;
 
 import com.iviettech.coffeeshop.entities.AccountEntity;
 import com.iviettech.coffeeshop.entities.FavoriteEntity;
+import com.iviettech.coffeeshop.entities.OrderEntity;
 import com.iviettech.coffeeshop.entities.VoteEntity;
+import com.iviettech.coffeeshop.enums.OrderStatus;
 import com.iviettech.coffeeshop.services.AccountService;
 import com.iviettech.coffeeshop.services.FavoriteService;
+import com.iviettech.coffeeshop.services.OrderService;
 import com.iviettech.coffeeshop.services.ProductService;
 import com.iviettech.coffeeshop.services.VoteService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -39,18 +43,8 @@ public class UserController {
     VoteService voteService;
     @Autowired
     AccountService accountService;
-
-    @RequestMapping(value = "/them-vao-yeu-thich/{productId}")
-    public String addToFavorite(@PathVariable("productId") int productId,
-            Authentication a) {
-        AccountEntity account = (AccountEntity) a.getPrincipal();
-        FavoriteEntity favorite = new FavoriteEntity();
-        favorite.setAccount(account);
-        favorite.setProduct(productService.findProduct(productId));
-        favorite.setStatus(true);
-        favoriteService.addFavorite(favorite);
-        return "redirect:/home";
-    }
+    @Autowired
+    OrderService orderService;
 
     @RequestMapping(value = "/thong-tin-ca-nhan")
     public String viewProfile(Model model) {
@@ -81,6 +75,9 @@ public class UserController {
                 && accountService.isExistedPhone(account.getPhone())) {
             messageError = "Số điện thoại đã được sử dụng";
             isValidated = false;
+        } else if (!account.getPhone().matches("\\d{10}") && !account.getPhone().matches("\\d{11}")) {
+            messageError = "Số điện thoại không chính xác";
+            isValidated = false;
         } else {
             currentAccount.setName(account.getName());
             currentAccount.setEmail(account.getEmail());
@@ -100,8 +97,7 @@ public class UserController {
             } else if (!newPassword.equals(reNewPassword)) {
                 messageError = "Nhập lại mật khẩu mới không khớp";
                 isValidated = false;
-            }
-            else{
+            } else {
                 currentAccount.setPassword(newPassword);
             }
         }
@@ -113,6 +109,28 @@ public class UserController {
             model.addAttribute("messageError", messageError);
         }
         return "profile";
+    }
+
+    @RequestMapping("/don-hang-cua-ban")
+    public String viewUserOrder(Model model,
+            Authentication a) {
+        AccountEntity account = (AccountEntity) a.getPrincipal();
+        List<OrderEntity> orders = orderService.getOrdersByAccountId(account.getId());
+        model.addAttribute("orders", orders);
+        return "userOrder";
+    }
+
+    @RequestMapping("/huy-don-hang/{orderId}")
+    public String cancelOrder(@PathVariable("orderId") int orderId,
+            Authentication a) {
+        AccountEntity account = (AccountEntity) a.getPrincipal();
+        OrderEntity order = orderService.getOrderByIdAndAccountId(orderId, account.getId());
+        if (order.getStatus().toString().equalsIgnoreCase(OrderStatus.NEW.toString())) {
+            order.setStatus(OrderStatus.CANCELED);
+            orderService.updateOrder(order);
+        }
+
+        return "redirect:/user/don-hang-cua-ban";
     }
 //    AJAX
 
@@ -148,6 +166,19 @@ public class UserController {
         favorite.setProduct(productService.findProduct(productId));
         favorite.setStatus(false);
         // just update favorite status to false so i reused addFavorite()
+        favoriteService.addFavorite(favorite);
+        return "ok";
+    }
+
+    @RequestMapping(value = "/them-vao-yeu-thich/{productId}")
+    public @ResponseBody
+    String addToFavorite(@PathVariable("productId") int productId,
+            Authentication a) {
+        AccountEntity account = (AccountEntity) a.getPrincipal();
+        FavoriteEntity favorite = new FavoriteEntity();
+        favorite.setAccount(account);
+        favorite.setProduct(productService.findProduct(productId));
+        favorite.setStatus(true);
         favoriteService.addFavorite(favorite);
         return "ok";
     }

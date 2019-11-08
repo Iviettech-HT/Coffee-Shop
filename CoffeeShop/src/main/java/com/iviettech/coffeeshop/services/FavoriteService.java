@@ -5,7 +5,6 @@
  */
 package com.iviettech.coffeeshop.services;
 
-import com.iviettech.coffeeshop.controller.ShopController;
 import com.iviettech.coffeeshop.controller.UserController;
 import com.iviettech.coffeeshop.entities.FavoriteEntity;
 import com.iviettech.coffeeshop.repositories.FavoriteRepository;

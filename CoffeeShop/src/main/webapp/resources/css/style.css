@@ -11,7 +11,7 @@
     overflow: hidden;
 
     background: url('../images/landingPage/panel.jpg') rgba(0, 0, 0, 0.2) no-repeat;
-    background-size: 100% 100%;
+    background-size: cover;
     background-blend-mode: darken;
 
     position: relative;
@@ -20,11 +20,11 @@
 
 @keyframes zoomIn {
     from {
-        background-size: 100% auto;
+        background-size: 105% auto;
     }
 
     to {
-        background-size: 105% auto;
+        background-size: 110% auto;
     }
 }
 
@@ -94,6 +94,29 @@ main {
 .sale__info{
     width: fit-content;
     margin: 10px 30px;
+}
+.animation-tranform-color{
+    animation: transformColor 3s linear 0s infinite alternate;
+}
+@keyframes transformColor{
+    0%{
+        color: rgb(255, 0, 0);
+    }
+    20%{
+        color: rgb(255, 255, 0);
+    }
+    40%{
+        color: rgb(0, 255, 0);
+    }
+    60%{
+        color: rgb(0, 255, 255);
+    }
+    80%{
+        color: rgb(0, 0, 255);
+    }
+    100%{
+        color: 	rgb(255, 0, 191);
+    }
 }
 /*Filter*/
 .filter{

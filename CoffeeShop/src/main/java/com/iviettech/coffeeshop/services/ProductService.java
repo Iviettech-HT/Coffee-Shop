@@ -14,7 +14,6 @@ import com.iviettech.coffeeshop.repositories.PromotionRepository;
 import com.iviettech.coffeeshop.repositories.SizeRepository;
 import com.iviettech.coffeeshop.repositories.VoteRepository;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -148,14 +147,10 @@ public class ProductService {
     }
 
     public LinkedHashSet<ProductEntity> getProductByPromotionId(int id){
+        
         return (LinkedHashSet<ProductEntity>) productRepository.getProductByPromotionId(id);
     }
-    private Set<SizeEntity> sortSizes(Set<SizeEntity> sizes) {
-        List<SizeEntity> lSizes = new ArrayList<>(sizes);
-
-        Collections.sort(lSizes, (a, b) -> Integer.compare(a.getId(), b.getId()));
-        return new LinkedHashSet<SizeEntity>(lSizes);
-    }
+    
     public void saveProduct(ProductEntity product) {
         productRepository.save(product);
     }

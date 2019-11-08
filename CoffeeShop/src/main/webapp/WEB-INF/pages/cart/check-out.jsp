@@ -35,6 +35,12 @@
                         <table>
                             <thead>
                                 <tr>
+                                    <jsp:useBean id="now" class="java.util.Date"/>
+                                    <th colspan="7">Ngày đặt hàng:
+                                        <fmt:formatDate value="${now}" pattern="dd/MM/yyyy"/>
+                                    </th>
+                                </tr>
+                                <tr>
                                     <th></th>
                                     <th>Tên</th>
                                     <th>Đơn giá</th>
@@ -80,7 +86,7 @@
                     </div>
                     <div class="personal-info">
                         <mvc:form action="${pageContext.request.contextPath}/dat-hang" method="POST" modelAttribute="customer"
-                              class="main__element--background">
+                                  class="main__element--background">
                             <table>
                                 <tr>
                                     <td>
@@ -90,6 +96,9 @@
                                         <input type="text" name="name" id="name" 
                                                <sec:authorize access="isAuthenticated()">
                                                    value="${user.name}"
+                                               </sec:authorize>
+                                               <sec:authorize access="!isAuthenticated()">
+                                                   value="${customer.name}"
                                                </sec:authorize>
                                                />
                                     </td>
@@ -103,6 +112,9 @@
                                                <sec:authorize access="isAuthenticated()">
                                                    value="${user.email}"
                                                </sec:authorize>
+                                               <sec:authorize access="!isAuthenticated()">
+                                                   value="${customer.email}"
+                                               </sec:authorize>
                                                />
                                     </td>
                                 </tr>
@@ -114,6 +126,9 @@
                                         <input type="tel" name="phone" id="phone"  
                                                <sec:authorize access="isAuthenticated()">
                                                    value="${user.phone}"
+                                               </sec:authorize>
+                                               <sec:authorize access="!isAuthenticated()">
+                                                   value="${customer.phone}"
                                                </sec:authorize>
                                                />
                                     </td>
@@ -127,6 +142,9 @@
                                                <sec:authorize access="isAuthenticated()">
                                                    value="${user.address}"
                                                </sec:authorize>
+                                               <sec:authorize access="!isAuthenticated()">
+                                                   value="${customer.address}"
+                                               </sec:authorize>
                                                />
                                     </td>
                                 </tr>
@@ -136,19 +154,32 @@
                                     </td>
                                     <td>
                                         <select name="gender" id="gender">
-                                            <option value="MALE">Nam</option>
-                                            <option value="FEMALE">Nữ</option>
+                                            <option value="MALE"
+                                                    <sec:authorize access="isAuthenticated()">
+                                                        <c:if test="${user.gender == 'MALE'}">selected</c:if>
+                                                    </sec:authorize>
+                                                    <sec:authorize access="!isAuthenticated()">
+                                                        <c:if test="${customer.gender == 'MALE'}">selected</c:if>
+                                                    </sec:authorize>
+                                                    >Nam</option>
+                                            <option value="FEMALE"
+                                                    <sec:authorize access="isAuthenticated()">
+                                                        <c:if test="${user.gender == 'FEMALE'}">selected</c:if>
+                                                    </sec:authorize>
+                                                    <sec:authorize access="!isAuthenticated()">
+                                                        <c:if test="${customer.gender == 'FEMALE'}">selected</c:if>
+                                                    </sec:authorize>
+                                                    >Nữ</option>
                                         </select>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td></td>
-                                    <td><input type="hidden" name="totalPrice" value="${totalPrice}"></td>
+                                <input type="hidden" name="totalPrice" value="${totalPrice}">
+                                <td colspan="2" style="color: red; text-align: center;">${messageError}</td>
                                 </tr>
                                 <input type="submit" hidden="true" id="submit">
                             </table>
                         </mvc:form>
-
                         <div class="action">
                             <div class="action__button main__element--background">
                                 <a href="<c:url value="/gio-hang"/>">Trở về</a>

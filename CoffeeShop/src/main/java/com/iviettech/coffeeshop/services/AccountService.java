@@ -10,6 +10,8 @@ import com.iviettech.coffeeshop.repositories.AccountRepository;
 import com.iviettech.coffeeshop.repositories.RoleRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,8 +25,11 @@ public class AccountService {
     @Autowired
     private RoleRepository roleRepository;
     
-    public AccountEntity findAccount(String username, String password){
-        return accountRepository.findByUsernameAndPassword(username, password);
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    
+    public AccountEntity findAccount(String username){
+        return accountRepository.findByUsername(username);
     }
     
     public boolean isExistedUsername(String username){
@@ -49,6 +54,7 @@ public class AccountService {
     }
     
     public AccountEntity addAccount(AccountEntity account){
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
         return accountRepository.save(account);
     }
     

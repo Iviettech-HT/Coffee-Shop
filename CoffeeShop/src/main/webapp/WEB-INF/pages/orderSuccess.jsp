@@ -22,7 +22,7 @@
     <body>
         <sec:authentication var="user" property="principal"/>
         <jsp:include page="include/header.jsp"/>
-        <main>
+        <main style="text-align: center">
             <h1>BẠN ĐÃ ĐẶT HÀNG THÀNH CÔNG</h1>
             <h2>Kiểm tra hóa đơn trong email của bạn</h2>
         </main>

@@ -7,8 +7,11 @@ package com.iviettech.coffeeshop.services;
 
 import com.iviettech.coffeeshop.entities.ProductEntity;
 import com.iviettech.coffeeshop.entities.PromotionEntity;
+import com.iviettech.coffeeshop.repositories.ImageRepository;
 import com.iviettech.coffeeshop.repositories.ProductRepository;
 import com.iviettech.coffeeshop.repositories.PromotionRepository;
+import com.iviettech.coffeeshop.repositories.SizeRepository;
+import com.iviettech.coffeeshop.repositories.VoteRepository;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -27,7 +30,13 @@ public class PromotionService {
     private PromotionRepository promotionRepository;
     @Autowired
     private ProductRepository productRepository;
-
+    @Autowired
+    private SizeRepository sizeRepository;
+    @Autowired
+    private ImageRepository imageRepository;
+    @Autowired
+    private VoteRepository voteRepository;
+    
     public List<PromotionEntity> findPromotion() {
         return (List<PromotionEntity>) promotionRepository.findAll();
     }
@@ -48,5 +57,21 @@ public class PromotionService {
 
     public Set<PromotionEntity> getPromotionsAvailable() {
         return promotionRepository.getPromotionsAvailable(new Date());
+    }
+
+    public Set<PromotionEntity> getPromotionsAvailablIncludeProducts() {
+        Set<PromotionEntity> promotions = promotionRepository.getPromotionsAvailable(new Date());
+        for (PromotionEntity promotion : promotions) {
+            Set<ProductEntity> products = productRepository.getProductByPromotionId(promotion.getId());
+            for (ProductEntity product : products) {
+                product.setSizes(sizeRepository.getSizesByProductId(product.getId()));
+                product.setImages(imageRepository.getImagesByProductId(product.getId()));
+                product.setVotes(voteRepository.getVotesByProductId(product.getId()));
+                product.setPromotions(promotionRepository.getPromotionsByProductId(product.getId(), new Date()));
+            }
+            
+            promotion.setProducts(products);
+        }
+        return promotions;
     }
 }

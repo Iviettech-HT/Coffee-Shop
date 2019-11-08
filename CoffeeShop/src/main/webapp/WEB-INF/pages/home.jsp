@@ -31,10 +31,11 @@
         <main id="main">
             <c:if test="${!empty promotions}">
                 <div class="sale">
-                    <h4>Khuyến mãi:</h4>
+                    <h4 class="animation-tranform-color">KHUYẾN MÃI:</h4>
                     <c:forEach var="promotion" items="${promotions}">
                         <div class="sale__info">
-                            <p>${promotion.description} <span>(Đến hết ${promotion.endDate})</span></p>
+                            <p>${promotion.description}(Giảm ${promotion.discount*100}%) 
+                                <span>Đến hết <fmt:formatDate pattern="dd-MM-yyyy" value="${promotion.endDate}"/></span></p>
                         </div>
                     </c:forEach>
                 </div>
@@ -42,10 +43,9 @@
             <div class="filter">
                 <p class="spacing">Bộ Lọc:</p>
                 <div class="filter__selection">
-                    <a href="" class="spacing">Giá từ thấp đến cao</a>
-                    <a href="" class="spacing">Giá từ cao xuống thấp</a>
-                    <a href="" class="spacing">Sản phẩm được mua nhiều</a>
-
+                    <a href="#main" class="spacing" onclick="lowToHighPrice()">Giá từ thấp đến cao</a>
+                    <a href="#main" class="spacing" onclick="highToLowPrice()">Giá từ cao xuống thấp</a>
+                    <a href="#main" class="spacing" onclick="highToLowVote()">Sản phẩm được đánh giá cao</a>
                 </div>
             </div>
             <nav>
@@ -81,17 +81,17 @@
                                 <span style="color: #999; font-size: 0.8em;">(Đã hết)</span>
                             </c:if>
                         </a>
+                        <c:set var="totalDiscount" value="${product.price + product.sizes.iterator().next().addition}"/>
                         <c:if test="${product.promotions.size() > 0}">
-                            <c:set var="totalDiscount" value="${product.price}"/>
                             <c:forEach var="promotion" items="${product.promotions}">
                                 <c:set var="totalDiscount" value="${totalDiscount*(1 - promotion.discount)}"/>
                             </c:forEach>
                             <p class="product__item--price">
-                                <fmt:formatNumber type="number" pattern="###,###" value="${product.price}"/>đ
+                                <fmt:formatNumber type="number" pattern="###,###" value="${product.price + product.sizes.iterator().next().addition}"/>đ   
                                 <span style="color: red">
                                     (-<fmt:formatNumber type="number" 
                                                       pattern="###,###" 
-                                                      value="${Math.round(product.price-totalDiscount)}"/>đ)
+                                                      value="${Math.round(product.price + product.sizes.iterator().next().addition-totalDiscount)}"/>đ)
                                 </span>
                             </p>
                         </c:if>
@@ -110,20 +110,23 @@
                             ${totalStar/countStar}
                             <span style="vertical-align: text-bottom">&#11088;</span>
                         </p>
-                        <div class="product__info">
-                            <img src="resources\images\landingPage\products\add-to-cart-icon.svg" alt="add-to-cart">
-                            <p>Thêm vào giỏ</p>
-                            <c:forEach var="size" items="${product.sizes}">
-                                <a href="<c:url value="/them-vao-gio-hang/${product.id}/${size.id}"/>" 
-                                   class="size">Size ${size.size}</a>
-                            </c:forEach>
-                            <sec:authorize access="isAuthenticated()">
-                                <sec:authentication var="user" property="principal"/>
-                                <sec:authorize access="${user.status}">
-                                    <a href="<c:url value="/user/them-vao-yeu-thich/${product.id}#main"/>" class="favorite">Thêm vào yêu thích</a>
+                        <c:if test="${product.status == true}">
+                            <div class="product__info">
+                                <img src="resources\images\landingPage\products\add-to-cart-icon.svg" alt="add-to-cart">
+                                <p>Thêm vào giỏ</p>
+                                <c:forEach var="size" items="${product.sizes}">
+                                    <a href="<c:url value="/them-vao-gio-hang/${product.id}/${size.id}"/>" 
+                                       class="size">Size ${size.size}</a>
+                                </c:forEach>
+                                <sec:authorize access="isAuthenticated()">
+                                    <sec:authentication var="user" property="principal"/>
+                                    <sec:authorize access="${user.status}">
+                                        <p class="favorite" id="btn-favorite-${product.id}" onclick="addToFavoriteProduct(${product.id})">Thêm vào yêu thích</p>
+                                    </sec:authorize>
                                 </sec:authorize>
-                            </sec:authorize>
-                        </div>
+                            </div>
+                        </c:if>
+                        <p class="tempPrice" style="display: none;">${totalDiscount}</p>
                     </div>
                 </c:forEach>
             </div>
@@ -133,63 +136,77 @@
 
         <script src="${pageContext.request.contextPath}/resources/js/landingPage.js"></script>
         <script>
-            let product = document.getElementsByClassName('product')[0];
-            let searchBox = document.getElementById('search__box');
-            let searchBtn = document.getElementById('search__icon');
-            let xhttp;
-            categoryItems = document.getElementsByClassName('category__item');
+                                            let product = document.getElementsByClassName('product')[0];
+                                            let searchBox = document.getElementById('search__box');
+                                            let searchBtn = document.getElementById('search__icon');
+                                            let xhttp;
+                                            categoryItems = document.getElementsByClassName('category__item');
 
-            for (let categoryItem of categoryItems) {
-                categoryItem.addEventListener('click', function () {
-                    getAllProductByCategoryName(categoryItem.children[0].innerHTML)
-                });
-            }
+                                            for (let categoryItem of categoryItems) {
+                                                categoryItem.addEventListener('click', function () {
+                                                    getAllProductByCategoryName(categoryItem.children[0].innerHTML)
+                                                });
+                                            }
 
-            searchBtn.onclick = () => {
-                console.log(searchBox.value);
-                xhttp = new XMLHttpRequest();
-                xhttp.open('GET', '${pageContext.request.contextPath}/tim-kiem-san-pham?name=' + searchBox.value, true)
-                xhttp.send();
-                xhttp.onreadystatechange = () => {
-                    if (xhttp.readyState == 4 && xhttp.status == 200) {
-                        product.innerHTML = xhttp.responseText;
-                    }
-                }
-                for (let i = 0; i < categoryItems.length; i++) {
-                    categoryItems[i].classList.remove('category__item--active');
-                    categoryItems[i].classList.remove('category__item--border');
-                }
-                if (!window.location.href.includes("#main"))
-                    window.location += '#main';
-                else
-                    window.location += '';
-            }
+                                            searchBtn.onclick = () => {
+                                                console.log(searchBox.value);
+                                                xhttp = new XMLHttpRequest();
+                                                xhttp.open('GET', '${pageContext.request.contextPath}/tim-kiem-san-pham?name=' + searchBox.value, true)
+                                                xhttp.send();
+                                                xhttp.onreadystatechange = () => {
+                                                    if (xhttp.readyState == 4 && xhttp.status == 200) {
+                                                        product.innerHTML = xhttp.responseText;
+                                                    }
+                                                }
+                                                for (let i = 0; i < categoryItems.length; i++) {
+                                                    categoryItems[i].classList.remove('category__item--active');
+                                                    categoryItems[i].classList.remove('category__item--border');
+                                                }
+                                                if (!window.location.href.includes("#main"))
+                                                    window.location += '#main';
+                                                else
+                                                    window.location += '';
+                                            }
 
-            function getAllProductByCategoryName(name) {
-                xhttp = new XMLHttpRequest();
-                name = name.toLowerCase();
-                if (name == 'yêu thích')
-                    xhttp.open('GET', '${pageContext.request.contextPath}/user/list-san-pham-yeu-thich', true);
-                else
-                    xhttp.open('GET', '${pageContext.request.contextPath}/list-san-pham?name=' + name, true);
-                xhttp.send();
-                xhttp.onreadystatechange = () => {
-                    if (xhttp.readyState == 4 && xhttp.status == 200) {
-                        product.innerHTML = xhttp.responseText;
-                    }
-                }
-            }
+                                            function getAllProductByCategoryName(name) {
+                                                xhttp = new XMLHttpRequest();
+                                                name = name.toLowerCase();
+                                                if (name == 'yêu thích')
+                                                    xhttp.open('GET', '${pageContext.request.contextPath}/user/list-san-pham-yeu-thich', true);
+                                                else
+                                                    xhttp.open('GET', '${pageContext.request.contextPath}/list-san-pham?name=' + name, true);
+                                                xhttp.send();
+                                                xhttp.onreadystatechange = () => {
+                                                    if (xhttp.readyState == 4 && xhttp.status == 200) {
+                                                        product.innerHTML = xhttp.responseText;
+                                                    }
+                                                }
+                                            }
 
-            function deleteFavoriteProduct(productId) {
-                xhttp = new XMLHttpRequest();
-                xhttp.open('GET', '${pageContext.request.contextPath}/user/xoa-san-pham-yeu-thich/' + productId, true);
-                xhttp.send();
-                xhttp.onreadystatechange = () => {
-                    if (xhttp.readyState == 4 && xhttp.status == 200) {
-                        document.getElementById('product' + productId).style.display = 'none';
-                    }
-                }
-            }
+                                            function addToFavoriteProduct(productId) {
+                                                xhttp = new XMLHttpRequest();
+                                                xhttp.open('GET', '<c:url value="/user/them-vao-yeu-thich/"/>' + productId, true);
+                                                xhttp.send();
+                                                xhttp.onreadystatechange = () => {
+                                                    if (xhttp.readyState == 4 && xhttp.status == 200) {
+                                                        document.getElementById('btn-favorite-' + productId).innerHTML += '(Đã thêm)';
+                                                    }
+                                                }
+                                            }
+
+                                            function deleteFavoriteProduct(productId) {
+                                                xhttp = new XMLHttpRequest();
+                                                xhttp.open('GET', '${pageContext.request.contextPath}/user/xoa-san-pham-yeu-thich/' + productId, true);
+                                                xhttp.send();
+                                                xhttp.onreadystatechange = () => {
+                                                    if (xhttp.readyState == 4 && xhttp.status == 200) {
+                                                        document.getElementById('product' + productId).remove();
+                                                        if (document.getElementsByClassName('product')[0].innerText == "") {
+                                                            document.getElementsByClassName('product')[0].innerHTML = "<h2>Không có sản phẩm nào</h2>"
+                                                        }
+                                                    }
+                                                }
+                                            }
         </script>
     </body>
 </html>

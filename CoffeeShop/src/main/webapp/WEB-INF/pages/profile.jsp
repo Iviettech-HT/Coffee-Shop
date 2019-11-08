@@ -4,6 +4,7 @@
     Author     : admin
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="mvc" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
@@ -44,6 +45,19 @@
                             <td class="title">SĐT:</td>
                             <td>
                                 <input type="tel" name="phone" value="${user.phone}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title">Giới tính:</td>
+                            <td>
+                                <select name="gender" id="">
+                                    <option value="MALE"
+                                            <c:if test="${user.gender == 'MALE'}">selected</c:if>
+                                            >Nam</option>
+                                    <option value="FEMALE"
+                                            <c:if test="${user.gender == 'FEMALE'}">selected</c:if>
+                                            >Nữ</option>
+                                </select>
                             </td>
                         </tr>
                         <tr>

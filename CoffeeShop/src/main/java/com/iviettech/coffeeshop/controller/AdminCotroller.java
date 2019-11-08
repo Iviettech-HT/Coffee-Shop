@@ -146,18 +146,18 @@ public class AdminCotroller implements ResourceLoaderAware {
                             try {
                                 byte[] bytes = image.getBytes();
 
-                                //Get path to resources
-                                String pathUrl = context.getRealPath("/images");
-                                int index = pathUrl.indexOf("target");
-                                String pathFolder = pathUrl.substring(0, index) + pathSaveImages;
-                                savedPath = "resources/images/landingPage/products/" + image.getOriginalFilename();
-                                //create temporary ImageEntityz
-                                ImageEntity imageTemp = new ImageEntity();
-                                imageTemp.setPath(savedPath);
-                                listImage.add(imageTemp);
-                                //Save file
-                                File storedFile = new File(pathFolder + File.separator + image.getOriginalFilename());
-                                BufferedOutputStream buffer = new BufferedOutputStream(new FileOutputStream(storedFile));
+                //Get path to resources
+                String pathUrl = context.getRealPath("/images");
+                int index = pathUrl.indexOf("target");
+                String pathFolder = pathUrl.substring(0, index) + pathSaveImages;
+                savedPath = "resources/images/landingPage/products/" + image.getOriginalFilename();
+                //create temporary ImageEntityz
+                ImageEntity imageTemp = new ImageEntity();
+                imageTemp.setPath(savedPath);
+                listImage.add(imageTemp);
+                //Save file
+                File storedFile = new File(pathFolder + File.separator + image.getOriginalFilename());
+                BufferedOutputStream buffer = new BufferedOutputStream(new FileOutputStream(storedFile));
 
                                 buffer.write(bytes);
                                 buffer.close();

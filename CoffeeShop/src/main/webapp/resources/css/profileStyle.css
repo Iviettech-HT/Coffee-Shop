@@ -60,6 +60,15 @@ form tr:last-child input[type="submit"]:hover{
     cursor: pointer;
     background: #5bd75b;
 }
+form td > select{
+    font-size: 1em;
+    border: 1.5px solid grey;
+    border-radius: 5px;
+}
+form td > select:focus{
+    outline: none;
+    border-color: #6495ED;
+}
 #change-password{
     width: fit-content;
     font-size: 1em;

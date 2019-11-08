@@ -53,4 +53,12 @@
         logo.src = '${pageContext.request.contextPath}/resources/images/landingPage/logo.jpg'
     }
 
+    function displayMenu(id) {
+        console.log(id);
+        document.getElementById(id).style.display = 'flex';
+        document.getElementById(id).onclick = function (e) {
+            if (e.target == this)
+                document.getElementById(id).style.display = 'none';
+        }
+    }
 </script>

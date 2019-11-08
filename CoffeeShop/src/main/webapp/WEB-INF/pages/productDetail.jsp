@@ -38,13 +38,13 @@
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, nemo, iusto, expedita, aliquid neque nisi placeat non ad illum amet praesentium obcaecati labore dignissimos voluptate at. Deleniti et saepe assumenda?
                     </p>
                     <c:if test="${product.promotions.size() > 0}">
-                        <c:set var="totalDiscount" value="${product.price}"/>
+                        <c:set var="totalDiscount" value="${product.price + product.sizes.iterator().next().addition}"/>
                         <c:forEach var="promotion" items="${product.promotions}">
                             <c:set var="totalDiscount" value="${totalDiscount*(1 - promotion.discount)}"/>
                         </c:forEach>
-                        
+
                         <p class="product-info__price--promotion">
-                        <fmt:formatNumber type="number" pattern="###,###" value="${product.price}"/>đ
+                            <fmt:formatNumber type="number" pattern="###,###" value="${product.price + product.sizes.iterator().next().addition}"/>đ
                         </p>
                         <p class="product-info__price">
                             <fmt:formatNumber type="number" pattern="###,###" value="${Math.round(totalDiscount)}"/>đ
@@ -52,18 +52,21 @@
                     </c:if>
                     <c:if test="${product.promotions.size() == 0}">
                         <p class="product-info__price">
-                        <fmt:formatNumber type="number" pattern="###,###" value="${product.price}"/>đ
+                            <fmt:formatNumber type="number" pattern="###,###" value="${product.price}"/>đ
                         </p>
                     </c:if>
-                    <div class="product-info__sizes">
-                        <p>Cỡ:</p>
-                        <c:forEach var="size" items="${product.sizes}">
-                            <div class="product-info__sizes__button"><p>${size.size}</p></div>
-                                </c:forEach>
-                    </div>
-                    <div class="product-info__buy-button">
-                        <p>Thêm vào giỏ</p>
-                    </div>
+
+                    <c:if test="${product.status == true}">
+                        <div class="product-info__sizes">
+                            <p>Cỡ:</p>
+                            <c:forEach var="size" items="${product.sizes}">
+                                <div class="product-info__sizes__button"><p>${size.size}</p></div>
+                                    </c:forEach>
+                        </div>
+                        <div class="product-info__buy-button">
+                            <p>Thêm vào giỏ</p>
+                        </div>
+                    </c:if>
                     <c:set var="countStar" value="0"/>
                     <c:set var="totalStar" value="0"/>
                     <c:forEach var="star" items="${product.votes}">

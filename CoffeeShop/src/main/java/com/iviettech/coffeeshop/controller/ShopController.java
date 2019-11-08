@@ -90,6 +90,19 @@ public class ShopController {
         return "home";
     }
 
+    @RequestMapping(value = "/khuyen-mai")
+    public String viewPromotion(Model model){
+        List<PromotionEntity> promotions = new ArrayList<>(promotionService.getPromotionsAvailablIncludeProducts());
+        List<ProductEntity> products = new ArrayList<>();
+        for(PromotionEntity promotion : promotions){
+            products.addAll(promotion.getProducts());
+        }
+        
+        model.addAttribute("promotion", promotions);
+        model.addAttribute("products", products);
+        return "discountedProducts";
+    }
+    
     @RequestMapping(value = {"/dang-nhap"})
     public String viewLogin(Model model,
             @RequestParam(name = "isError", required = false) boolean isError) {
@@ -216,10 +229,28 @@ public class ShopController {
                 toppingStr.append(topping.getName() + ",");
                 totalToppingPrice += topping.getPrice();
             }
-
             toppingStr.deleteCharAt(toppingStr.length() - 1);
+
             orderDetails.get(pos).setTopping(toppingStr.toString());
             orderDetails.get(pos).setPrice(orderDetails.get(pos).getPrice() + totalToppingPrice * orderDetails.get(pos).getQuantity());
+
+            // filter list order detail if exist an orderDetail has size, product, topping
+            int lenOrderDetails = orderDetails.size();
+            for (int i = 0; i < lenOrderDetails; i++) {
+                OrderDetailEntity orderDetail1 = orderDetails.get(i);
+                for (int j = i + 1; j < lenOrderDetails; j++) {
+                    OrderDetailEntity orderDetail2 = orderDetails.get(j);
+                    if (orderDetail1.getSize().toString().equalsIgnoreCase(orderDetail2.getSize().toString())
+                            && orderDetail1.getProduct().getName().equalsIgnoreCase(orderDetail2.getProduct().getName())
+                            && orderDetail1.getTopping().equalsIgnoreCase(orderDetail2.getTopping())) {
+                        orderDetail1.setQuantity(orderDetail1.getQuantity() + orderDetail2.getQuantity());
+                        orderDetail1.setPrice(orderDetail1.getPrice() + orderDetail2.getPrice());
+                        orderDetails.remove(j);
+                        j--;
+                        i--;
+                    }
+                }
+            }
             session.setAttribute("orderDetails", orderDetails);
         } catch (Exception ex) {
             Logger.getLogger(ShopController.class.getName()).log(Level.SEVERE, null, ex);
@@ -234,18 +265,39 @@ public class ShopController {
     }
 
     @RequestMapping(value = "/dat-hang", method = RequestMethod.POST)
-    public String addOrder(HttpSession session,
+    public String addOrder(Model model,
+            HttpSession session,
             @ModelAttribute(name = "customer") CustomerEntity customer,
             @RequestParam(name = "totalPrice") double totalPrice,
             @Value(value = "${fileForSend}") String fileForSend,
             @Value(value = "${pathToResources}") String pathToResources,
             Authentication a) {
+        //Validate form customer
+        String messageError = "";
+        boolean isValidated = true;
+        if (customer.getName().isEmpty() || customer.getEmail().isEmpty() || customer.getPhone().isEmpty()
+                || customer.getAddress().isEmpty()) {
+            messageError = "Vui lòng không bỏ trống";
+            isValidated = false;
+        } else if (!customer.getEmail().contains("@") && !customer.getEmail().contains(".")) {
+            messageError = "Email không chính xác";
+            isValidated = false;
+        } else if (!customer.getPhone().matches("\\d{10}") && !customer.getPhone().matches("\\d{11}")) {
+            messageError = "Số điện thoại không chính xác";
+            isValidated = false;
+        }
+        if (!isValidated) {
+            model.addAttribute("messageError", messageError);
+            model.addAttribute("customer", customer);
+            return "cart/check-out";
+        }
+        //
         if (a != null) {
             customer.setAccount((AccountEntity) a.getPrincipal());
         }
         List<OrderDetailEntity> orderDetails = (List<OrderDetailEntity>) session.getAttribute("orderDetails");
-        OrderEntity order = new OrderEntity(new Date(), new Date(), totalPrice, OrderStatus.MAKING, orderDetails, customer);
-        orderService.addOrder(order);
+        OrderEntity order = new OrderEntity(new Date(), new Date(), totalPrice, OrderStatus.NEW, orderDetails, customer);
+        order = orderService.addOrder(order);
 //        Send mail order
         fileForSend += "emailSendOrder.html";
         textHtml = new StringBuilder();
@@ -263,11 +315,18 @@ public class ShopController {
                     textHtml.append("Tổng cộng:" + Math.round(order.getTotalPrice()) + "đ");
                 } else if (check == 3) {
                     textHtml.append("<table>");
+                    textHtml.append("<tr><td colspan='6'>Mã đơn hàng:" + order.getId() + "</td></tr>");
                     textHtml.append("<tr><td>Tên</td><td>Đơn giá</td><td>Số lượng</td><td>Giá</td><td>Size</td><td>Topping</td></tr>");
                     for (OrderDetailEntity orderDetail : orderDetails) {
-                        textHtml.append(String.format("<tr><td>%s</td><td>%.0fđ</td><td>%d</td><td>%.0fđ</td><td>%s</td><td>%s</td></tr>",
-                                orderDetail.getProduct().getName(), orderDetail.getUnitPrice(), orderDetail.getQuantity(),
-                                orderDetail.getPrice(), orderDetail.getSize().toString(), orderDetail.getTopping()));
+                        
+                        textHtml.append(String.format("<tr><td>%s</td><td>%,dđ</td><td>%d</td><td>%,dđ</td><td>%s</td><td>",
+                                orderDetail.getProduct().getName(), Math.round(orderDetail.getUnitPrice()), orderDetail.getQuantity(),
+                                Math.round(orderDetail.getPrice()), orderDetail.getSize().toString()));
+                        if (orderDetail.getTopping() != null) {
+                            textHtml.append(String.format("%s</td></tr>", orderDetail.getTopping()));
+                        } else {
+                            textHtml.append(" </td></tr>");
+                        }
                     }
 
                     textHtml.append("</table>");
@@ -287,7 +346,7 @@ public class ShopController {
                     String pathUrl = context.getRealPath("/images");
                     int index = pathUrl.indexOf("target");
                     String pathImage = pathUrl.substring(0, index) + pathToResources + "/images/email/logo.jpg";
-                    
+
                     //attach image into html
                     helper.addInline("logoHeader", new File(pathImage));
                 }
@@ -327,6 +386,9 @@ public class ShopController {
             isValidated = false;
         } else if (!account.getEmail().contains("@") && !account.getEmail().contains(".")) {
             messageError = "Email không chính xác";
+            isValidated = false;
+        } else if (!account.getPhone().matches("\\d{10}") && !account.getPhone().matches("\\d{11}")) {
+            messageError = "Số điện thoại không chính xác";
             isValidated = false;
         }
 

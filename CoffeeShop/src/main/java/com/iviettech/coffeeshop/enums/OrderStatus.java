@@ -10,5 +10,5 @@ package com.iviettech.coffeeshop.enums;
  * @author admin
  */
 public enum OrderStatus {
-    MAKING, SHIPPING, DONE, CANCELED
+    NEW ,MAKING, SHIPPING, DONE, CANCELED
 }

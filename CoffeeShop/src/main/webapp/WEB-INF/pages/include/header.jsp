@@ -8,6 +8,22 @@
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
+<c:set var="totalQuantity" value="0"/>
+<c:forEach var="orderDetail" items="${sessionScope.orderDetails}">
+    <c:set var="totalQuantity" value="${totalQuantity + orderDetail.quantity}"/>
+</c:forEach>
+<style>
+    <c:if test="${totalQuantity != 0}">
+        .cart-icon::after{
+            content: '${totalQuantity}';
+        }
+    </c:if>
+    <c:if test="${totalQuantity == 0}">
+        .cart-icon::after{
+            display: none;
+        }
+    </c:if>
+</style>
 <header>
     <div class="search">
         <img src="${pageContext.request.contextPath}/resources/images/landingPage/logo.jpg" alt="logo" class="logo"
@@ -17,19 +33,22 @@
     </div>
     <div class="control">
         <a href="#contact">LIÊN HỆ</a>
-        <a>KHUYỄN MÃI</a>
-        <a href="#" onclick="displayMenu()">MENU</a>
-        <img src="${pageContext.request.contextPath}/resources/images/landingPage/cart_icon.svg" alt="cart" onclick="window.location = '<c:url value="/gio-hang"/>'" />
+        <a href="<c:url value="/khuyen-mai"/>">KHUYỄN MÃI</a>
+        <a href="#" onclick="displayMenu('menu-show')">MENU</a>
+        <div class="cart-icon">
+            <img src="${pageContext.request.contextPath}/resources/images/landingPage/cart_icon.svg" alt="cart" 
+                 onclick="window.location = '<c:url value="/gio-hang"/>'" />
+        </div>
         <div class="menu">
             <div class="line"></div>
             <div class="line"></div>
             <div class="line"></div>
             <ul class="menu__sub">
                 <li class="menu-content-responsive">
-                    <a href="#" onclick="displayMenu()">MENU</a>
+                    <a href="#" onclick="displayMenu('menu-show')">MENU</a>
                 </li>
                 <li class="menu-content-responsive">
-                    <a>KHUYỄN MÃI</a>
+                    <a href="#" onclick="displayMenu('promotion-show')">KHUYỄN MÃI</a>
                 </li>
                 <li class="menu-content-responsive">
                     <a href="#contact">LIÊN HỆ</a>
@@ -48,7 +67,7 @@
                         <a href='<c:url value="/dang-ky"/>'>ĐĂNG KÝ</a>
                     </li>
                 </sec:authorize>
-                <sec:authorize access="hasRole('ROLE_ADMIN')">
+                <sec:authorize access="hasAnyRole('ROLE_ADMIN','ROLE_SELLER','ROLE_MANAGER')">
                     <li>
                         <a href='<c:url value="/admin/home"/>'>QUẢN LÝ</a>
                     </li>
@@ -71,6 +90,9 @@
                     </sec:authorize>
                     <sec:authorize access="hasRole('ROLE_USER') && ${user.status}">
                         <li>
+                            <a href="<c:url value="/user/don-hang-cua-ban"/>">ĐƠN HÀNG CỦA BẠN</a>
+                        </li>
+                        <li>
                             <a href='<c:url value="/user/thong-tin-ca-nhan"/>'>HỒ SƠ</a>
                         </li>
                         <li>
@@ -82,6 +104,15 @@
         </div>
     </div>
 </header>
-        <div id="menu-show">
-            <img src="${pageContext.request.contextPath}/resources/images/header/menu_teaffee.jpg" alt="Menu">
-        </div>
+<div id="menu-show" class="menu-show">
+    <img src="${pageContext.request.contextPath}/resources/images/header/menu_teaffee.jpg" alt="Menu">
+</div>
+
+<div id="promotion-show" class="menu-show">
+    <c:forEach var="promotion" items="${promotions}">
+        <c:if test="${!empty promotion.image}">
+            <img src="${pageContext.request.contextPath}/${promotion.image}" alt="">
+            <br>
+        </c:if>
+    </c:forEach>
+</div>

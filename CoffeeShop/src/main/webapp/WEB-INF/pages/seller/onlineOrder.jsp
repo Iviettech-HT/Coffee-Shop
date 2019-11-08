@@ -11,8 +11,9 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.4.1/css/bootstrap.min.css"/>"/>
         <link rel="stylesheet" href="<c:url value="/resources/css/sellerTabStyle.css"/>"/>
+        <title>Seller Page</title>
         <style>
             .container{
                 width: 100%;
@@ -22,16 +23,20 @@
     </head>
     <body>
         <c:set var="sellerOrderDetails" value="${sessionScope.sellerOrderDetails}"/>
+        <c:set var="totalQuantity" value="0"/>
+        <c:forEach var="orderDetail" items="${sellerOrderDetails}">
+            <c:set var="totalQuantity" value="${totalQuantity + orderDetail.quantity}"/>
+        </c:forEach>
         <div class="container">
             <h1>TRANG BÁN HÀNG</h1>
         </div>
         <div id="exTab1" class="container" style="width: 100%">	
             <ul  class="nav nav-pills">
                 <li>
-                    <a  href="<c:url value="/seller/home"/>" data-toggle="tab">Sản phẩm</a>
+                    <a  href="<c:url value="/seller/home"/>">Sản phẩm</a>
                 </li>
                 <li><a href="<c:url value="/seller/gio-hang"/>">Giỏ hàng 
-                        <span class="badge">${sellerOrderDetails.size()}</span></a>
+                        <span class="badge">${totalQuantity}</span></a>
                 </li>
                 <li class="active" ><a href="<c:url value="/seller/don-hang-online"/>">Đơn hàng online</a>
                 </li>
@@ -48,7 +53,12 @@
                     <h2>ĐƠN HÀNG ONLINE</h2>         
                     <c:forEach var="order" items="${orders}">
                         <div class="container">
-                            <h3>${order.customer.name}</h3>
+                            <h3>
+                                ${order.customer.name}
+                                <c:if test="${order.status.toString() eq 'MAKING'}">
+                                    (Đang thực hiện...)
+                                </c:if>
+                            </h3>
                             <p>${order.orderDate}</p>
                             <p>${order.totalPrice}</p>
                             <button type="button" class="btn btn-info" 
@@ -88,7 +98,13 @@
                                         </c:forEach>
                                         <tr>
                                             <td colspan="7">
-                                                <a href="<c:url value="/seller/xac-nhan-don-hang-online/${order.id}"/>" class="btn btn-success">XÁC NHẬN</a>
+                                                <c:if test="${!(order.status.toString() eq 'MAKING')}">
+                                                    <a href="<c:url value="/seller/lam-don-hang-online/${orderId}"/>" class="btn btn-primary">NHẬN ĐƠN HÀNG</a>
+                                                </c:if>
+                                                <c:if test="${order.status.toString() == 'MAKING'}">
+                                                    <a href="<c:url value="/seller/xac-nhan-don-hang-online/${order.id}"/>" class="btn btn-success">BẮT ĐẦU SHIP</a>
+                                                </c:if>
+                                                <a href="<c:url value="/seller/huy-don-hang"/>" class="btn btn-danger">HỦY</a>
                                             </td>
                                         </tr>
                                     </tbody>

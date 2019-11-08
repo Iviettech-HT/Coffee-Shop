@@ -11,7 +11,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.4.1/css/bootstrap.min.css"/>"/>
         <link href="//cdn.datatables.net/1.10.20/css/dataTables.bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <link rel="stylesheet" href="<c:url value="/resources/css/sellerTabStyle.css"/>"/>
         <title>Seller Page</title>
@@ -32,6 +32,10 @@
     </head>
     <body>
         <c:set var="sellerOrderDetails" value="${sessionScope.sellerOrderDetails}"/>
+        <c:set var="totalQuantity" value="0"/>
+        <c:forEach var="orderDetail" items="${sellerOrderDetails}">
+            <c:set var="totalQuantity" value="${totalQuantity + orderDetail.quantity}"/>
+        </c:forEach>
         <div class="container">
             <h1>TRANG BÁN HÀNG</h1>
         </div>
@@ -41,7 +45,7 @@
                     <a  href="<c:url value="/seller/home"/>" >Sản phẩm</a>
                 </li>
                 <li><a href="<c:url value="/seller/gio-hang"/>">Giỏ hàng 
-                        <span class="badge">${sellerOrderDetails.size()}</span></a>
+                        <span class="badge">${totalQuantity}</span></a>
                 </li>
                 <li><a href="<c:url value="/seller/don-hang-online"/>" >Đơn hàng online</a>
                 </li>
@@ -76,7 +80,8 @@
                                         ${product.name}
                                     </td>
                                     <td>
-                                        <fmt:formatNumber type="number" pattern="###,###" value="${product.price}"/>đ
+                                        <fmt:formatNumber type="number" pattern="###,###" 
+                                                          value="${product.price + product.sizes.iterator().next().addition}"/>đ
                                     </td>
                                     <td>
                                         ${product.category.name}
@@ -108,12 +113,11 @@
                                                     <c:forEach var="size" items="${product.sizes}">
                                                         <c:if test="${isFirstSize}">
                                                             <option value="${size.id}" selected>${size.size}</option>
-                                                            <c:set var="isFirstSize" value="${false}"/>
                                                         </c:if>
                                                         <c:if test="${!isFirstSize}">
                                                             <option value="${size.id}">${size.size}</option>
                                                         </c:if>
-
+                                                        <c:set var="isFirstSize" value="${false}"/>
                                                     </c:forEach>
                                                 </select>
                                             </div>
@@ -145,24 +149,13 @@
                                             </div>    
                                         </form>
                                     </td>
-
                                 </tr>
                             </c:forEach>
                         </tbody>
                     </table>
                 </div>
-                <div class="tab-pane" id="2a">
-                    <h3>We use the class nav-pills instead of nav-tabs which automatically creates a background color for the tab</h3>
-                </div>
-                <div class="tab-pane" id="3a">
-                    <h3>We applied clearfix to the tab-content to rid of the gap between the tab and the content</h3>
-                </div>
-                <div class="tab-pane" id="4a">
-                    <h3>We use css to change the background color of the content to be equal to the tab</h3>
-                </div>
             </div>
         </div>
-
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
         <script src="//cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>

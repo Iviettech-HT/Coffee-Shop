@@ -20,6 +20,7 @@
     <mvc:resources mapping="/resources-management/**" location="/resources-management/" />
     
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="order" value="2"></property>
         <property name="prefix" value="/WEB-INF/pages/" />
         <property name="suffix" value=".jsp" />
     </bean>
@@ -53,10 +54,18 @@
     
     <!-- Send Email Exception Resolver i.e. In Case Of Exception The Controller Will Navigate To 'error.jsp' & Will Display The Exception Message -->
     <bean id="multipartResolver"
-                class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 
         <!-- setting maximum upload size -->
         <property name="maxUploadSize" value="10000000" />
 
+    </bean>
+    <!--Generate PDF-->
+    <bean class = "org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping" />
+    <bean class = "org.springframework.web.servlet.view.XmlViewResolver">
+        <property name="order" value="1"></property>
+        <property name = "location">
+            <value>/WEB-INF/views.xml</value>
+        </property>
     </bean>
 </beans>

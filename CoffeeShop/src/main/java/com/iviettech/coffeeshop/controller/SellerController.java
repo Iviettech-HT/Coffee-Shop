@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  *
@@ -119,7 +120,7 @@ public class SellerController {
                 }
             }
         }
-        
+
         if (isExistProduct == false) {
             orderDetail.setProduct(product);
             orderDetail.setQuantity(quantity);
@@ -169,10 +170,10 @@ public class SellerController {
         session.setAttribute("sellerOrderDdetails", orderDetails);
         return "redirect:/seller/gio-hang";
     }
-    
+
     @RequestMapping("/dat-hang")
     public String addOrder(HttpSession session,
-            Authentication a){
+            Authentication a) {
         List<OrderDetailEntity> orderDetails = (List<OrderDetailEntity>) session.getAttribute("sellerOrderDetails");
         AccountEntity account = (AccountEntity) a.getPrincipal();
         CustomerEntity customer = new CustomerEntity();
@@ -182,40 +183,60 @@ public class SellerController {
         customer.setGender(account.getGender());
         customer.setPhone(account.getPhone());
         customer.setAccount(account);
-        
+
         double totalPrice = 0;
-        for(OrderDetailEntity orderDetail : orderDetails){
+        for (OrderDetailEntity orderDetail : orderDetails) {
             totalPrice += orderDetail.getPrice();
         }
-        OrderEntity order = new OrderEntity(new Date(), new Date(),totalPrice , OrderStatus.DONE, orderDetails, customer);
+        OrderEntity order = new OrderEntity(new Date(), new Date(), totalPrice, OrderStatus.DONE, orderDetails, customer);
         orderService.addOrder(order);
         session.removeAttribute("sellerOrderDetails");
         return "redirect:/seller/home";
     }
-    
+
     @RequestMapping("/don-hang-online")
-    public String viewOnlineOrder(Model model){
-        List<OrderEntity> orders = orderService.getOrdersByStatus(OrderStatus.MAKING);
+    public String viewOnlineOrder(Model model) {
+        List<OrderEntity> orders = orderService.getOrdersByStatus(OrderStatus.NEW);
+        orders.addAll(0, orderService.getOrdersByStatus(OrderStatus.MAKING));
         model.addAttribute("orders", orders);
         return "seller/onlineOrder";
     }
-    
+
     @RequestMapping("/don-hang-dang-ship")
-    public String viewShippingOrder(Model model){
+    public String viewShippingOrder(Model model) {
         List<OrderEntity> orders = orderService.getOrdersByStatus(OrderStatus.SHIPPING);
         model.addAttribute("orders", orders);
         return "seller/shippingOrder";
     }
     
-    @RequestMapping("/xac-nhan-don-hang-online/{orderId}")
-    public String changeToShippingStatus(@PathVariable("orderId") int orderId){
-        orderService.changeStatusToShipping(orderId);
+    @RequestMapping("/lam-don-hang-online/{orderId}")
+    public String changeToMakingStatus(@PathVariable("orderId") int orderId){
+        orderService.changeStatusToMaking(orderId);
         return "redirect:/seller/don-hang-online";
     }
     
+    @RequestMapping("/xac-nhan-don-hang-online/{orderId}")
+    public String changeToShippingStatus(@PathVariable("orderId") int orderId) {
+        orderService.changeStatusToShipping(orderId);
+        return "redirect:/seller/don-hang-online";
+    }
+
     @RequestMapping("/xac-nhan-don-hang-da-ship/{orderId}")
-    public String changeToDoneStatus(@PathVariable("orderId") int orderId){
+    public String changeToDoneStatus(@PathVariable("orderId") int orderId) {
         orderService.changeStatusToDone(orderId);
         return "redirect:/seller/don-hang-dang-ship";
     }
+
+    @RequestMapping("/huy-don-hang/{orderId}")
+    public String changeToDeleteStatus(@PathVariable("orderId") int orderId) {
+        orderService.changeStatusToCanceled(orderId);
+        return "redirect:/seller/don-hang-online";
+    }
+
+    @RequestMapping("/xuat-hoa-don")
+    public ModelAndView showBill(HttpSession session) {
+        ArrayList<OrderDetailEntity> orderDetails = (ArrayList<OrderDetailEntity>) session.getAttribute("sellerOrderDetails");
+        return new ModelAndView("pdfPage", "orderDetails", orderDetails);
+    }
+
 }

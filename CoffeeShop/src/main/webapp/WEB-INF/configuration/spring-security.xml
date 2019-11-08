@@ -9,6 +9,10 @@
 ">
     <security:authentication-manager>
         <security:authentication-provider ref="authentication" />
+        
+        <security:authentication-provider user-service-ref="userDetailsManager">
+            <security:password-encoder ref="bcryptEncoder"/>
+        </security:authentication-provider>
     </security:authentication-manager>
     
     <security:http auto-config="true">
@@ -30,16 +34,24 @@
         <security:csrf disabled="true" />
         
         <security:intercept-url pattern="/user/*" 
-                                access="hasRole('ROLE_USER')" />
+                                access="hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_MANAGER')" />
         <security:intercept-url pattern="/seller/*" 
-                                access="hasRole('ROLE_SELLER')" />
+                                access="hasAnyRole('ROLE_SELLER','ROLE_ADMIN','ROLE_MANAGER')" />
         <security:intercept-url pattern="/admin/*" 
-                                access="hasRole('ROLE_ADMIN')" />
+                                access="hasAnyRole('ROLE_ADMIN','ROLE_SELLER','ROLE_MANAGER')" />
     </security:http>
+    
     
     <bean id="authentication"
           class="com.iviettech.coffeeshop.security.CustomAuthenticationProvider"/>
     <bean id="authentication-success"
           class="com.iviettech.coffeeshop.security.CustomAuthenticationSuccessHandler"/>
+    
+    <bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+    
+    <bean id="userDetailsManager" class="org.springframework.security.provisioning.JdbcUserDetailsManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    
 </beans>
 

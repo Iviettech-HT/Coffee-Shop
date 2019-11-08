@@ -97,6 +97,9 @@
                                                <sec:authorize access="isAuthenticated()">
                                                    value="${user.name}"
                                                </sec:authorize>
+                                               <sec:authorize access="!isAuthenticated()">
+                                                   value="${customer.name}"
+                                               </sec:authorize>
                                                />
                                     </td>
                                 </tr>
@@ -108,6 +111,9 @@
                                         <input type="email" name="email" id="email"  
                                                <sec:authorize access="isAuthenticated()">
                                                    value="${user.email}"
+                                               </sec:authorize>
+                                               <sec:authorize access="!isAuthenticated()">
+                                                   value="${customer.email}"
                                                </sec:authorize>
                                                />
                                     </td>
@@ -121,6 +127,9 @@
                                                <sec:authorize access="isAuthenticated()">
                                                    value="${user.phone}"
                                                </sec:authorize>
+                                               <sec:authorize access="!isAuthenticated()">
+                                                   value="${customer.phone}"
+                                               </sec:authorize>
                                                />
                                     </td>
                                 </tr>
@@ -132,6 +141,9 @@
                                         <input type="text" name="address" id="address"  
                                                <sec:authorize access="isAuthenticated()">
                                                    value="${user.address}"
+                                               </sec:authorize>
+                                               <sec:authorize access="!isAuthenticated()">
+                                                   value="${customer.address}"
                                                </sec:authorize>
                                                />
                                     </td>
@@ -146,23 +158,28 @@
                                                     <sec:authorize access="isAuthenticated()">
                                                         <c:if test="${user.gender == 'MALE'}">selected</c:if>
                                                     </sec:authorize>
+                                                    <sec:authorize access="!isAuthenticated()">
+                                                        <c:if test="${customer.gender == 'MALE'}">selected</c:if>
+                                                    </sec:authorize>
                                                     >Nam</option>
                                             <option value="FEMALE"
                                                     <sec:authorize access="isAuthenticated()">
                                                         <c:if test="${user.gender == 'FEMALE'}">selected</c:if>
+                                                    </sec:authorize>
+                                                    <sec:authorize access="!isAuthenticated()">
+                                                        <c:if test="${customer.gender == 'FEMALE'}">selected</c:if>
                                                     </sec:authorize>
                                                     >Nữ</option>
                                         </select>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td></td>
-                                    <td><input type="hidden" name="totalPrice" value="${totalPrice}"></td>
+                                <input type="hidden" name="totalPrice" value="${totalPrice}">
+                                <td colspan="2" style="color: red; text-align: center;">${messageError}</td>
                                 </tr>
                                 <input type="submit" hidden="true" id="submit">
                             </table>
                         </mvc:form>
-
                         <div class="action">
                             <div class="action__button main__element--background">
                                 <a href="<c:url value="/gio-hang"/>">Trở về</a>

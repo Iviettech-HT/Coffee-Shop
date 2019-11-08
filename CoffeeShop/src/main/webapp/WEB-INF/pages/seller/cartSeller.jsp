@@ -11,9 +11,9 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <link rel="stylesheet" href="<c:url value="/webjars/bootstrap/3.4.1/css/bootstrap.min.css"/>"/>
         <link rel="stylesheet" href="<c:url value="/resources/css/sellerTabStyle.css"/>"/>
-        <title>JSP Page</title>
+        <title>Seller Page</title>
         <style>
             .container{
                 width: 100%;
@@ -22,6 +22,10 @@
     </head>
     <body>
         <c:set var="sellerOrderDetails" value="${sessionScope.sellerOrderDetails}"/>
+        <c:set var="totalQuantity" value="0"/>
+        <c:forEach var="orderDetail" items="${sellerOrderDetails}">
+            <c:set var="totalQuantity" value="${totalQuantity + orderDetail.quantity}"/>
+        </c:forEach>
         <div class="container">
             <h1>TRANG BÁN HÀNG</h1>
         </div>
@@ -31,7 +35,7 @@
                     <a  href="<c:url value="/seller/home"/>" data-toggle="tab">Sản phẩm</a>
                 </li>
                 <li class="active"><a href="<c:url value="/seller/gio-hang"/>">Giỏ hàng 
-                        <span class="badge">${sellerOrderDetails.size()}</span></a>
+                        <span class="badge">${totalQuantity}</span></a>
                 </li>
                 <li><a href="<c:url value="/seller/don-hang-online"/>" data-toggle="tab">Đơn hàng online</a>
                 </li>
@@ -83,7 +87,10 @@
                                 </c:forEach>
                                 <tr>
                                     <td colspan="7">
-                                        <a href="<c:url value="/seller/dat-hang"/>" class="btn btn-success">XÁC NHẬN</a>
+                                        <a href="#" class="btn btn-success" id="btn-confirm">XÁC NHẬN</a>
+                                        <a href="<c:url value="/seller/xuat-hoa-don"/>" 
+                                           class="btn btn-primary" target="_blank"
+                                           onclick="addHrefConfirmOrder()">XUẤT HÓA ĐƠN</a>
                                     </td>
                                 </tr>
                             </tbody>
@@ -96,5 +103,10 @@
                 </div>
             </div>
         </div>
+        <script>
+            function addHrefConfirmOrder() {
+                document.getElementById('btn-confirm').href = '<c:url value="/seller/dat-hang"/>';
+            }
+        </script>
     </body>
 </html>

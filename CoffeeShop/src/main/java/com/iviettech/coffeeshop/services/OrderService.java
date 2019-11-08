@@ -74,6 +74,7 @@ public class OrderService {
     public OrderEntity changeStatusToShipping(int orderId){
         OrderEntity order = orderRepository.findOne(orderId);
         order.setStatus(OrderStatus.SHIPPING);
+        order.setShippingDate(new Date());
         return orderRepository.save(order);
     }
     
@@ -82,9 +83,36 @@ public class OrderService {
         order.setStatus(OrderStatus.DONE);
         return orderRepository.save(order);
     }
-
+    
+    public OrderEntity changeStatusToCanceled(int orderId){
+        OrderEntity order = orderRepository.findOne(orderId);
+        order.setStatus(OrderStatus.CANCELED);
+        return orderRepository.save(order);
+    }
+    
+    public OrderEntity changeStatusToMaking(int orderId){
+        OrderEntity order = orderRepository.findOne(orderId);
+        order.setStatus(OrderStatus.MAKING);
+        return orderRepository.save(order);
+    }
+    
     public List<OrderEntity> getOrderByDate(Date startDate, Date endDate){
         return (List<OrderEntity>) orderRepository.findByOrderDateBetween(startDate, endDate);
+    }
+    
+    public List<OrderEntity> getOrdersByAccountId(int accountId){
+        List<OrderEntity> orders = orderRepository.getByAccountId(accountId);
+        for(OrderEntity order : orders){
+            order.setOrderDetails(orderDetailRepository.findByOrderId(order.getId()));
+        }
+        return orders;
+    }
+    public  OrderEntity getOrderByIdAndAccountId(int orderId, int accountId){
+        return orderRepository.getByIdAndAccountId(orderId, accountId);
+    }
+    
+    public OrderEntity updateOrder(OrderEntity order){
+        return orderRepository.save(order);
     }
 }
     

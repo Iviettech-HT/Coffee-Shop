@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  *
@@ -25,6 +26,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 public class CustomAuthenticationProvider implements AuthenticationProvider{
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public Authentication authenticate(Authentication a) throws AuthenticationException {
@@ -32,9 +35,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider{
         String password = a.getCredentials().toString().trim();
         
         if (!username.isEmpty() && !password.isEmpty()) {
-            AccountEntity account = accountService.findAccount(username, password);
-            
-            if (account != null && account.getId() > 0) {
+            AccountEntity account = accountService.findAccount(username);
+            if (account != null && account.getId() > 0 && passwordEncoder.matches(password, account.getPassword())) {
                 List<GrantedAuthority> roles = new ArrayList<>();
                 for (RoleEntity role : account.getRoles()) {
                     roles.add(

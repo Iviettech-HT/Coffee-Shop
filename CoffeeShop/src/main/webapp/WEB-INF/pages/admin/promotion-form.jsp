@@ -47,7 +47,7 @@
                                 <h5>Personal-info</h5>
                             </div>
                             <div class="widget-content nopadding">
-                                <mvc:form action="${pageContext.request.contextPath}/admin/${action}" method="post" class="form-horizontal" modelAttribute="promotion" enctype="multipart/form-data">
+                                <mvc:form action="${pageContext.request.contextPath}/admin/add-promotion" method="post" class="form-horizontal" modelAttribute="promotion" enctype="multipart/form-data">
                                     <c:if test="${action eq 'edit-promotion'}">
                                         <input type="hidden" name="id" value="${promotion.id}"  />
                                     </c:if>
@@ -72,6 +72,7 @@
                                             <c:if test="${action eq 'edit-promotion'}"> 
                                                 <div class="col-sm-3 image" >
                                                     <img src="${pageContext.request.contextPath}/${promotion.image}" height="50px" width="50px"/>
+                                                    <input type="file" name="file"/> 
                                                 </div>
                                             </c:if>   
                                         </div>

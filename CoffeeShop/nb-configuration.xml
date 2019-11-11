@@ -23,6 +23,7 @@ Any value defined here will override the pom.xml file value but is only applicab
             <config-file>src/main/webapp/WEB-INF/configuration/spring-root.xml</config-file>
             <config-file>src/main/webapp/WEB-INF/configuration/spring-security.xml</config-file>
             <config-file>src/main/webapp/WEB-INF/views.xml</config-file>
+            <config-file>src/main/webapp/WEB-INF/excelview.xml</config-file>
         </config-files>
         <config-file-groups/>
     </spring-data>

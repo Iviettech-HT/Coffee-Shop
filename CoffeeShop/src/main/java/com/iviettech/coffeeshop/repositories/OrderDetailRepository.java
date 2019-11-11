@@ -18,6 +18,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface OrderDetailRepository extends CrudRepository<OrderDetailEntity, Integer>{
-    @Query(value = "SELECT DISTINCT od FROM OrderDetailEntity od WHERE od.order.id = ?1")
+    @Query(value = "SELECT od FROM OrderDetailEntity od WHERE od.order.id = ?1")
     public List<OrderDetailEntity> findByOrderId(int orderId);
 }

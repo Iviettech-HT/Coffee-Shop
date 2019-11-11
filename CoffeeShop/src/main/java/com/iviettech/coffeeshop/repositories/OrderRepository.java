@@ -25,9 +25,10 @@ public interface OrderRepository extends CrudRepository<OrderEntity, Integer>{
     public List<OrderEntity> getByOrderStatus(OrderStatus status);
     
     public List<OrderEntity> findByOrderDateBetween(Date startDate, Date endDate);
+    
 @Query(value = "SELECT DISTINCT o FROM OrderEntity o WHERE o.customer.account.id = ?1 ")
     public List<OrderEntity> getByAccountId(int accountId);
     
-    @Query(value = "SELECT DISTINCT o FROM OrderEntity o WHERE  o.id = ?1 AND o.customer.account.id = ?2")
+@Query(value = "SELECT DISTINCT o FROM OrderEntity o WHERE  o.id = ?1 AND o.customer.account.id = ?2")
     public OrderEntity getByIdAndAccountId(int orderId, int accountId);
 }

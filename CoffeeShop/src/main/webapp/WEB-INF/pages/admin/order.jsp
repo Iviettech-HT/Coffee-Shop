@@ -37,7 +37,7 @@
             </div>
             <div class="container-fluid">
                 <hr>  
-                <mvc:form action="${pageContext.request.contextPath}/admin/searchOrder"  class="form-horizontal">
+                <mvc:form action="${pageContext.request.contextPath}/admin/searchOrder" method="GET"  class="form-horizontal">
                     <div class="span5">
                         <div class="span6">
                             <h5>Date</h5>

@@ -42,6 +42,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.Message;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.POST;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ResourceLoaderAware;
@@ -54,6 +55,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  *
@@ -146,18 +148,18 @@ public class AdminCotroller implements ResourceLoaderAware {
                             try {
                                 byte[] bytes = image.getBytes();
 
-                //Get path to resources
-                String pathUrl = context.getRealPath("/images");
-                int index = pathUrl.indexOf("target");
-                String pathFolder = pathUrl.substring(0, index) + pathSaveImages;
-                savedPath = "resources/images/landingPage/products/" + image.getOriginalFilename();
-                //create temporary ImageEntityz
-                ImageEntity imageTemp = new ImageEntity();
-                imageTemp.setPath(savedPath);
-                listImage.add(imageTemp);
-                //Save file
-                File storedFile = new File(pathFolder + File.separator + image.getOriginalFilename());
-                BufferedOutputStream buffer = new BufferedOutputStream(new FileOutputStream(storedFile));
+                                //Get path to resources
+                                String pathUrl = context.getRealPath("/images");
+                                int index = pathUrl.indexOf("target");
+                                String pathFolder = pathUrl.substring(0, index) + pathSaveImages;
+                                savedPath = "resources/images/landingPage/products/" + image.getOriginalFilename();
+                                //create temporary ImageEntityz
+                                ImageEntity imageTemp = new ImageEntity();
+                                imageTemp.setPath(savedPath);
+                                listImage.add(imageTemp);
+                                //Save file
+                                File storedFile = new File(pathFolder + File.separator + image.getOriginalFilename());
+                                BufferedOutputStream buffer = new BufferedOutputStream(new FileOutputStream(storedFile));
 
                                 buffer.write(bytes);
                                 buffer.close();
@@ -330,9 +332,8 @@ public class AdminCotroller implements ResourceLoaderAware {
     }
 
     @RequestMapping(value = {"/add-promotion"})
-    public String addPromotion(Model model
-    ) {
-        model.addAttribute("category", new PromotionEntity());
+    public String addPromotion(Model model) {
+        model.addAttribute("promotion", new PromotionEntity());
         model.addAttribute("action", "add-promotion");
         return "admin/promotion-form";
     }
@@ -343,29 +344,36 @@ public class AdminCotroller implements ResourceLoaderAware {
             @RequestParam("file") MultipartFile image,
             @Value(value = "${pathSaveImage}") String pathSaveImages
     ) {
-
+        String errorMessage = "";
         String savedPath;
-        try {
-            byte[] bytes = image.getBytes();
+        if (promotion.getDescription().isEmpty() || promotion.getDiscount() == 0) {
+            errorMessage = "Không thể bỏ trống!!!";
+            model.addAttribute("errorMessage", errorMessage);
+            return "admin/promotion-form";
+        } else {
+            try {
+                byte[] bytes = image.getBytes();
 
-            //Get path to resources
-            String pathUrl = context.getRealPath("/images");
-            int index = pathUrl.indexOf("target");
-            String pathFolder = pathUrl.substring(0, index) + pathSaveImages;
-            savedPath = "resources/images/landingPage/products/" + image.getOriginalFilename();
-            promotion.setImage(savedPath);
-            //Save file
-            File storedFile = new File(pathFolder + File.separator + image.getOriginalFilename());
-            BufferedOutputStream buffer = new BufferedOutputStream(new FileOutputStream(storedFile));
+                //Get path to resources
+                String pathUrl = context.getRealPath("/images");
+                int index = pathUrl.indexOf("target");
+                String pathFolder = pathUrl.substring(0, index) + pathSaveImages;
+                savedPath = "resources/images/landingPage/products/" + image.getOriginalFilename();
+                promotion.setImage(savedPath);
+                //Save file
+                File storedFile = new File(pathFolder + File.separator + image.getOriginalFilename());
+                BufferedOutputStream buffer = new BufferedOutputStream(new FileOutputStream(storedFile));
 
-            buffer.write(bytes);
-            buffer.close();
+                buffer.write(bytes);
+                buffer.close();
 
-        } catch (IOException ex) {
-            model.addAttribute("errorMessage", "Error can't add product");
-            return "error";
+            } catch (IOException ex) {
+                model.addAttribute("errorMessage", "Error can't add product");
+                return "error";
+            }
+            promotionService.addPromotion(promotion);
         }
-        promotionService.addPromotion(promotion);
+
         return "redirect:/admin/promotion";
     }
 
@@ -374,7 +382,7 @@ public class AdminCotroller implements ResourceLoaderAware {
             @PathVariable("id") int id
     ) {
         model.addAttribute("promotion", promotionService.getPromotion(id));
-        model.addAttribute("action", "add-promotion");
+        model.addAttribute("action", "edit-promotion");
         return "admin/promotion-form";
     }
 
@@ -448,24 +456,28 @@ public class AdminCotroller implements ResourceLoaderAware {
 
     @RequestMapping("/new-order")
     public String getNewOrder(Model model) {
+        model.addAttribute("os", OrderStatus.values());
         model.addAttribute("order", orderService.getOrdersByStatus(OrderStatus.NEW));
         return "admin/order";
     }
 
     @RequestMapping("/making-order")
     public String getMakingOrder(Model model) {
+        model.addAttribute("os", OrderStatus.values());
         model.addAttribute("order", orderService.getOrdersByStatus(OrderStatus.MAKING));
         return "admin/order";
     }
 
     @RequestMapping("/shipping-order")
     public String getShipingOrder(Model model) {
+        model.addAttribute("os", OrderStatus.values());
         model.addAttribute("order", orderService.getOrdersByStatus(OrderStatus.SHIPPING));
         return "admin/order";
     }
 
     @RequestMapping("/cancel-order")
     public String getCancelOrder(Model model) {
+        model.addAttribute("os", OrderStatus.values());
         model.addAttribute("order", orderService.getOrdersByStatus(OrderStatus.CANCELED));
         return "admin/order";
     }
@@ -495,7 +507,8 @@ public class AdminCotroller implements ResourceLoaderAware {
     public String searchOrder(Model model,
             @RequestParam(name = "startDate") String startDate,
             @RequestParam(name = "endDate") String endDate,
-            @RequestParam(name = "osTemp", required = false) List<OrderStatus> orderStatuses) throws ParseException {
+            @RequestParam(name = "osTemp", required = false) List<OrderStatus> orderStatuses,
+            HttpSession session) throws ParseException {
 
         String messageError = "";
         model.addAttribute("os", OrderStatus.values());
@@ -520,7 +533,9 @@ public class AdminCotroller implements ResourceLoaderAware {
                     model.addAttribute("e", e);
                     model.addAttribute("s", s);
                     model.addAttribute("total", total);
-                    model.addAttribute("order", orderService.getOrderByDate(s, e));
+                    List<OrderEntity> order = orderService.getOrderByDate(s, e);
+                    model.addAttribute("order", order);
+                    session.setAttribute("order", order);
                 } else {
                     double total = 0;
                     for (OrderEntity findOrder : orderService.searchOrder(s, e, orderStatuses)) {
@@ -531,8 +546,11 @@ public class AdminCotroller implements ResourceLoaderAware {
                     model.addAttribute("e", e);
                     model.addAttribute("s", s);
                     model.addAttribute("total", total);
-                    model.addAttribute("order", orderService.searchOrder(s, e, orderStatuses));
+                    List<OrderEntity> order = orderService.searchOrder(s, e, orderStatuses);
+                    model.addAttribute("order", order);
+                    session.setAttribute("order", order);
                 }
+
             }
         }
         return "admin/searchOrder";
@@ -568,6 +586,17 @@ public class AdminCotroller implements ResourceLoaderAware {
         order.setStatus(OrderStatus.CANCELED);
         orderService.addOrder(order);
         return "redirect:/admin/order";
+    }
+
+    @RequestMapping(value = {"/export-file"})
+    public ModelAndView reportExcel(Model modle, HttpSession session) {
+        ModelAndView newView = new ModelAndView("ExcelView");
+        List<OrderEntity> newList = (List<OrderEntity>) session.getAttribute("order");
+        for (OrderEntity orderEntity : newList) {
+            orderEntity.setOrderDetails(orderDetailService.findByOrderId(orderEntity.getId()));
+        }
+        newView.addObject("newOrders", newList);
+        return newView;
     }
 //----Account----------------------------------------------------------------------
 

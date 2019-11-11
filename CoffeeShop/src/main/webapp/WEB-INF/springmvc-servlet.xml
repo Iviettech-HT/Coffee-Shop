@@ -20,7 +20,7 @@
     <mvc:resources mapping="/resources-management/**" location="/resources-management/" />
     
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="order" value="2"></property>
+        <property name="order" value="3"></property>
         <property name="prefix" value="/WEB-INF/pages/" />
         <property name="suffix" value=".jsp" />
     </bean>
@@ -66,6 +66,12 @@
         <property name="order" value="1"></property>
         <property name = "location">
             <value>/WEB-INF/views.xml</value>
+        </property>
+    </bean>
+    <bean class = "org.springframework.web.servlet.view.XmlViewResolver">
+        <property name="order" value="2"></property>
+        <property name = "location">
+            <value>/WEB-INF/excelview.xml</value>
         </property>
     </bean>
 </beans>

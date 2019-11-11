@@ -39,7 +39,7 @@
             </div>
             <div class="container-fluid">
                 <hr>  
-                <mvc:form action="${pageContext.request.contextPath}/admin/searchOrder"  class="form-horizontal">
+                <mvc:form action="${pageContext.request.contextPath}/admin/searchOrder"  method="GET" class="form-horizontal">
                     <div class="span5">
                         <div class="span6">
                             <h5>Date</h5>
@@ -62,12 +62,20 @@
                             </c:forEach>
                         </div>
                     </div>
-                    <div  class="span7">
+                    <hr/>
+                    <div  class="span3">
                         <div class="span1"></div>    
                         <button type="submit" class="btn btn-success">Search Order Date</button> 
-                        <button type="submit" class="btn btn-success">Export File</button> 
+
                     </div>
                 </mvc:form>
+                <div  class="span2">
+                    <div class="span1"></div>    
+                    <button type="button" class="btn btn-danger btn-sm"
+                            onclick="location.href = '<c:url value="/admin/export-file"/>'">Export File</button>
+
+
+                </div>
                 <div class="row-fluid">
                     <div class="span12">
                         <div class="widget-box">

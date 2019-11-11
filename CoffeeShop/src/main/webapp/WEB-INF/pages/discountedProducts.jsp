@@ -35,8 +35,9 @@
     <body>
         <jsp:include page="include/header.jsp"/>
         <div id="slide-show">
-            <img src="https://hoclaixecaptoc.com/wp-content/uploads/2018/06/promotion-la-gi.jpg" alt="khuyen-mai">
-            <img src="https://i1.wp.com/www.feedough.com/wp-content/uploads/2019/07/sales-promotion.png?resize=883%2C493&ssl=1" alt="khuyen-mai">
+            <c:forEach var="promotion" items="${promotions}"> 
+                <img src="${pageContext.request.contextPath}/${promotion.image}" alt="khuyen-mai">
+            </c:forEach>
         </div>
         <main>
             <c:if test="${!empty promotions}">
@@ -44,8 +45,8 @@
                     <h4 class="animation-tranform-color">KHUYẾN MÃI:</h4>
                     <c:forEach var="promotion" items="${promotions}">
                         <div class="sale__info">
-                            <p>${promotion.description}(Giảm ${promotion.discount*100}%) 
-                                <span>Đến hết <fmt:formatDate pattern="dd-MM-yyyy" value="${promotion.endDate}"/></span></p>
+                            <a href="<c:url value="/khuyen-mai?id=${promotion.id}"/>">${promotion.description}(Giảm ${promotion.discount*100}%) 
+                                <span>Đến hết <fmt:formatDate pattern="dd-MM-yyyy" value="${promotion.endDate}"/></span></a>
                         </div>
                     </c:forEach>
                 </div>
@@ -120,6 +121,9 @@
         </main>
         <jsp:include page="include/footer.jsp"/>
         <jsp:include page="include/script/standardScript.jsp"/>
+
+        <script src="${pageContext.request.contextPath}/resources/js/landingPage.js">
+        </script>
         <script>
             let slideShow = document.getElementById('slide-show');
             let changeImage = setInterval(function () {
@@ -127,26 +131,26 @@
                 slideShow.removeChild(slideShow.children[slideShow.children.length - 1]);
                 slideShow.insertBefore(lastImage, slideShow.firstChild);
             }, 2000);
-            
+
 //            Search
             let searchIcon = document.getElementById('search__icon');
             let searchBox = document.getElementById('search__box');
-            
+
             let productItemsData = [];
-            
-            for(let productItem of document.getElementsByClassName('product__item')){
+
+            for (let productItem of document.getElementsByClassName('product__item')) {
                 productItemsData.push(productItem);
             }
-            
-            searchBox.oninput = function(){
+
+            searchBox.oninput = function () {
                 let searchValue = searchBox.value.toString().toUpperCase();
                 let productItems = document.getElementsByClassName('product__item');
                 let productContainer = document.getElementsByClassName('product')[0];
-                
+
                 productContainer.innerHTML = '';
-                for(let productItem of productItemsData){
+                for (let productItem of productItemsData) {
                     let nameProduct = productItem.children[1].innerText;
-                    if(nameProduct.toUpperCase().includes(searchValue)){
+                    if (nameProduct.toUpperCase().includes(searchValue)) {
                         productContainer.appendChild(productItem);
                     }
                 }

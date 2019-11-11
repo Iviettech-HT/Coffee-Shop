@@ -13,7 +13,14 @@
 <c:if test="${products.size() > 0}">
     <c:forEach var="product" items="${products}">
         <div class="product__item" id="product${product.id}">
-            <img src="${product.images[0].path}" alt="product">
+            <c:choose>
+                <c:when test="${!empty product.images[0].path or product.images[0].path != null}">
+                    <img src="${product.images[0].path}" alt="product">
+                </c:when>
+                <c:otherwise>
+                    <img src="${pageContext.request.contextPath}/resources/images/landingPage/products/no_image.png" alt="product">
+                </c:otherwise>
+            </c:choose>
             <a href="<c:url value="/chi-tiet-san-pham/${product.id}"/>" class="product__item--name">
                 ${product.name}
                 <c:if test="${product.status == false}">

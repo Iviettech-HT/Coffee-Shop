@@ -39,6 +39,6 @@ public interface ProductRepository extends CrudRepository<ProductEntity, Integer
     public List<ProductEntity> getFavoriteProducts(int accountId);
     
     @Query(value = "SELECT p FROM ProductEntity p JOIN p.promotions pr WHERE pr.id = ?1")
-    public LinkedHashSet<ProductEntity> getProductByPromotionId(int id);
+    public LinkedHashSet<ProductEntity> getProductsByPromotionId(int id);
     
 }

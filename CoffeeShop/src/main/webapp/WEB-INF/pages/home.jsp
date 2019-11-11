@@ -34,8 +34,8 @@
                     <h4 class="animation-tranform-color">KHUYẾN MÃI:</h4>
                     <c:forEach var="promotion" items="${promotions}">
                         <div class="sale__info">
-                            <p>${promotion.description}(Giảm ${promotion.discount*100}%) 
-                                <span>Đến hết <fmt:formatDate pattern="dd-MM-yyyy" value="${promotion.endDate}"/></span></p>
+                            <a href="<c:url value="/khuyen-mai?id=${promotion.id}"/>">${promotion.description}(Giảm ${promotion.discount*100}%) 
+                                <span>Đến hết <fmt:formatDate pattern="dd-MM-yyyy" value="${promotion.endDate}"/></span></a>
                         </div>
                     </c:forEach>
                 </div>
@@ -74,14 +74,21 @@
             <div class="product">
                 <c:forEach var="product" items="${products}">
                     <div class="product__item" id="product${product.id}">
-                        <img src="${product.images[0].path}" alt="product">
+                        <c:choose>
+                            <c:when test="${!empty product.images[0].path or product.images[0].path != null}">
+                                <img src="${product.images[0].path}" alt="product">
+                            </c:when>
+                            <c:otherwise>
+                                <img src="${pageContext.request.contextPath}/resources/images/landingPage/products/no_image.png" alt="product">
+                            </c:otherwise>
+                        </c:choose>
                         <a href="<c:url value="/chi-tiet-san-pham/${product.id}"/>" class="product__item--name">
                             ${product.name}
                             <c:if test="${product.status == false}">
                                 <span style="color: #999; font-size: 0.8em;">(Đã hết)</span>
                             </c:if>
                         </a>
-                        <c:set var="totalDiscount" value="${product.price + product.sizes.iterator().next().addition}"/>
+                        <c:set var="totalDiscount" value="${product.price + product.sizes.toArray()[0].addition}"/>
                         <c:if test="${product.promotions.size() > 0}">
                             <c:forEach var="promotion" items="${product.promotions}">
                                 <c:set var="totalDiscount" value="${totalDiscount*(1 - promotion.discount)}"/>
@@ -134,79 +141,80 @@
         <jsp:include page="include/footer.jsp"/>
         <jsp:include page="include/script/standardScript.jsp"/>
 
-        <script src="${pageContext.request.contextPath}/resources/js/landingPage.js"></script>
+        <script src="${pageContext.request.contextPath}/resources/js/landingPage.js">
+        </script>
         <script>
-                                            let product = document.getElementsByClassName('product')[0];
-                                            let searchBox = document.getElementById('search__box');
-                                            let searchBtn = document.getElementById('search__icon');
-                                            let xhttp;
-                                            categoryItems = document.getElementsByClassName('category__item');
+            let product = document.getElementsByClassName('product')[0];
+            let searchBox = document.getElementById('search__box');
+            let searchBtn = document.getElementById('search__icon');
+            let xhttp;
+            categoryItems = document.getElementsByClassName('category__item');
 
-                                            for (let categoryItem of categoryItems) {
-                                                categoryItem.addEventListener('click', function () {
-                                                    getAllProductByCategoryName(categoryItem.children[0].innerHTML)
-                                                });
-                                            }
+            for (let categoryItem of categoryItems) {
+                categoryItem.addEventListener('click', function () {
+                    getAllProductByCategoryName(categoryItem.children[0].innerHTML)
+                });
+            }
 
-                                            searchBtn.onclick = () => {
-                                                console.log(searchBox.value);
-                                                xhttp = new XMLHttpRequest();
-                                                xhttp.open('GET', '${pageContext.request.contextPath}/tim-kiem-san-pham?name=' + searchBox.value, true)
-                                                xhttp.send();
-                                                xhttp.onreadystatechange = () => {
-                                                    if (xhttp.readyState == 4 && xhttp.status == 200) {
-                                                        product.innerHTML = xhttp.responseText;
-                                                    }
-                                                }
-                                                for (let i = 0; i < categoryItems.length; i++) {
-                                                    categoryItems[i].classList.remove('category__item--active');
-                                                    categoryItems[i].classList.remove('category__item--border');
-                                                }
-                                                if (!window.location.href.includes("#main"))
-                                                    window.location += '#main';
-                                                else
-                                                    window.location += '';
-                                            }
+            searchBtn.onclick = () => {
+                console.log(searchBox.value);
+                xhttp = new XMLHttpRequest();
+                xhttp.open('GET', '${pageContext.request.contextPath}/tim-kiem-san-pham?name=' + searchBox.value, true)
+                xhttp.send();
+                xhttp.onreadystatechange = () => {
+                    if (xhttp.readyState == 4 && xhttp.status == 200) {
+                        product.innerHTML = xhttp.responseText;
+                    }
+                }
+                for (let i = 0; i < categoryItems.length; i++) {
+                    categoryItems[i].classList.remove('category__item--active');
+                    categoryItems[i].classList.remove('category__item--border');
+                }
+                if (!window.location.href.includes("#main"))
+                    window.location += '#main';
+                else
+                    window.location += '';
+            }
 
-                                            function getAllProductByCategoryName(name) {
-                                                xhttp = new XMLHttpRequest();
-                                                name = name.toLowerCase();
-                                                if (name == 'yêu thích')
-                                                    xhttp.open('GET', '${pageContext.request.contextPath}/user/list-san-pham-yeu-thich', true);
-                                                else
-                                                    xhttp.open('GET', '${pageContext.request.contextPath}/list-san-pham?name=' + name, true);
-                                                xhttp.send();
-                                                xhttp.onreadystatechange = () => {
-                                                    if (xhttp.readyState == 4 && xhttp.status == 200) {
-                                                        product.innerHTML = xhttp.responseText;
-                                                    }
-                                                }
-                                            }
+            function getAllProductByCategoryName(name) {
+                xhttp = new XMLHttpRequest();
+                name = name.toLowerCase();
+                if (name == 'yêu thích')
+                    xhttp.open('GET', '${pageContext.request.contextPath}/user/list-san-pham-yeu-thich', true);
+                else
+                    xhttp.open('GET', '${pageContext.request.contextPath}/list-san-pham?name=' + name, true);
+                xhttp.send();
+                xhttp.onreadystatechange = () => {
+                    if (xhttp.readyState == 4 && xhttp.status == 200) {
+                        product.innerHTML = xhttp.responseText;
+                    }
+                }
+            }
 
-                                            function addToFavoriteProduct(productId) {
-                                                xhttp = new XMLHttpRequest();
-                                                xhttp.open('GET', '<c:url value="/user/them-vao-yeu-thich/"/>' + productId, true);
-                                                xhttp.send();
-                                                xhttp.onreadystatechange = () => {
-                                                    if (xhttp.readyState == 4 && xhttp.status == 200) {
-                                                        document.getElementById('btn-favorite-' + productId).innerHTML += '(Đã thêm)';
-                                                    }
-                                                }
-                                            }
+            function addToFavoriteProduct(productId) {
+                xhttp = new XMLHttpRequest();
+                xhttp.open('GET', '<c:url value="/user/them-vao-yeu-thich/"/>' + productId, true);
+                xhttp.send();
+                xhttp.onreadystatechange = () => {
+                    if (xhttp.readyState == 4 && xhttp.status == 200) {
+                        document.getElementById('btn-favorite-' + productId).innerHTML += '(Đã thêm)';
+                    }
+                }
+            }
 
-                                            function deleteFavoriteProduct(productId) {
-                                                xhttp = new XMLHttpRequest();
-                                                xhttp.open('GET', '${pageContext.request.contextPath}/user/xoa-san-pham-yeu-thich/' + productId, true);
-                                                xhttp.send();
-                                                xhttp.onreadystatechange = () => {
-                                                    if (xhttp.readyState == 4 && xhttp.status == 200) {
-                                                        document.getElementById('product' + productId).remove();
-                                                        if (document.getElementsByClassName('product')[0].innerText == "") {
-                                                            document.getElementsByClassName('product')[0].innerHTML = "<h2>Không có sản phẩm nào</h2>"
-                                                        }
-                                                    }
-                                                }
-                                            }
+            function deleteFavoriteProduct(productId) {
+                xhttp = new XMLHttpRequest();
+                xhttp.open('GET', '${pageContext.request.contextPath}/user/xoa-san-pham-yeu-thich/' + productId, true);
+                xhttp.send();
+                xhttp.onreadystatechange = () => {
+                    if (xhttp.readyState == 4 && xhttp.status == 200) {
+                        document.getElementById('product' + productId).remove();
+                        if (document.getElementsByClassName('product')[0].innerText == "") {
+                            document.getElementsByClassName('product')[0].innerHTML = "<h2>Không có sản phẩm nào</h2>"
+                        }
+                    }
+                }
+            }
         </script>
     </body>
 </html>

@@ -43,10 +43,24 @@ public class PromotionService {
 
     public PromotionEntity findPromotionById(int id) {
         PromotionEntity promotion = promotionRepository.findOne(id);
-        promotion.setProducts(productRepository.getProductByPromotionId(promotion.getId()));
+        promotion.setProducts(productRepository.getProductsByPromotionId(promotion.getId()));
         return promotion;
     }
-
+    
+    public PromotionEntity getPromotionById(int id){
+        PromotionEntity promotion = promotionRepository.findOne(id);
+        Set<ProductEntity> products = productRepository.getProductsByPromotionId(promotion.getId());
+        for (ProductEntity product : products) {
+                product.setSizes(sizeRepository.getSizesByProductId(product.getId()));
+                product.setImages(imageRepository.getImagesByProductId(product.getId()));
+                product.setVotes(voteRepository.getVotesByProductId(product.getId()));
+                product.setPromotions(promotionRepository.getPromotionsByProductId(product.getId(), new Date()));
+            }
+            
+            promotion.setProducts(products);
+        return promotion;
+    }
+    
     public PromotionEntity getPromotion(int id) {
         return (PromotionEntity) promotionRepository.findOne(id);
     }
@@ -62,7 +76,7 @@ public class PromotionService {
     public Set<PromotionEntity> getPromotionsAvailablIncludeProducts() {
         Set<PromotionEntity> promotions = promotionRepository.getPromotionsAvailable(new Date());
         for (PromotionEntity promotion : promotions) {
-            Set<ProductEntity> products = productRepository.getProductByPromotionId(promotion.getId());
+            Set<ProductEntity> products = productRepository.getProductsByPromotionId(promotion.getId());
             for (ProductEntity product : products) {
                 product.setSizes(sizeRepository.getSizesByProductId(product.getId()));
                 product.setImages(imageRepository.getImagesByProductId(product.getId()));

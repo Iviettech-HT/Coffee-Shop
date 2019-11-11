@@ -91,18 +91,29 @@ public class ShopController {
     }
 
     @RequestMapping(value = "/khuyen-mai")
-    public String viewPromotion(Model model){
-        List<PromotionEntity> promotions = new ArrayList<>(promotionService.getPromotionsAvailablIncludeProducts());
-        List<ProductEntity> products = new ArrayList<>();
-        for(PromotionEntity promotion : promotions){
-            products.addAll(promotion.getProducts());
+    public String viewPromotions(Model model,
+            @RequestParam(name = "id", required = false) Integer promotionId) {
+        try {
+            List<PromotionEntity> promotions = new ArrayList<>();
+            promotions.add(promotionService.getPromotionById(promotionId));
+            
+            List<ProductEntity> products = new ArrayList<>(promotions.get(0).getProducts());
+            model.addAttribute("promotions", promotions);
+            model.addAttribute("products", products);
+            
+        } catch (Exception ex) {
+            List<PromotionEntity> promotions = new ArrayList<>(promotionService.getPromotionsAvailablIncludeProducts());
+            List<ProductEntity> products = new ArrayList<>();
+            for (PromotionEntity promotion : promotions) {
+                products.addAll(promotion.getProducts());
+            }
+
+            model.addAttribute("promotions", promotions);
+            model.addAttribute("products", products);
         }
-        
-        model.addAttribute("promotion", promotions);
-        model.addAttribute("products", products);
         return "discountedProducts";
     }
-    
+
     @RequestMapping(value = {"/dang-nhap"})
     public String viewLogin(Model model,
             @RequestParam(name = "isError", required = false) boolean isError) {
@@ -318,7 +329,7 @@ public class ShopController {
                     textHtml.append("<tr><td colspan='6'>Mã đơn hàng:" + order.getId() + "</td></tr>");
                     textHtml.append("<tr><td>Tên</td><td>Đơn giá</td><td>Số lượng</td><td>Giá</td><td>Size</td><td>Topping</td></tr>");
                     for (OrderDetailEntity orderDetail : orderDetails) {
-                        
+
                         textHtml.append(String.format("<tr><td>%s</td><td>%,dđ</td><td>%d</td><td>%,dđ</td><td>%s</td><td>",
                                 orderDetail.getProduct().getName(), Math.round(orderDetail.getUnitPrice()), orderDetail.getQuantity(),
                                 Math.round(orderDetail.getPrice()), orderDetail.getSize().toString()));
@@ -365,7 +376,8 @@ public class ShopController {
     public String addAccount(Model model,
             @ModelAttribute(name = "account") AccountEntity account,
             @RequestParam(name = "rePassword") String rePassword,
-            @Value(value = "${fileForSend}") String fileForSend) {
+            @Value(value = "${fileForSend}") String fileForSend,
+            @Value(value = "${pathToResources}") String pathToResources) {
         // validate infomation
         boolean isValidated = true;
         String messageError = "";
@@ -405,8 +417,7 @@ public class ShopController {
         accountService.addAccount(account);
         model.addAttribute("email", account.getEmail());
 
-        fileForSend += "emailSendCode.html";
-        this.sendCodeEmail(account.getEmail(), fileForSend);
+        this.sendCodeEmail(account.getEmail(), fileForSend, pathToResources);
 
         return "validateEmail";
     }
@@ -427,10 +438,11 @@ public class ShopController {
     @RequestMapping(value = "/xac-thuc-email")
     public String viewFormValidateEmail(Model model,
             @RequestParam(name = "email") String email,
-            @Value(value = "${fileForSend}") String fileForSend) {
+            @Value(value = "${fileForSend}") String fileForSend,
+            @Value(value = "${pathToResources}") String pathToResources) {
 
         fileForSend += "emailSendCode.html";
-        this.sendCodeEmail(email, fileForSend);
+        this.sendCodeEmail(email, fileForSend, pathToResources);
         model.addAttribute("email", email);
         return "validateEmail";
     }
@@ -488,8 +500,10 @@ public class ShopController {
     public @ResponseBody
     String sendCodeEmail(
             @RequestParam(name = "email") String email,
-            @Value(value = "${fileForSend}") String fileForSend) {
+            @Value(value = "${fileForSend}") String fileForSend,
+            @Value(value = "${pathToResources}") String pathToResources) {
 
+        fileForSend += "emailSendCode.html";
         mailCode = (int) Math.round(Math.random() * 1000000);
         textHtml = new StringBuilder();
         File f = new File(context.getRealPath(fileForSend));
@@ -512,10 +526,17 @@ public class ShopController {
             MimeMessagePreparator preparator = new MimeMessagePreparator() {
                 @Override
                 public void prepare(MimeMessage mm) throws Exception {
-                    MimeMessageHelper helper = new MimeMessageHelper(mm, false, "UTF-8");
+                    MimeMessageHelper helper = new MimeMessageHelper(mm, true, "UTF-8");
                     helper.setSubject("Coffe Shop Validation");
                     helper.setTo(email);
                     helper.setText(textHtml.toString(), true);
+                    // Get image from resources
+                    String pathUrl = context.getRealPath("/images");
+                    int index = pathUrl.indexOf("target");
+                    String pathImage = pathUrl.substring(0, index) + pathToResources + "/images/email/logo.jpg";
+
+                    //attach image into html
+                    helper.addInline("logoHeader", new File(pathImage));
                 }
             };
             jvs.send(preparator);

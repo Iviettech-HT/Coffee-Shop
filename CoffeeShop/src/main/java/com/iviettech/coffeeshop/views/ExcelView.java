@@ -31,49 +31,63 @@ public class ExcelView extends AbstractXlsView {
         Sheet sheet = wrkbk.createSheet("List Orders");
         Sheet sheet2 = wrkbk.createSheet("Detail Order");
 
-        Row header = sheet.createRow(0);
-        header.createCell(0).setCellValue("#");
-        header.createCell(1).setCellValue("Order number");
-        header.createCell(2).setCellValue("Order date");
-        header.createCell(3).setCellValue("Customer name");
-        header.createCell(4).setCellValue("Customer phone");
-        header.createCell(5).setCellValue("Note");
-        header.createCell(6).setCellValue("Total price");
-        header.createCell(7).setCellValue("Status");
-//2
-        Row header2 = sheet2.createRow(0);
-        header2.createCell(0).setCellValue("#");
-        header2.createCell(1).setCellValue("Order number");
-        header2.createCell(2).setCellValue("Product Id");
-        header2.createCell(3).setCellValue("Product name");
-        header2.createCell(4).setCellValue("Size");
+//Order
+        Row orderH = sheet.createRow(0);
+        orderH.createCell(0).setCellValue("#");
+        orderH.createCell(1).setCellValue("Order Id");
+        orderH.createCell(2).setCellValue("Shipping date");
+        orderH.createCell(3).setCellValue("Customer name");
+        orderH.createCell(4).setCellValue("Customer address");
+        orderH.createCell(5).setCellValue("Customer phone");
+        orderH.createCell(6).setCellValue("Customer email");
+        orderH.createCell(7).setCellValue("Total price");
+        orderH.createCell(8).setCellValue("Status");
+//Order-Detail
+        Row detailH = sheet2.createRow(0);
+        detailH.createCell(0).setCellValue("#");
+        detailH.createCell(1).setCellValue("Order id");
+        detailH.createCell(2).setCellValue("Order detail id");
+        detailH.createCell(3).setCellValue("Product Id");
+        detailH.createCell(4).setCellValue("Product name");
+        detailH.createCell(5).setCellValue("Quantity");
+        detailH.createCell(6).setCellValue("Topping");
+        detailH.createCell(7).setCellValue("Size");
+        detailH.createCell(8).setCellValue("Price");
+        detailH.createCell(9).setCellValue("Unit price");
         
 
         int i = 1;
         int stt = 1;
-
         int j = 1;
-        int sttt = 1;
+        int stt2 = 1;
         double total = 0;
+        
         for (OrderEntity order : orders) {
-            Row rowcontain = sheet.createRow(i);
-            rowcontain.createCell(0).setCellValue(stt);
-            rowcontain.createCell(1).setCellValue(order.getId());
-            rowcontain.createCell(2).setCellValue(order.getOrderDate().toString());
-            rowcontain.createCell(3).setCellValue(order.getCustomer().getName());
-            rowcontain.createCell(4).setCellValue(order.getCustomer().getPhone());
-            rowcontain.createCell(5).setCellValue("update");
-            rowcontain.createCell(6).setCellValue(order.getTotalPrice());
-            rowcontain.createCell(7).setCellValue("update");
+            Row orderR = sheet.createRow(i);
+            orderR.createCell(0).setCellValue(stt);
+            orderR.createCell(1).setCellValue(order.getId());
+            orderR.createCell(2).setCellValue(order.getOrderDate().toString());
+            orderR.createCell(3).setCellValue(order.getShippingDate().toString());
+            orderR.createCell(4).setCellValue(order.getCustomer().getName());
+            orderR.createCell(5).setCellValue(order.getCustomer().getAddress());
+            orderR.createCell(6).setCellValue(order.getCustomer().getPhone());
+            orderR.createCell(7).setCellValue(order.getCustomer().getEmail());
+            orderR.createCell(8).setCellValue(order.getTotalPrice());
+            orderR.createCell(8).setCellValue(order.getStatus().toString());
             for (OrderDetailEntity item : order.getOrderDetails()) {
-                Row rs2 = sheet2.createRow(j);
-                rs2.createCell(0).setCellValue(sttt);
-                rs2.createCell(1).setCellValue(order.getId());
-                rs2.createCell(2).setCellValue(item.getProduct().getId());
-                rs2.createCell(3).setCellValue(item.getProduct().getName());
-                rs2.createCell(4).setCellValue(String.valueOf(item.getSize())); 
+                Row detailR = sheet2.createRow(j);
+                detailR.createCell(0).setCellValue(stt2);
+                detailR.createCell(1).setCellValue(order.getId());                
+                detailR.createCell(2).setCellValue(item.getId());
+                detailR.createCell(3).setCellValue(item.getProduct().getId());
+                detailR.createCell(4).setCellValue(item.getProduct().getName());
+                detailR.createCell(5).setCellValue(item.getQuantity());
+                detailR.createCell(6).setCellValue(item.getTopping());
+                detailR.createCell(7).setCellValue(String.valueOf(item.getSize())); 
+                detailR.createCell(8).setCellValue(item.getPrice());
+                detailR.createCell(9).setCellValue(item.getUnitPrice());
                 j++;
-                sttt++;
+                stt2++;
             }
             i++;
             stt++;

@@ -146,12 +146,15 @@ public class ProductService {
         return (List<ProductEntity>) productRepository.findAll();
     }
 
-    public LinkedHashSet<ProductEntity> getProductByPromotionId(int id){
-        
+    public LinkedHashSet<ProductEntity> getProductByPromotionId(int id){        
         return (LinkedHashSet<ProductEntity>) productRepository.getProductByPromotionId(id);
-    }
-    
+    }    
     public void saveProduct(ProductEntity product) {
         productRepository.save(product);
     }
+    
+    public List<ProductEntity> findByCategoryId(int id){        
+        return (List<ProductEntity>) productRepository.getProductByCategoryId(id);
+    }
+
 }

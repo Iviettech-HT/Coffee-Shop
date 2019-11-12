@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="mvc" uri="http://www.springframework.org/tags/form"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <html lang="en">
     <head>
         <title>Matrix Admin</title>
@@ -62,10 +63,12 @@
                     </div>
                     <div  class="span7">
                         <div class="span1"></div>    
-                        <button type="submit" class="btn btn-success">Search Order Date</button> 
-                        <button type="submit" class="btn btn-success">Export File</button> 
+                        <button type="submit" class="btn btn-success">Search Order Date</button>                         
                     </div>
                 </mvc:form>
+                <div class="span12">
+                    <h5>${messageError}</h5>
+                </div>
                 <div class="row-fluid">
                     <div class="span12">
                         <div class="widget-box">
@@ -92,7 +95,8 @@
                                                 <td>${o.customer.name}</td>
                                                 <td>${o.orderDate}</td>
                                                 <td>${o.shippingDate}</td>
-                                                <td>${o.totalPrice} VNĐ</td>
+                                                <td><fmt:formatNumber type = "number" 
+                                                                  maxFractionDigits = "3" value = "${o.totalPrice}"/> VNĐ</td>
                                                 <td>${o.status}</td>
                                                 <td>
                                                     <button type="button" class="btn btn-primary btn-sm"

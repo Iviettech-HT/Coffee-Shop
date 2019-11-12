@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="mvc" uri="http://www.springframework.org/tags/form"%>
-
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <html lang="en">
@@ -103,7 +102,8 @@
                                                 <td>${o.customer.name}</td>
                                                 <td>${o.orderDate}</td>
                                                 <td>${o.shippingDate}</td>
-                                                <td>${o.totalPrice} VNĐ</td>
+                                                <td><fmt:formatNumber type = "number" 
+                                                                  maxFractionDigits = "3" value = "${o.totalPrice}"/> VNĐ</td>
                                                 <td>${o.status}</td>
                                                 <td>
                                                     <button type="button" class="btn btn-primary btn-sm"

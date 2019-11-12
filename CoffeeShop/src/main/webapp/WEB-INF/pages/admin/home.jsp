@@ -23,14 +23,14 @@
         <div id="header">
             <h1><a href="dashboard.html">Matrix Admin</a></h1>
         </div>
-  
+
         <!--top-Header-menu-->
         <jsp:include page="../include/topMenuAdmin.jsp"/>
 
 
         <!--sidebar-menu-->
         <jsp:include page="../include/slidebarMenuAdmin.jsp"/>
-        
+
         <div id="content">
             <!--breadcrumbs-->
             <div id="content-header">
@@ -43,11 +43,10 @@
                 <div class="quick-actions_homepage">
                     <ul class="quick-actions">
                         <li class="bg_lb"> <a href = "<c:url value = "/admin/new-order"/>"> <i class="icon-dashboard"></i> <span class="label label-important">${order.size()}</span> New Order </a> </li>
-                        <li class="bg_lg span3"> <a href="charts.html"> <i class="icon-signal"></i> Doanh Thu: </a> </li>
-                        <li class="bg_ly"> <a href="widgets.html"> <i class="icon-inbox"></i><span class="label label-success">101</span> Widgets </a> </li>
-                        <li class="bg_lo"> <a href="tables.html"> <i class="icon-th"></i> Tables</a> </li>
-                        <li class="bg_ls"> <a href="test"> <i class="icon-fullscreen"></i> AAA</a> </li>
-                        
+                        <li class="bg_ly"> <a href = "<c:url value = "/admin/making-order"/>"> <i class="icon-inbox"></i><span class="label label-success">${order1.size()}</span> Making </a> </li>                        
+                        <li class="bg_ls"> <a href = "<c:url value = "/admin/shipping-order"/>"> <i class="icon-fullscreen"><span class="label label-success">${order2.size()}</span></i> Shipping</a> </li>
+                        <li class="bg_lo"> <a href = "<c:url value = "/admin/cancel-order"/>"> <i class="icon-info-sign"><span class="label label-important">${order3.size()}</span></i> Cancel</a> </li>
+                        <li class="bg_lg span3"> <a href = "<c:url value = "/admin/new-order"/>"> <i class="icon-signal"><span class="label label-important">${order4.size()}</span></i> Done</a> </li>
                     </ul>
                 </div>
 

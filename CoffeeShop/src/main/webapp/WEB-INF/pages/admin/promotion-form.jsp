@@ -50,6 +50,7 @@
                                 <mvc:form action="${pageContext.request.contextPath}/admin/add-promotion" method="post" class="form-horizontal" modelAttribute="promotion" enctype="multipart/form-data">
                                     <c:if test="${action eq 'edit-promotion'}">
                                         <input type="hidden" name="id" value="${promotion.id}"  />
+                                        <input type="hidden" name="image" value="${promotion.image}"  />
                                     </c:if>
                                     <div class="control-group">
                                         <label class="control-label" >Description :</label>
@@ -60,7 +61,30 @@
                                     <div class="control-group">
                                         <label class="control-label">Discount :</label>
                                         <div class="controls">
-                                            <input type="text" class="span11" name="discount" placeholder="Discount" value="${promotion.discount}" />
+                                            <input type="text" class="span11" name="discount" placeholder="Discount" value="${promotion.discount}"/>
+                                        </div>
+                                    </div>                                    
+                                    <div class="control-group">
+                                        <label class="control-label">Status :</label>
+                                        <div class="controls">
+                                            <label>True
+                                                <input type="radio" name="status" value="true" checked="checked"/>
+                                            </label> 
+                                            <label>False
+                                                <input type="radio" name="status" value="false" />
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">Start Date :</label>
+                                        <div class="controls">
+                                            <input type="date" name="startDate" value="${promotion.startDate}"/>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">End Date :</label>
+                                        <div class="controls">
+                                            <input type="date" name="endDate" value="${promotion.endDate}"/>
                                         </div>
                                     </div>
                                     <div class="control-group">
@@ -78,26 +102,8 @@
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label class="control-label">Status :</label>
-                                        <div class="controls">
-                                            <label>True
-                                                <input type="radio" name="status" value="true" checked="checked"/>
-                                            </label> 
-                                            <label>False
-                                                <input type="radio" name="status" value="false" />
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="control-group">
-                                        <label class="control-label">Start Date :</label>
-                                        <div class="controls">
-                                            <input type="date" name="startDate" value="${promotion.startDate}"/>
-                                        </div>
-                                    </div><div class="control-group">
-                                        <label class="control-label">End Date :</label>
-                                        <div class="controls">
-                                            <input type="date" name="endDate" value="${promotion.endDate}"/>
-                                        </div>
+                                        <label class="control-label"></label>
+                                        <h5>${errorMessage}</h5>
                                     </div>
                                     <div class="form-actions">
                                         <button type="submit" class="btn btn-success">Save</button>

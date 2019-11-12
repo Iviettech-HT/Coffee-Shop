@@ -148,7 +148,7 @@ public class ProductService {
 
     public LinkedHashSet<ProductEntity> getProductByPromotionId(int id){
         
-        return (LinkedHashSet<ProductEntity>) productRepository.getProductByPromotionId(id);
+        return (LinkedHashSet<ProductEntity>) productRepository.getProductsByPromotionId(id);
     }
     
     public void saveProduct(ProductEntity product) {

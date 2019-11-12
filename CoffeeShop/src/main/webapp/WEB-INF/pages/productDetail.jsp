@@ -35,7 +35,7 @@
                         </h1>
                     </div>
                     <p class="product-info__decription">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, nemo, iusto, expedita, aliquid neque nisi placeat non ad illum amet praesentium obcaecati labore dignissimos voluptate at. Deleniti et saepe assumenda?
+                        ${product.description}
                     </p>
                     <c:if test="${product.promotions.size() > 0}">
                         <c:set var="totalDiscount" value="${product.price + product.sizes.iterator().next().addition}"/>

@@ -304,14 +304,14 @@ public class AdminCotroller implements ResourceLoaderAware {
     @RequestMapping(value = {"/disable-category/{id}"})
     public String disableCategory(Model model,
             @PathVariable("id") int Id) {
-        CategoryEntity category = categoryService.changeStatus(Id, false);     
+        CategoryEntity category = categoryService.changeStatus(Id, false);
         return "redirect:/admin/category";
     }
 
     @RequestMapping(value = {"/enable-category/{id}"})
     public String enableCategory(Model model,
             @PathVariable("id") int Id) {
-        CategoryEntity category = categoryService.changeStatus(Id, true);   
+        CategoryEntity category = categoryService.changeStatus(Id, true);
         return "redirect:/admin/category";
     }
 
@@ -346,24 +346,26 @@ public class AdminCotroller implements ResourceLoaderAware {
     ) {
         String errorMessage = "";
         String savedPath;
+        boolean isValidated = true;
         if (promotion.getDescription().isEmpty() || promotion.getDiscount() == 0) {
             errorMessage = "Không thể bỏ trống!!!";
             model.addAttribute("errorMessage", errorMessage);
-            return "admin/promotion-form";
+            isValidated = false;
         } else if (promotion.getDiscount() < 0 || promotion.getDiscount() > 1) {
             errorMessage = "Không thể lớn < 0 hoặc >1 !!!";
             model.addAttribute("errorMessage", errorMessage);
-            return "admin/promotion-form";
+            isValidated = false;
         } else if (promotion.getStartDate() == null || promotion.getEndDate() == null) {
             errorMessage = "Không thể bỏ trống ngày!!!";
             model.addAttribute("errorMessage", errorMessage);
-            return "admin/promotion-form";
+            isValidated = false;
         } else if (promotion.getStartDate().after(promotion.getEndDate())) {
             errorMessage = "Nhập sai ngày!!!";
             model.addAttribute("errorMessage", errorMessage);
-            return "admin/promotion-form";
+            isValidated = false;
         } else if (image.getOriginalFilename().isEmpty()) {
             promotion.setImage(promotion.getImage());
+            isValidated = true;
         } else {
             try {
                 byte[] bytes = image.getBytes();
@@ -380,15 +382,27 @@ public class AdminCotroller implements ResourceLoaderAware {
 
                 buffer.write(bytes);
                 buffer.close();
-
+                isValidated = true;
             } catch (IOException ex) {
                 model.addAttribute("errorMessage", "Error can't add promotion");
                 return "error";
             }
-            promotionService.addPromotion(promotion);
-        }
 
-        return "redirect:/admin/promotion";
+        }
+        if (isValidated) {            
+            model.addAttribute("promotion", promotion);
+            promotionService.addPromotion(promotion);
+            return "redirect:/admin/promotion";
+        } else {
+            if (promotion.getId() == 0) {
+                model.addAttribute("errorMessage", errorMessage);
+            } else {
+                model.addAttribute("messageError", errorMessage);
+                model.addAttribute("promotion", promotionService.findPromotionById(promotion.getId()));
+                model.addAttribute("action", "edit-promotion");
+            }
+            return "admin/promotion-form";
+        }
     }
 
     @RequestMapping(value = {"/edit-promotion/{id}"})

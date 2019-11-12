@@ -36,7 +36,7 @@ public class AccountEntity extends PersonalInfo implements Serializable{
     @Column(length = 50)
     private String username;
     
-    @Column(length = 50)
+    @Column(length = 200)
     private String password;
     
     private boolean status;

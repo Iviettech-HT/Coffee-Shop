@@ -148,10 +148,12 @@ public class ProductService {
 
     public LinkedHashSet<ProductEntity> getProductByPromotionId(int id){
         
-        return (LinkedHashSet<ProductEntity>) productRepository.getProductsByPromotionId(id);
+        return (LinkedHashSet<ProductEntity>) productRepository.getProductByPromotionId(id);
     }
     
     public void saveProduct(ProductEntity product) {
         productRepository.save(product);
     }
+
+
 }

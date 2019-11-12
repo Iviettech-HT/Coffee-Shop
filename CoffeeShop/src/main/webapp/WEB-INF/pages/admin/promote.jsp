@@ -108,7 +108,7 @@
                                             <c:forEach var="r" items="${roles}">
                                                 <c:set var="check" value="${false}"/>
                                                 <c:forEach var="ar" items="${account.roles}">
-                                                    <c:if test="${r.id == ar.id}">
+                                                    <c:if test="${r.id == ar.id }">
                                                         <c:set var="check" value="${true}"/>
                                                     </c:if>
                                                 </c:forEach>
@@ -118,7 +118,7 @@
                                                         ${r.role}
                                                     </label>
                                                 </c:if>
-                                                <c:if test="${!check}">
+                                                <c:if test="${!check && r.role != 'ROLE_ADMIN'}">
                                                     <label>
                                                         <input type="checkbox" name="roleTemp" value="${r.id}" />
                                                         ${r.role}

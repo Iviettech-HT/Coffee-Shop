@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <html lang="en">
     <head>
         <title>Matrix Admin</title>
@@ -67,7 +68,8 @@
                                             <c:set var="i" value="1"/>
                                             <tr class="gradeU">
                                                 <td>${p.name}</td>
-                                                <td>${p.price*1.0} VNĐ</td>
+                                                <td><fmt:formatNumber type = "number" 
+                                                                  maxFractionDigits = "3" value = "${p.price}"/> VNĐ</td>
                                                 <td>${p.category.name}</td>
                                                 <td>
                                                     <c:forEach var="s" items="${p.sizes}"> 

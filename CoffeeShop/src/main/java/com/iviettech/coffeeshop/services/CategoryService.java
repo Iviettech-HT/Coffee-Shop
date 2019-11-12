@@ -6,7 +6,9 @@
 package com.iviettech.coffeeshop.services;
 
 import com.iviettech.coffeeshop.entities.CategoryEntity;
+import com.iviettech.coffeeshop.entities.ProductEntity;
 import com.iviettech.coffeeshop.repositories.CategoryRepository;
+import com.iviettech.coffeeshop.repositories.ProductRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,8 @@ public class CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private ProductRepository productRepository;
    
     public List<CategoryEntity> getCategories(){
         return (List<CategoryEntity>) categoryRepository.findAll();
@@ -34,5 +38,16 @@ public class CategoryService {
     }
     public List<CategoryEntity> getCategoryByStatus(){
         return (List<CategoryEntity>) categoryRepository.getCategoryByStatus();
+    }
+    
+    public CategoryEntity changeStatus(int id, boolean status){
+        List<ProductEntity> products = productRepository.getProductByCategoryId(id);
+        for(ProductEntity product : products){
+            product.setStatus(status);
+            productRepository.save(product);
+        }
+        CategoryEntity category = categoryRepository.findOne(id);
+        category.setStatus(status);
+        return categoryRepository.save(category);
     }
 }

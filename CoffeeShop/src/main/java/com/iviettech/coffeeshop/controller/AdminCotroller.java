@@ -93,6 +93,10 @@ public class AdminCotroller implements ResourceLoaderAware {
     @RequestMapping(value = {"/*", "/home"})
     public String viewAdmin(Model model) {
         model.addAttribute("order", orderService.getOrdersByStatus(OrderStatus.NEW));
+        model.addAttribute("order1", orderService.getOrdersByStatus(OrderStatus.MAKING));
+        model.addAttribute("order2", orderService.getOrdersByStatus(OrderStatus.SHIPPING));
+        model.addAttribute("order3", orderService.getOrdersByStatus(OrderStatus.CANCELED));
+        model.addAttribute("order4", orderService.getOrdersByStatus(OrderStatus.DONE));
         return "admin/home";
     }
 //-----Product--------------------------------------------
@@ -126,7 +130,7 @@ public class AdminCotroller implements ResourceLoaderAware {
         String messageError = "";
         boolean isValidated = true;
         if (product.getName().isEmpty()) {
-            messageError = "Vui lòng không bỏ trống tên!!!";
+            messageError = "Vui lòng không bỏ trống!!!";
             isValidated = false;
         } else {
             if (sizeIds == null) {
@@ -300,18 +304,14 @@ public class AdminCotroller implements ResourceLoaderAware {
     @RequestMapping(value = {"/disable-category/{id}"})
     public String disableCategory(Model model,
             @PathVariable("id") int Id) {
-        CategoryEntity category = categoryService.findCategory(Id);
-        category.setStatus(false);
-        categoryService.addCategory(category);
+        CategoryEntity category = categoryService.changeStatus(Id, false);     
         return "redirect:/admin/category";
     }
 
     @RequestMapping(value = {"/enable-category/{id}"})
     public String enableCategory(Model model,
             @PathVariable("id") int Id) {
-        CategoryEntity category = categoryService.findCategory(Id);
-        category.setStatus(true);
-        categoryService.addCategory(category);
+        CategoryEntity category = categoryService.changeStatus(Id, true);   
         return "redirect:/admin/category";
     }
 
@@ -341,7 +341,7 @@ public class AdminCotroller implements ResourceLoaderAware {
     @RequestMapping(value = "/add-promotion", method = RequestMethod.POST)
     public String savePromotion(Model model,
             @ModelAttribute("promotion") PromotionEntity promotion,
-            @RequestParam("file") MultipartFile image,
+            @RequestParam(name = "file", required = false) MultipartFile image,
             @Value(value = "${pathSaveImage}") String pathSaveImages
     ) {
         String errorMessage = "";
@@ -350,6 +350,20 @@ public class AdminCotroller implements ResourceLoaderAware {
             errorMessage = "Không thể bỏ trống!!!";
             model.addAttribute("errorMessage", errorMessage);
             return "admin/promotion-form";
+        } else if (promotion.getDiscount() < 0 || promotion.getDiscount() > 1) {
+            errorMessage = "Không thể lớn < 0 hoặc >1 !!!";
+            model.addAttribute("errorMessage", errorMessage);
+            return "admin/promotion-form";
+        } else if (promotion.getStartDate() == null || promotion.getEndDate() == null) {
+            errorMessage = "Không thể bỏ trống ngày!!!";
+            model.addAttribute("errorMessage", errorMessage);
+            return "admin/promotion-form";
+        } else if (promotion.getStartDate().after(promotion.getEndDate())) {
+            errorMessage = "Nhập sai ngày!!!";
+            model.addAttribute("errorMessage", errorMessage);
+            return "admin/promotion-form";
+        } else if (image.getOriginalFilename().isEmpty()) {
+            promotion.setImage(promotion.getImage());
         } else {
             try {
                 byte[] bytes = image.getBytes();
@@ -368,7 +382,7 @@ public class AdminCotroller implements ResourceLoaderAware {
                 buffer.close();
 
             } catch (IOException ex) {
-                model.addAttribute("errorMessage", "Error can't add product");
+                model.addAttribute("errorMessage", "Error can't add promotion");
                 return "error";
             }
             promotionService.addPromotion(promotion);
@@ -441,7 +455,8 @@ public class AdminCotroller implements ResourceLoaderAware {
 
 //----Orders----------------------------------------------------------------------
     @RequestMapping("/order")
-    public String getOrder(Model model) {
+    public String getOrder(Model model
+    ) {
         double total = 0;
         for (OrderEntity findOrder : orderService.findOrders()) {
             if (findOrder.getStatus().equals(OrderStatus.DONE)) {
@@ -455,36 +470,42 @@ public class AdminCotroller implements ResourceLoaderAware {
     }
 
     @RequestMapping("/new-order")
-    public String getNewOrder(Model model) {
+    public String getNewOrder(Model model
+    ) {
         model.addAttribute("os", OrderStatus.values());
         model.addAttribute("order", orderService.getOrdersByStatus(OrderStatus.NEW));
         return "admin/order";
     }
 
     @RequestMapping("/making-order")
-    public String getMakingOrder(Model model) {
+    public String getMakingOrder(Model model
+    ) {
         model.addAttribute("os", OrderStatus.values());
         model.addAttribute("order", orderService.getOrdersByStatus(OrderStatus.MAKING));
         return "admin/order";
     }
 
     @RequestMapping("/shipping-order")
-    public String getShipingOrder(Model model) {
+    public String getShipingOrder(Model model
+    ) {
         model.addAttribute("os", OrderStatus.values());
         model.addAttribute("order", orderService.getOrdersByStatus(OrderStatus.SHIPPING));
         return "admin/order";
     }
 
     @RequestMapping("/cancel-order")
-    public String getCancelOrder(Model model) {
+    public String getCancelOrder(Model model
+    ) {
         model.addAttribute("os", OrderStatus.values());
         model.addAttribute("order", orderService.getOrdersByStatus(OrderStatus.CANCELED));
         return "admin/order";
     }
 
     @RequestMapping("/done-order")
-    public String getDoneOrder(Model model) {
+    public String getDoneOrder(Model model
+    ) {
         double total = 0;
+        model.addAttribute("os", OrderStatus.values());
         for (OrderEntity findOrder : orderService.findOrders()) {
             if (findOrder.getStatus().equals(OrderStatus.DONE)) {
                 total += findOrder.getTotalPrice();
@@ -496,7 +517,9 @@ public class AdminCotroller implements ResourceLoaderAware {
     }
 
     @RequestMapping("/orderDetail/{id}")
-    public String getOrderDetails(Model model, @PathVariable("id") int Id) {
+    public String getOrderDetails(Model model,
+            @PathVariable("id") int Id
+    ) {
         OrderEntity order = orderService.findOrder(Id);
         order.setOrderDetails(orderDetailService.findByOrderId(Id));
         model.addAttribute("orderDetail", order);
@@ -519,8 +542,8 @@ public class AdminCotroller implements ResourceLoaderAware {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date s = sdf.parse(startDate);
             Date e = sdf.parse(endDate);
-            if (s.after(e)) {
-                messageError = "Vui lòng chọn lại ngày!!!";
+            if (orderService.getOrderByDate(s, e).isEmpty()) {
+                messageError = "Không có dữ liệu!!!";
                 model.addAttribute("messageError", messageError);
             } else {
                 if (orderStatuses == null) {
@@ -536,6 +559,10 @@ public class AdminCotroller implements ResourceLoaderAware {
                     List<OrderEntity> order = orderService.getOrderByDate(s, e);
                     model.addAttribute("order", order);
                     session.setAttribute("order", order);
+                    return "admin/searchOrder";
+                } else if (orderService.searchOrder(s, e, orderStatuses).isEmpty()) {
+                    messageError = "Không có dữ liệu!!!";
+                    model.addAttribute("messageError", messageError);
                 } else {
                     double total = 0;
                     for (OrderEntity findOrder : orderService.searchOrder(s, e, orderStatuses)) {
@@ -549,11 +576,13 @@ public class AdminCotroller implements ResourceLoaderAware {
                     List<OrderEntity> order = orderService.searchOrder(s, e, orderStatuses);
                     model.addAttribute("order", order);
                     session.setAttribute("order", order);
+                    return "admin/searchOrder";
                 }
 
             }
         }
-        return "admin/searchOrder";
+        model.addAttribute("messageError", messageError);
+        return this.getOrder(model);
     }
 
     @RequestMapping(value = {"/change-order/{id}"})
@@ -567,7 +596,7 @@ public class AdminCotroller implements ResourceLoaderAware {
             return "redirect:/admin/making-order";
         } else {
             if (order.getStatus() == OrderStatus.MAKING) {
-                order.setStatus(OrderStatus.SHIPPING);
+                orderService.changeStatusToShipping(Id);
                 orderService.addOrder(order);
                 return "redirect:/admin/shipping-order";
             } else {
@@ -589,14 +618,17 @@ public class AdminCotroller implements ResourceLoaderAware {
     }
 
     @RequestMapping(value = {"/export-file"})
-    public ModelAndView reportExcel(Model modle, HttpSession session) {
+    public ModelAndView reportExcel(HttpSession session
+    ) {
         ModelAndView newView = new ModelAndView("ExcelView");
         List<OrderEntity> newList = (List<OrderEntity>) session.getAttribute("order");
         for (OrderEntity orderEntity : newList) {
             orderEntity.setOrderDetails(orderDetailService.findByOrderId(orderEntity.getId()));
         }
         newView.addObject("newOrders", newList);
+        session.removeAttribute("order");
         return newView;
+
     }
 //----Account----------------------------------------------------------------------
 
@@ -618,7 +650,9 @@ public class AdminCotroller implements ResourceLoaderAware {
     }
 
     @RequestMapping(value = {"/enable-account/{id}"})
-    public String enableAccount(Model model, @PathVariable("id") int Id) {
+    public String enableAccount(Model model,
+            @PathVariable("id") int Id
+    ) {
         AccountEntity account = accountService.findAccountById(Id);
         account.setStatus(true);
         accountService.addAccount(account);

@@ -15,13 +15,13 @@ main{
     background-position-x: 100%;
     background-position-y: 100%;
     background-size: contain;
-    
+
     background-color: #ebfaeb;
 }
 .container-product-info{
     width: 100%;
     height: 80vh;
-    
+
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -40,14 +40,14 @@ main{
 .product-info__name{
     width: fit-content;
     position: relative;
-    
+
     text-transform: uppercase;
 }
 .product-info__name:after{
     content: '';
     width: 60%;
     height: 3px;
-    
+
     position: absolute;
     background: #5bd75b;
 }
@@ -68,7 +68,7 @@ main{
 }
 .product-info__sizes{
     margin: 10% 0;
-    
+
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -80,9 +80,9 @@ main{
 .product-info__sizes__button{
     padding: 10px 20px;
     margin: 0 5px;
-    
+
     text-align: center;
-    
+
     border: 2px solid black;
     border-radius: 10px;
     transition: 0.3s;
@@ -99,24 +99,38 @@ main{
     color: #ccc;
     background: black;
 }
+.product-info__buy-action{
+    display: flex;
+    flex: 1 0 auto;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+}
 .product-info__buy-button{
-    width: 80%;
-    padding: 15px 0;
+    /*width: 80%;*/
+    padding: 15px 5px;
+    margin-left: 10px;
     text-align: center;
-    
+
     font-weight: 600;
     font-size: 1.2em;
     text-transform: uppercase;
     background-color: #ebfaeb;
-    
+
     border: 2px solid #5bd75b;
     border-radius: 10px;
-    
+
     transition: 0.3s;
 }
 .product-info__buy-button:hover{
     cursor: pointer;
     background: #5bd75b;
+}
+.product-info__buy-button:nth-child(2){
+    border: 2px solid #d9ad73 !important;
+}
+.product-info__buy-button:nth-child(2):hover{
+    background: #d9ad73 !important;
 }
 .product-info__buy-button--active{
     cursor: pointer;
@@ -153,6 +167,33 @@ main{
     color: #f2f20d;
 }
 
+#popup-message{
+    width: 100vw;
+    height: 100vh;
+
+    display: none;
+    justify-content: center;
+    align-items: center;
+    
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+#popup-message > .container{
+    width: 300px;
+    height: fit-content;
+    padding: 10px 0;
+    
+    border: 1px solid #99ffcc;
+    border-radius: 5px;
+    box-shadow:1px 1px 20px 8px #99ffcc;
+    
+    background-color: white;
+    
+}
+#popup-message > .container > h2{
+    text-align: center;
+}
 @media only screen and (max-width: 700px){
     .container-product-info{
         height: fit-content;

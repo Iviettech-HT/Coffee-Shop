@@ -13,16 +13,12 @@
     <c:set var="totalQuantity" value="${totalQuantity + orderDetail.quantity}"/>
 </c:forEach>
 <style>
-    <c:if test="${totalQuantity != 0}">
-        .cart-icon::after{
-            content: '${totalQuantity}';
-        }
-    </c:if>
-    <c:if test="${totalQuantity == 0}">
-        .cart-icon::after{
+    .cart-icon::after{
+        content: attr(data);
+        <c:if test="${totalQuantity == 0}">
             display: none;
-        }
-    </c:if>
+        </c:if>
+    }
 </style>
 <header>
     <div class="search">
@@ -35,7 +31,7 @@
         <a href="#contact">LIÊN HỆ</a>
         <a href="<c:url value="/khuyen-mai"/>">KHUYỄN MÃI</a>
         <a href="#" onclick="displayMenu('menu-show')">MENU</a>
-        <div class="cart-icon">
+        <div class="cart-icon" data="${totalQuantity}" display=none>
             <img src="${pageContext.request.contextPath}/resources/images/landingPage/cart_icon.svg" alt="cart" 
                  onclick="window.location = '<c:url value="/gio-hang"/>'" />
         </div>

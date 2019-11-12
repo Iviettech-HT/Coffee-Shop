@@ -31,50 +31,56 @@
                     <table>
                         <tr>
                             <td class="title">Họ và tên:</td>
-                            <td>
+                            <td class="input-box">
                                 <input type="text" name="name" value="${user.name}">
                             </td>
                         </tr>
                         <tr>
                             <td class="title">Email:</td>
-                            <td>
+                            <td class="input-box">
                                 <input type="text" name="email" value="${user.email}">
+
                             </td>
+                            <c:if test="${user.status == false}">
+                                <td>
+                                    <a href="<c:url value="/xac-thuc-email?email=${user.email}"/>" style="word-wrap: none;">Xác thực</a>
+                                </td>
+                            </c:if>
                         </tr>
                         <tr>
                             <td class="title">SĐT:</td>
-                            <td>
+                            <td class="input-box">
                                 <input type="tel" name="phone" value="${user.phone}">
                             </td>
                         </tr>
                         <tr>
                             <td class="title">Giới tính:</td>
-                            <td>
+                            <td class="input-box">
                                 <select name="gender" id="">
                                     <option value="MALE"
                                             <c:if test="${user.gender == 'MALE'}">selected</c:if>
-                                            >Nam</option>
-                                    <option value="FEMALE"
+                                                >Nam</option>
+                                            <option value="FEMALE"
                                             <c:if test="${user.gender == 'FEMALE'}">selected</c:if>
-                                            >Nữ</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title">Địa chỉ</td>
-                            <td>
-                                <input type="text" name="address" value="${user.address}">
+                                                >Nữ</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">Địa chỉ</td>
+                                <td class="input-box">
+                                    <input type="text" name="address" value="${user.address}">
                             </td>
                         </tr>
                         <tr>
                             <td class="title">Tên đăng nhập</td>
-                            <td>
+                            <td class="input-box">
                                 <input style="cursor: not-allowed" type="text" value="${user.username}" disabled>
                             </td>
                         </tr>
                         <tr>
                             <td class="title">Thay đổi mật khẩu</td>
-                            <td>
+                            <td class="input-box">
                                 <p id="change-password">Thay đổi</p>
                             </td>
                         </tr>
@@ -87,7 +93,7 @@
                         </tr>
                         <tr>
                             <td></td>
-                            <td>
+                            <td class="input-box">
                                 <input type="submit" value="CẬP NHẬT">
                             </td>
                         </tr>
@@ -100,19 +106,19 @@
             btnChangePassword.onclick = function () {
 
                 tr = document.createElement('TR');
-                tr.innerHTML = '<td><input type="password" name="reNewPassword" placeholder="Nhập lại mật khẩu mới"></td>';
+                tr.innerHTML = '<td class="input-box"><input type="password" name="reNewPassword" placeholder="Nhập lại mật khẩu mới"></td>';
                 this.parentNode
                         .parentNode
                         .insertAdjacentElement('afterend', tr);
 
                 tr = document.createElement('TR');
-                tr.innerHTML = '<td><input type="password" name="newPassword" placeholder="Nhập mật khẩu mới"></td>';
+                tr.innerHTML = '<td class="input-box"><input type="password" name="newPassword" placeholder="Nhập mật khẩu mới"></td>';
                 this.parentNode
                         .parentNode
                         .insertAdjacentElement('afterend', tr);
 
                 tr = document.createElement('TR');
-                tr.innerHTML = '<td><input type="password" name="oldPassword" placeholder="Nhập mật khẩu cũ"></td>';
+                tr.innerHTML = '<td class="input-box"><input type="password" name="oldPassword" placeholder="Nhập mật khẩu cũ"></td>';
                 this.parentNode
                         .parentNode
                         .insertAdjacentElement('afterend', tr);

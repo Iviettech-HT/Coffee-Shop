@@ -21,30 +21,7 @@
         </style>
     </head>
     <body>
-        <c:set var="sellerOrderDetails" value="${sessionScope.sellerOrderDetails}"/>
-        <c:set var="totalQuantity" value="0"/>
-        <c:forEach var="orderDetail" items="${sellerOrderDetails}">
-            <c:set var="totalQuantity" value="${totalQuantity + orderDetail.quantity}"/>
-        </c:forEach>
-        <div class="container">
-            <h1>TRANG BÁN HÀNG</h1>
-        </div>
-        <div id="exTab1" class="container" style="width: 100%">	
-            <ul  class="nav nav-pills">
-                <li>
-                    <a  href="<c:url value="/seller/home"/>" data-toggle="tab">Sản phẩm</a>
-                </li>
-                <li class="active"><a href="<c:url value="/seller/gio-hang"/>">Giỏ hàng 
-                        <span class="badge">${totalQuantity}</span></a>
-                </li>
-                <li><a href="<c:url value="/seller/don-hang-online"/>" data-toggle="tab">Đơn hàng online</a>
-                </li>
-                <li><a href="<c:url value="/seller/don-hang-dang-ship"/>" data-toggle="tab">Đơn hàng đang ship</a>
-                </li>
-                <li>
-                    <a  href="" data-toggle="tab">Quản lý</a>
-                </li>
-            </ul>
+        <jsp:include page="../include/sellerHeader.jsp"/>
 
             <div class="tab-content clearfix">
 

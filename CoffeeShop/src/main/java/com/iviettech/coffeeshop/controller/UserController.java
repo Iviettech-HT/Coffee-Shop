@@ -18,6 +18,7 @@ import com.iviettech.coffeeshop.services.VoteService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -45,6 +46,8 @@ public class UserController {
     AccountService accountService;
     @Autowired
     OrderService orderService;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @RequestMapping(value = "/thong-tin-ca-nhan")
     public String viewProfile(Model model) {
@@ -88,7 +91,7 @@ public class UserController {
             if (oldPassword.isEmpty() || newPassword.isEmpty() || reNewPassword.isEmpty()) {
                 messageError = "Vui lòng không bỏ trống";
                 isValidated = false;
-            } else if (!currentAccount.getPassword().equals(oldPassword)) {
+            } else if (!passwordEncoder.matches(oldPassword, currentAccount.getPassword())) {
                 messageError = "Mật khẩu cũ không đúng";
                 isValidated = false;
             } else if (newPassword.length() <= 6) {

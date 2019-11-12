@@ -57,9 +57,11 @@
                         <p>Best choose</p>
                     </li>
                     <c:forEach var="category" items="${categories}">
-                        <li class="category__item">
-                            <p>${category.name}</p>
-                        </li>
+                        <c:if test="${category.status == true}">
+                            <li class="category__item">
+                                <p>${category.name}</p>
+                            </li>
+                        </c:if>
                     </c:forEach>
                     <sec:authorize access="isAuthenticated()">
                         <sec:authentication var="user" property="principal"/>

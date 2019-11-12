@@ -109,7 +109,7 @@
             let tbodys = document.getElementsByTagName('tbody');
             for(let tbody of tbodys){
                 if(tbody.innerText.toString().trim() === '')
-                    tbody.innerHTML = '<tr><td colspan="5"><h2>Không có đơn hàng nào</h2></td></tr>'
+                    tbody.innerHTML = '<tr><td colspan="5"><h1>Không có đơn hàng nào</h1></td></tr>'
             }
         </script>
         <jsp:include page="include/footer.jsp"/>

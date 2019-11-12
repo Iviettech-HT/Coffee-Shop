@@ -63,8 +63,14 @@
                                 <div class="product-info__sizes__button"><p>${size.size}</p></div>
                                     </c:forEach>
                         </div>
-                        <div class="product-info__buy-button">
-                            <p>Thêm vào giỏ</p>
+                        <div class="product-info__buy-action">
+                            <div class="product-info__buy-button">
+                                <p>Thêm vào giỏ</p>
+                            </div>
+
+                            <div class="product-info__buy-button">
+                                <p>Mua nhanh</p>
+                            </div>
                         </div>
                     </c:if>
                     <c:set var="countStar" value="0"/>
@@ -83,15 +89,19 @@
                 </div>
             </div>
         </main>    
-
+        <div id="popup-message">
+            <div class="container">
+                <h2>Đã thêm vào giỏ hàng</h2>
+            </div>
+        </div>
         <script type="text/javascript">
             let sizes = document.getElementsByClassName('product-info__sizes__button');
+            let buyFast = document.getElementsByClassName('product-info__buy-button')[1];
             let addToCart = document.getElementsByClassName('product-info__buy-button')[0];
             let sizeId = ${product.sizes.iterator().next().id};
             let stars = document.getElementsByClassName('star');
             let totalStar = ${totalStar/countStar};
             let vote = document.getElementById('vote');
-            console.log(totalStar);
             for (let size of sizes) {
                 size.onclick = () => {
                     for (let size of sizes)
@@ -132,10 +142,31 @@
 //
                 </sec:authorize>
             </sec:authorize>
-            addToCart.onclick = () => {
-                window.location = '<c:url value="/them-vao-gio-hang/${product.id}/"/>' + sizeId;
+            buyFast.onclick = () => {
+                window.location = '<c:url value="/mua-nhanh/${product.id}/"/>' + sizeId;
             }
 
+            let showedTotalQuantity = false;
+            addToCart.onclick = () => {
+                let xhttp = new XMLHttpRequest();
+                let linkToProcess = '<c:url value="/them-vao-gio-hang/${product.id}/"/>' + sizeId;
+                xhttp.open('GET', linkToProcess, true);
+                xhttp.send();
+                xhttp.onreadystatechange = () => {
+                    if (xhttp.readyState == 4 && xhttp.status == 200) {
+                        let cartIcon = document.getElementsByClassName('cart-icon')[0];
+                        let currentQuantity = parseInt(cartIcon.getAttribute('data'));
+                        console.log(currentQuantity);
+                        cartIcon.setAttribute('data', currentQuantity + 1);
+                        if (!showedTotalQuantity) {
+                            cartIcon.innerHTML += '<style>.cart-icon::after{display:block;}</style>';
+                            showedTotalQuantity = true;
+                        }
+                        document.getElementById('popup-message').style.display = 'flex';
+                        setTimeout(()=>{ document.getElementById('popup-message').style.display = 'none'},1000);
+                    }
+                }
+            }
             function addSelectedToStars(numberStar) {
                 numberStar = Math.round(numberStar);
                 for (let star of stars) {

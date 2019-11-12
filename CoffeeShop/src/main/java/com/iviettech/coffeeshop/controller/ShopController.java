@@ -52,12 +52,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
 /**
  *
  * @author admin
  */
 @Controller
+@SessionAttributes(names = {"mailCode"})
 public class ShopController {
 
     @Autowired
@@ -80,7 +84,11 @@ public class ShopController {
     private ServletContext context;
 
     private StringBuilder textHtml;
-    private static int mailCode;
+
+    @ModelAttribute("mailCode")
+    Integer getMailCode() {
+        return new Integer(0);
+    }
 
     @RequestMapping(value = {"/*", "/home"})
     public String viewHome(Model model, HttpSession session) {
@@ -96,11 +104,11 @@ public class ShopController {
         try {
             List<PromotionEntity> promotions = new ArrayList<>();
             promotions.add(promotionService.getPromotionById(promotionId));
-            
+
             List<ProductEntity> products = new ArrayList<>(promotions.get(0).getProducts());
             model.addAttribute("promotions", promotions);
             model.addAttribute("products", products);
-            
+
         } catch (Exception ex) {
             List<PromotionEntity> promotions = new ArrayList<>(promotionService.getPromotionsAvailablIncludeProducts());
             List<ProductEntity> products = new ArrayList<>();
@@ -141,8 +149,8 @@ public class ShopController {
         return "productDetail";
     }
 
-    @RequestMapping(value = "/them-vao-gio-hang/{productId}/{sizeId}")
-    public String addToCart(Model model,
+    @RequestMapping(value = "/mua-nhanh/{productId}/{sizeId}")
+    public String buyFast(Model model,
             @PathVariable("productId") int productId,
             @PathVariable("sizeId") int sizeId,
             HttpSession session) {
@@ -377,7 +385,8 @@ public class ShopController {
             @ModelAttribute(name = "account") AccountEntity account,
             @RequestParam(name = "rePassword") String rePassword,
             @Value(value = "${fileForSend}") String fileForSend,
-            @Value(value = "${pathToResources}") String pathToResources) {
+            @Value(value = "${pathToResources}") String pathToResources,
+            @ModelAttribute("mailCode") Integer mailCode) {
         // validate infomation
         boolean isValidated = true;
         String messageError = "";
@@ -417,7 +426,7 @@ public class ShopController {
         accountService.addAccount(account);
         model.addAttribute("email", account.getEmail());
 
-        this.sendCodeEmail(account.getEmail(), fileForSend, pathToResources);
+        this.sendCodeEmail(model, account.getEmail(), fileForSend, pathToResources, mailCode);
 
         return "validateEmail";
     }
@@ -425,13 +434,16 @@ public class ShopController {
     @RequestMapping(value = "/xac-thuc-dang-ky", method = RequestMethod.POST)
     public String completeRegister(Model model,
             @RequestParam(name = "email") String email,
-            @RequestParam(name = "code") int code) {
-        if (code != this.mailCode) {
+            @RequestParam(name = "code") int code,
+            @ModelAttribute("mailCode") Integer mailCode,
+            SessionStatus sessionStatus) {
+        if (code != mailCode) {
             model.addAttribute("messageError", "Mã xác thực không chính xác");
             model.addAttribute("email", email);
             return "validateEmail";
         }
         accountService.updateAccountStatus(email, true);
+        sessionStatus.setComplete();
         return "redirect:/dang-nhap";
     }
 
@@ -439,10 +451,10 @@ public class ShopController {
     public String viewFormValidateEmail(Model model,
             @RequestParam(name = "email") String email,
             @Value(value = "${fileForSend}") String fileForSend,
-            @Value(value = "${pathToResources}") String pathToResources) {
+            @Value(value = "${pathToResources}") String pathToResources,
+            @ModelAttribute("mailCode") Integer mailCode) {
 
-        fileForSend += "emailSendCode.html";
-        this.sendCodeEmail(email, fileForSend, pathToResources);
+        this.sendCodeEmail(model, email, fileForSend, pathToResources, mailCode);
         model.addAttribute("email", email);
         return "validateEmail";
     }
@@ -461,6 +473,16 @@ public class ShopController {
         model.addAttribute("products", products);
         model.addAttribute("favorite", false);
         return "ajax/listProducts";
+    }
+
+    @RequestMapping(value = "/them-vao-gio-hang/{productId}/{sizeId}")
+    public @ResponseBody
+    String addToCart(Model model,
+            @PathVariable("productId") int productId,
+            @PathVariable("sizeId") int sizeId,
+            HttpSession session) {
+        this.buyFast(model, productId, sizeId, session);
+        return "ok";
     }
 
     @RequestMapping(value = "/tim-kiem-san-pham")
@@ -498,13 +520,15 @@ public class ShopController {
 
     @RequestMapping("/gui-code")
     public @ResponseBody
-    String sendCodeEmail(
+    String sendCodeEmail(Model model,
             @RequestParam(name = "email") String email,
             @Value(value = "${fileForSend}") String fileForSend,
-            @Value(value = "${pathToResources}") String pathToResources) {
+            @Value(value = "${pathToResources}") String pathToResources,
+            @ModelAttribute("mailCode") Integer mailCode) {
 
         fileForSend += "emailSendCode.html";
         mailCode = (int) Math.round(Math.random() * 1000000);
+        model.addAttribute("mailCode", mailCode);
         textHtml = new StringBuilder();
         File f = new File(context.getRealPath(fileForSend));
         try (

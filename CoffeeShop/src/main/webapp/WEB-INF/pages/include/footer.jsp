@@ -53,7 +53,7 @@
             <h4>Thông tin liên hệ</h4>
             <ul>
                 <li>
-                    <p>SĐT Shop: 077 789 7689</p>
+                    <p>SĐT Shop: <a href="phoneto:0777897689">077 789 7689</a></p>
                 </li>
                 <li>
                     <p>SĐT Nhân viên giao hàng: 012 345 6789</p>
@@ -62,7 +62,7 @@
                     <p>Địa chỉ: 43 Ngô Thì Nhậm, Liên Chiểu, Đà Nẵng</p>
                 </li>
                 <li>
-                    <p>Email: nt199952@gmail.com</p>
+                    <p>Email: <a href="mailto:nt199952@gmail.com">nt199952@gmail.com</a></p>
                 </li>
             </ul>
         </div>

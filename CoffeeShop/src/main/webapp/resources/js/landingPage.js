@@ -43,6 +43,7 @@ function orderIncresePrice(isIncrease) {
     let newProductItems = Array.prototype.slice.call(productItems).sort(function (item1, item2) {
         let price1 = parseFloat(item1.children[item1.children.length - 1].innerText);
         let price2 = parseFloat(item2.children[item2.children.length - 1].innerText);
+        console.log(price1);
         return price1 - price2;
     });
     if (isIncrease)

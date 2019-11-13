@@ -277,6 +277,12 @@ public class ShopController {
         return "redirect:/gio-hang";
     }
 
+    @RequestMapping(value = "/xoa-gio-hang")
+    public String clearCart(HttpSession session) {
+        session.removeAttribute("orderDetails");
+        return "redirect:/home";
+    }
+
     @RequestMapping(value = "/dat-hang")
     public String viewCheckout(Model model) {
         model.addAttribute("customer", new CustomerEntity());
@@ -526,9 +532,18 @@ public class ShopController {
             @Value(value = "${pathToResources}") String pathToResources,
             @ModelAttribute("mailCode") Integer mailCode) {
 
-        fileForSend += "emailSendCode.html";
         mailCode = (int) Math.round(Math.random() * 1000000);
         model.addAttribute("mailCode", mailCode);
+        String content = String.format("<h2>Mã xác thực của bạn là:%d</h2><h2>Điền mã này vào ô xác thực</h2>", mailCode);
+        this.sendMail(email, fileForSend, pathToResources, content);
+
+        return "ok";
+    }
+
+    private void sendMail(String email, String fileForSend, String pathToResources, String content) {
+
+        fileForSend += "emailTemplate.html";
+
         textHtml = new StringBuilder();
         File f = new File(context.getRealPath(fileForSend));
         try (
@@ -541,7 +556,7 @@ public class ShopController {
             while ((line = reader.readLine()) != null) {
                 //Custom name at Line 35
                 if (check == 2) {
-                    textHtml.append(mailCode);
+                    textHtml.append(content);
                 } else {
                     textHtml.append(line);
                 }
@@ -568,6 +583,5 @@ public class ShopController {
         } catch (Exception ex) {
             Logger.getLogger(ShopController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return "ok";
     }
 }

@@ -23,9 +23,8 @@ main{
 #go-to-top{
     position: fixed;
     z-index: 2;
-    top: 100%;
-    left: 100%;
-    transform: translate(-140%,-300%);
+    right: 23px;
+    bottom: 15px;
 }
 #go-to-top{
     width: 50px;

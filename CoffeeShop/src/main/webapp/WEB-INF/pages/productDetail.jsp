@@ -91,7 +91,7 @@
         </main>    
         <div id="popup-message">
             <div class="container">
-                <h2>Đã thêm vào giỏ hàng</h2>
+                <h2></h2>
             </div>
         </div>
         <script type="text/javascript">
@@ -135,6 +135,12 @@
                     xhttp.onreadystatechange = () => {
                         if (xhttp.readyState == 4 && xhttp.status == 200) {
                             totalStar = parseInt(xhttp.responseText);
+                            // Show popup in 1s then hide
+                            document.getElementById('popup-message').children[0].children[0].innerHTML = "Bạn đã đánh giá " + (5-i) + " sao";
+                            document.getElementById('popup-message').style.display = 'flex';
+                            setTimeout(() => {
+                                document.getElementById('popup-message').style.display = 'none';
+                            }, 1000);
                         }
                     }
                 }
@@ -162,8 +168,12 @@
                             cartIcon.innerHTML += '<style>.cart-icon::after{display:block;}</style>';
                             showedTotalQuantity = true;
                         }
+                        // Show popup in 1s then hide
+                        document.getElementById('popup-message').children[0].children[0].innerHTML = "Đã thêm vào giỏ hàng";
                         document.getElementById('popup-message').style.display = 'flex';
-                        setTimeout(()=>{ document.getElementById('popup-message').style.display = 'none'},1000);
+                        setTimeout(() => {
+                            document.getElementById('popup-message').style.display = 'none';
+                        }, 1000);
                     }
                 }
             }

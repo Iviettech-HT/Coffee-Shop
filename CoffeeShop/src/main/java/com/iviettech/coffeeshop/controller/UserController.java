@@ -7,11 +7,13 @@ package com.iviettech.coffeeshop.controller;
 
 import com.iviettech.coffeeshop.entities.AccountEntity;
 import com.iviettech.coffeeshop.entities.FavoriteEntity;
+import com.iviettech.coffeeshop.entities.OrderDetailEntity;
 import com.iviettech.coffeeshop.entities.OrderEntity;
 import com.iviettech.coffeeshop.entities.VoteEntity;
 import com.iviettech.coffeeshop.enums.OrderStatus;
 import com.iviettech.coffeeshop.services.AccountService;
 import com.iviettech.coffeeshop.services.FavoriteService;
+import com.iviettech.coffeeshop.services.OrderDetailService;
 import com.iviettech.coffeeshop.services.OrderService;
 import com.iviettech.coffeeshop.services.ProductService;
 import com.iviettech.coffeeshop.services.VoteService;
@@ -46,6 +48,8 @@ public class UserController {
     AccountService accountService;
     @Autowired
     OrderService orderService;
+    @Autowired
+    OrderDetailService orderDetailService;
     @Autowired
     PasswordEncoder passwordEncoder;
 
@@ -121,6 +125,20 @@ public class UserController {
         List<OrderEntity> orders = orderService.getOrdersByAccountId(account.getId());
         model.addAttribute("orders", orders);
         return "userOrder";
+    }
+
+    @RequestMapping("/chi-tiet-don-hang/{orderId}")
+    public String viewUserOrderDetail(Model model,
+            @PathVariable("orderId") int orderId,
+            Authentication a) {
+        AccountEntity account = (AccountEntity) a.getPrincipal();
+        OrderEntity order = orderService.getOrderByIdAndAccountId(orderId, account.getId());
+        List<OrderDetailEntity> orderDetails = orderDetailService.findByOrderId(order.getId());
+        order.setOrderDetails(orderDetails);
+        
+        model.addAttribute("order", order);
+        model.addAttribute("customer", order.getCustomer());
+        return "orderDetail";
     }
 
     @RequestMapping("/huy-don-hang/{orderId}")

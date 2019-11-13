@@ -27,8 +27,8 @@
                     <span style="color: #999; font-size: 0.8em;">(Đã hết)</span>
                 </c:if>
             </a>
+            <c:set var="totalDiscount" value="${product.price + product.sizes.toArray()[0].addition}"/>
             <c:if test="${product.promotions.size() > 0}">
-                <c:set var="totalDiscount" value="${product.price}"/>
                 <c:forEach var="promotion" items="${product.promotions}">
                     <c:set var="totalDiscount" value="${totalDiscount*(1 - promotion.discount)}"/>
                 </c:forEach>
@@ -43,7 +43,7 @@
             </c:if>
             <c:if test="${product.promotions.size() == 0}">
                 <p class="product__item--price">
-                    <fmt:formatNumber type="number" pattern="###,###" value="${product.price}"/>đ
+                    <fmt:formatNumber type="number" pattern="###,###" value="${totalDiscount}"/>đ
                 </p>
             </c:if>
             <p class="product__item--vote">
@@ -62,7 +62,7 @@
                     <img src="resources\images\landingPage\products\add-to-cart-icon.svg" alt="add-to-cart">
                     <p>Thêm vào giỏ</p>
                     <c:forEach var="size" items="${product.sizes}">
-                        <a href="<c:url value="/them-vao-gio-hang/${product.id}/${size.id}"/>" 
+                        <a href="<c:url value="/mua-nhanh/${product.id}/${size.id}"/>" 
                            class="size">Size ${size.size}</a>
                     </c:forEach>
                     <sec:authorize access="isAuthenticated()">
@@ -79,6 +79,7 @@
                     </sec:authorize>
                 </div>
             </c:if>
+            <p class="tempPrice" style="display: none;">${totalDiscount}</p>
         </div>
     </c:forEach>
 </c:if>

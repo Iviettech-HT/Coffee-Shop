@@ -48,6 +48,7 @@ main {
 
 .list-product>table {
     width: 100%;
+    position: relative;
 }
 
 .list-product>table th,
@@ -56,6 +57,17 @@ main {
 }
 .list-product>table tr > td:nth-of-type(4) {
     width: 20%;
+}
+.list-product>table > tbody tr{
+    width: fit-content;
+    position: relative;
+}
+.list-product>table > tbody tr:after{
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    border-top: 1px solid black;
 }
 .list-product>table td>img {
     width: 50px;

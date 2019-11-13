@@ -16,6 +16,13 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/standard.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/cartStyle.css">
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/landingPage/favicon.png">
+        <style>
+            .row--active:hover{
+                cursor: pointer;
+                color: #1ebb47;
+                font-weight: 600;
+            }
+        </style>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     </head>
@@ -45,7 +52,8 @@
                     <tbody style="text-align: center">
                         <c:forEach var="order" items="${orders}">
                             <c:if test="${order.status == 'NEW' or order.status == 'MAKING' }">
-                                <tr>
+                                <tr class="row--active"
+                                    onclick="window.location = '<c:url value="/user/chi-tiet-don-hang/${order.id}"/>'">
                                     <td>${order.id}</td>
                                     <td><fmt:formatDate pattern="dd-MM-yyyy" value="${order.orderDate}"/></td>
                                     <c:set var="totalQuantity" value="0"/>

@@ -83,6 +83,9 @@
                         <a href="<c:url value="/home#main"/>">Tiếp tục mua</a>
                     </div>
                     <div class="action__button main__element--background">
+                        <a href="<c:url value="/xoa-gio-hang"/>">Xóa hết</a>
+                    </div>
+                    <div class="action__button main__element--background">
                         <a href="<c:url value="/dat-hang"/>">Đặt hàng</a>
                     </div>
                 </div>

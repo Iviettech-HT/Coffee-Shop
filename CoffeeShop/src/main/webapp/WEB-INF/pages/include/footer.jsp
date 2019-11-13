@@ -72,3 +72,21 @@
 
 <div id="go-to-top">
 </div>
+<style>
+    #embed_fullchat{
+        bottom: 150px !important;
+    }
+    #embed_vchat{
+        bottom: 85px !important;
+    }
+    #embed_fill{
+        bottom: 75px !important;
+    }
+    #embed_circle{
+        bottom: 70px !important;
+    }
+    #embed_greeting{
+        bottom: 155px !important;
+    }
+</style>
+<script lang="javascript">var _vc_data = {id : 2397722, secret : 'b866f17db4cee45bb15335d94386ecd6'}; (function() {var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.defer = true; ga.src = '//live.vnpgroup.net/client/tracking.js?id=2397722'; var s = document.getElementsByTagName('script'); s[0].parentNode.insertBefore(ga, s[0]); })();</script>

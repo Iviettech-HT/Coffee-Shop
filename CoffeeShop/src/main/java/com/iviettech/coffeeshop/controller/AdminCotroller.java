@@ -610,7 +610,8 @@ public class AdminCotroller implements ResourceLoaderAware {
             return "redirect:/admin/making-order";
         } else {
             if (order.getStatus() == OrderStatus.MAKING) {
-                orderService.changeStatusToShipping(Id);
+                order.setStatus(OrderStatus.SHIPPING);
+                order.setShippingDate(new Date());
                 orderService.addOrder(order);
                 return "redirect:/admin/shipping-order";
             } else {

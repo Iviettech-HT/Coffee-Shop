@@ -31,8 +31,6 @@ public class ExcelView extends AbstractXlsView {
 
         int i = 1;
         int j = 1;
-
-
         Sheet sheet = wrkbk.createSheet("List Orders");
 
 //Order

@@ -32,7 +32,7 @@
 
         <div id="content">
             <div id="content-header">
-                <div id="breadcrumb"> <a href = "<c:url value = "/admin/home"/>" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Category</a> </div>
+                <div id="breadcrumb"> <a href = "<c:url value = "/admin/home/home"/>" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Category</a> </div>
                 <h1>Category</h1>
             </div>
             <div class="container-fluid">
@@ -41,7 +41,7 @@
                     <div class="span12">
                         <div>
                             <button class="btn btn-primary"
-                                    onclick="location.href = '<c:url value="/admin/add-category"/>'">Add Category</button>
+                                    onclick="location.href = '<c:url value="/admin/category/add-category"/>'">Add Category</button>
                         </div>
                         <div class="widget-box">
 
@@ -64,14 +64,14 @@
                                                 <td>${c.status}</td>
                                                 <td>
                                                     <button type="button" class="btn btn-primary btn-sm"
-                                                            onclick="location.href = '<c:url value="/admin/edit-category/${c.id}"/>'">Edit</button>
+                                                            onclick="location.href = '<c:url value="/admin/category/edit-category/${c.id}"/>'">Edit</button>
                                                     <c:if test="${c.status == false}">
                                                         <button type="button" class="btn btn-success btn-sm"
-                                                                onclick="location.href = '<c:url value="/admin/enable-category/${c.id}"/>'">Enable</button>
+                                                                onclick="location.href = '<c:url value="/admin/category/enable-category/${c.id}"/>'">Enable</button>
                                                     </c:if>
                                                     <c:if test="${c.status != false}">
                                                         <button type="button" class="btn btn-sm btn-danger"
-                                                                onclick="location.href = '<c:url value="/admin/disable-category/${c.id}"/>'">Disable</button>
+                                                                onclick="location.href = '<c:url value="/admin/category/disable-category/${c.id}"/>'">Disable</button>
                                                     </c:if>
                                                 </td>                                           
 

@@ -33,7 +33,7 @@
 
         <div id="content">
             <div id="content-header">
-                <div id="breadcrumb"> <a href = "<c:url value = "/admin/home"/>" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Product</a> </div>
+                <div id="breadcrumb"> <a href = "<c:url value = "/admin/home/home"/>" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Product</a> </div>
                 <h1>Product</h1>
             </div>
             <div class="container-fluid">
@@ -42,7 +42,7 @@
                     <div class="span12">
                         <div>
                             <button class="btn btn-primary"
-                                    onclick="location.href = '<c:url value="/admin/add-product"/>'">Add Product</button>
+                                    onclick="location.href = '<c:url value="/admin/product/add-product"/>'">Add Product</button>
                         </div>
                         <div class="widget-box">
 
@@ -56,8 +56,7 @@
                                             <th>Name</th>                                            
                                             <th>Price</th>
                                             <th>Category</th>                                            
-                                            <th>Size</th>
-                                            <th>Description</th>
+                                            <th>Size</th>                                           
                                             <th>Image</th>
                                             <th>Status</th>
                                             <th>Action</th>
@@ -82,7 +81,7 @@
                                                         <c:set var="i" value="${i+1}"/>
                                                     </c:forEach>
                                                 </td>
-                                                <td>${p.description}</td>
+         
                                                 <td>
                                                     <div class="col-sm-3 image" >
                                                         <img src="${pageContext.request.contextPath}/${p.images[0].path}" alt="${product.name}" height="50px" width="50px"/>
@@ -91,14 +90,14 @@
                                                 <td>${p.status}</td>
                                                 <td>
                                                     <button class="btn btn-primary btn-sm" 
-                                                            onclick="location.href = '<c:url value="/admin/edit-product/${p.id}"/>'">Edit</button>
+                                                            onclick="location.href = '<c:url value="/admin/product/edit-product/${p.id}"/>'">Edit</button>
                                                     <c:if test="${p.status == false}">
                                                         <button class="btn btn-success btn-sm"
-                                                                onclick="location.href = '<c:url value="/admin/enable-product/${p.id}"/>'">Enable</button>
+                                                                onclick="location.href = '<c:url value="/admin/product/enable-product/${p.id}"/>'">Enable</button>
                                                     </c:if>
                                                     <c:if test="${p.status != false}">
                                                         <button class="btn btn-danger btn-sm"
-                                                                onclick="location.href = '<c:url value="/admin/disable-product/${p.id}"/>'">Disable</button>
+                                                                onclick="location.href = '<c:url value="/admin/product/disable-product/${p.id}"/>'">Disable</button>
                                                     </c:if>
                                                 </td>                                           
 

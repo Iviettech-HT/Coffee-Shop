@@ -64,12 +64,12 @@
                                     </c:forEach>
                         </div>
                         <div class="product-info__buy-action">
-                            <div class="product-info__buy-button">
+<!--                            <div class="product-info__buy-button">
                                 <p>Thêm vào giỏ</p>
-                            </div>
+                            </div>-->
 
                             <div class="product-info__buy-button">
-                                <p>Mua nhanh</p>
+                                <p>Thêm vào giỏ</p>
                             </div>
                         </div>
                     </c:if>

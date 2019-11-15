@@ -55,7 +55,7 @@
                                 <c:forEach var="orderDetail" items="${orderDetails}">
                                     <tr>
                                         <td>
-                                            <img src="${pageContext.request.contextPath}/${orderDetail.product.images[0].path}" alt="${orderDetail.product.name}">
+                                            <img src="${pageContext.request.contextPath}/${orderDetail.product.images[1].path}" alt="${orderDetail.product.name}">
                                         </td>
                                         <td>${orderDetail.product.name}</td>
                                         <td>

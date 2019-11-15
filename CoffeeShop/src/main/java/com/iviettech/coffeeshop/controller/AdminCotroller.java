@@ -713,7 +713,7 @@ public class AdminCotroller implements ResourceLoaderAware {
             model.addAttribute("messageError", messageError);
             model.addAttribute("account", accountService.findAccountById(account.getId()));
             model.addAttribute("roles", roleService.findAllRoles());
-            model.addAttribute("action", "account/promote-account");
+            model.addAttribute("action", "account/update-promote-account");
         }
         return "admin/promote";
     }

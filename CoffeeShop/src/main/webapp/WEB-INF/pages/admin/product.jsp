@@ -40,10 +40,12 @@
                 <hr>
                 <div class="row-fluid">
                     <div class="span12">
-                        <div>
-                            <button class="btn btn-primary"
-                                    onclick="location.href = '<c:url value="/admin/product/add-product"/>'">Add Product</button>
-                        </div>
+                        <sec:authorize access="!hasRole('ROLE_SELLER')">
+                            <div>
+                                <button class="btn btn-primary"
+                                        onclick="location.href = '<c:url value="/admin/product/add-product"/>'">Add Product</button>
+                            </div>
+                        </sec:authorize>
                         <div class="widget-box">
 
                             <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>

@@ -75,8 +75,8 @@
                                         </c:forEach>
                                         <tr>
                                             <td colspan="7">
-                                                <c:if test="${!(order.status.toString() eq 'MAKING')}">
-                                                    <a href="<c:url value="/seller/lam-don-hang-online/${orderId}"/>" class="btn btn-primary">NHẬN ĐƠN HÀNG</a>
+                                                <c:if test="${order.status.toString() eq 'NEW'}">
+                                                    <a href="<c:url value="/seller/lam-don-hang-online/${order.id}"/>" class="btn btn-primary">NHẬN ĐƠN HÀNG</a>
                                                 </c:if>
                                                 <c:if test="${order.status.toString() == 'MAKING'}">
                                                     <a href="<c:url value="/seller/xac-nhan-don-hang-online/${order.id}"/>" class="btn btn-success">BẮT ĐẦU SHIP</a>

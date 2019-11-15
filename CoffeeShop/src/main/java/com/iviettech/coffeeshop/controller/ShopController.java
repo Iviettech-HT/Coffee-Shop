@@ -346,12 +346,11 @@ public class ShopController {
             }
         }
         textHtml.append("</table></h2>");
-        textHtml.append("<h1>Tổng cộng:" + Math.round(order.getTotalPrice()) + "đ</h1>");
+        textHtml.append(String.format("<h1>Tổng cộng: %,dđ</h1>", Math.round(order.getTotalPrice())));
         
         emailSenderSerivce.sendMail(customer.getEmail(), fileForSend, pathToResources, textHtml.toString());
 
         session.removeAttribute("orderDetails");
-        session.removeAttribute("mailCode");
         return "orderSuccess";
     }
 
@@ -567,8 +566,21 @@ public class ShopController {
 
     @RequestMapping(value = "/tim-kiem-san-pham")
     public String searchProducts(Model model,
-            @RequestParam(name = "name") String productName) {
-        model.addAttribute("products", productService.searchProducts(productName));
+            @RequestParam(name = "name") String productName,
+            Authentication a) {
+        List<ProductEntity> products = productService.searchProducts(productName);
+        
+        if(a != null){
+            AccountEntity account = (AccountEntity) a.getPrincipal();
+            for(ProductEntity product : products){
+                product.setFavorites(new ArrayList<>());
+                FavoriteEntity favorite = favoriteService.getFavoritesByAccountIdAndProductId(account.getId(), product.getId());
+                if(favorite != null && favorite.isStatus())
+                    product.getFavorites().add(favorite);
+            }
+        }
+        model.addAttribute("products", products);
+        model.addAttribute("favorite", false);
         return "ajax/listProducts";
     }
 

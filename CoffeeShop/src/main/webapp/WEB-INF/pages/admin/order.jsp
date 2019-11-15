@@ -61,8 +61,8 @@
                             </c:forEach>
                         </div>
                     </div>
-                    <div  class="span2">
-                        <div class="span1"></div>    
+                    <div  class="span12">
+                        <div class="span0"></div>    
                         <button type="submit" class="btn btn-success">Search Order Date</button>                         
                     </div>
                 </mvc:form>

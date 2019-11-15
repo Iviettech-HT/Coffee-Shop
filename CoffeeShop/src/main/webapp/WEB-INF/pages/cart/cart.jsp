@@ -46,7 +46,7 @@
                             <c:forEach var="orderDetail" items="${orderDetails}">
                                 <tr>
                                     <td>
-                                        <img src="${pageContext.request.contextPath}/${orderDetail.product.images[0].path}" alt="${orderDetail.product.name}">
+                                        <img src="${pageContext.request.contextPath}/${orderDetail.product.images[1].path}" alt="${orderDetail.product.name}">
                                     </td>
                                     <td>${orderDetail.product.name}</td>
                                     <td>
@@ -101,7 +101,7 @@
                                     <td>
                                         <input type="checkbox" value="${topping.id}" name="topping" 
                                                id="topping${topping.id}" class="topping"/>
-                                        <label for="topping${topping.id}">${topping.name}(${topping.price})</label>
+                                        <label for="topping${topping.id}">${topping.name}(<fmt:formatNumber type="number" pattern="###,###" value="${topping.price}"/>đ)</label>
                                     </td>
                                 </tr>
                                 <c:set var="countTopping" value="${countTopping + 1}"/>

@@ -18,7 +18,7 @@
                 <ul>
                     <li><a href="<c:url value = "/admin/order/order"/>"><i class="icon icon-list-ul"></i>All Orders</a></li>
                     <li><a href="<c:url value = "/admin/order/new-order"/>"><i class="icon icon-tag"></i>New Orders</a></li>
-                    <li><a href="<c:url value = "/admin/order/making-order"/>"><i class="icon icon-cog"></i>Making Orders</a></li>
+                    <li><a href="<c:url value = "/admin/order/making-order"/>"><i class="icon icon-cog"></i>Processing Orders</a></li>
                     <li><a href="<c:url value = "/admin/order/shipping-order"/>"><i class="icon icon-truck"></i>Shipping Orders</a></li>
                     <li><a href="<c:url value = "/admin/order/cancel-order"/>"><i class="icon icon-remove"></i>Cancel Orders</a></li>
                     <li><a href="<c:url value = "/admin/order/done-order"/>"><i class="icon icon-thumbs-up"></i>Done Orders</a></li>

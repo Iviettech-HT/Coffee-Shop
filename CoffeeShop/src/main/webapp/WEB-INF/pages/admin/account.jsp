@@ -82,9 +82,13 @@
                                                 <td>${a.status}</td>
                                                 <td>
                                                     <c:set var="test" value="${true}"/>
+                                                    <c:set var="test1" value="${false}"/>
                                                     <c:forEach var="r" items="${a.roles}">
                                                         <c:if test="${r.role != 'ROLE_ADMIN'}">
                                                             <c:set var="test" value="${false}"/>                                                            
+                                                        </c:if>
+                                                        <c:if test="${r.role == 'ROLE_SELLER' or r.role == 'ROLE_MANAGER'}">
+                                                            <c:set var="test1" value="${true}"/>                                                            
                                                         </c:if>
                                                     </c:forEach>
                                                     <c:if test="${test == false}">
@@ -93,13 +97,14 @@
                                                             <button class="btn btn-success btn-sm"
                                                                     onclick="location.href = '<c:url value="/admin/account/enable-account/${a.id}"/>'">Enable</button>
                                                         </c:if>
-                                                        <c:if test="${a.status == true}"> 
-                                                            <button class="btn btn-danger btn-sm"
-                                                                    onclick="location.href = '<c:url value="/admin/account/disable-account/${a.id}"/>'">Disable</button>
+                                                        <c:if test="${!test1}">
+                                                            <c:if test="${a.status == true}"> 
+                                                                <button class="btn btn-danger btn-sm"
+                                                                        onclick="location.href = '<c:url value="/admin/account/disable-account/${a.id}"/>'">Disable</button>
+                                                            </c:if>
                                                         </c:if>
                                                     </c:if> 
-                                                </td>                                           
-
+                                                </td>
                                             </tr>
                                         </c:forEach>
                                     </tbody>

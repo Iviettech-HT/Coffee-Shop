@@ -39,7 +39,6 @@
             <div class="container-fluid">
                 <hr>  
                 <mvc:form action="${pageContext.request.contextPath}/admin/order/searchOrder"  method="GET" class="form-horizontal">
-                    <div class="span12">
                         <div class="span5">
                             <div class="span6">
                                 <h5>Date</h5>
@@ -50,7 +49,7 @@
                                 <input type="date" name="endDate" id="endDate"/>
                             </div>
                         </div>
-                        <div class="span4">
+                        <div class="span6">
                             <div class="span6">
                                 <h5>Status</h5>
                             </div>
@@ -62,21 +61,19 @@
                                 </c:forEach>
                             </div>
                         </div>
-                    </div>
-                    <hr/>
-                    <div  class="span3">
-                        <div class="span1"></div>    
-                        <button id="submit" type="submit" class="btn btn-success" style="display: none;">Search Order Date</button> 
+                    <hr/>   
+                    <button id="submit" type="submit" class="btn btn-success" style="display: none;">Search Order Date</button> 
+
+                    <div class="span12">
+                        <div class="span0">
+                            <label for="submit" class="btn btn-success btn-sm"
+                                   >Search Order Date</label>                   
+                            <p type="button" class="btn btn-danger btn-sm"
+                               onclick="location.href = '<c:url value="/admin/order/export-file"/>'">Export File</p>
+                        </div>
 
                     </div>
                 </mvc:form>
-                <div  class="span12">
-                    <label for="submit" class="btn btn-success btn-sm"
-                           >Search Order Date</label>                   
-                    <button type="button" class="btn btn-danger btn-sm"
-                            onclick="location.href = '<c:url value="/admin/order/export-file"/>'">Export File</button>
-
-                </div>
                 <div class="row-fluid">
                     <div class="span12">
                         <div class="widget-box">

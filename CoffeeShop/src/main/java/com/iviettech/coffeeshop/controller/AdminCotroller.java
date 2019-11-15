@@ -396,6 +396,7 @@ public class AdminCotroller implements ResourceLoaderAware {
         }
         if (isValidated) {            
             model.addAttribute("promotion", promotion);
+            promotion.setProducts(productService.getProductByPromotionId(promotion.getId()));
             promotionService.addPromotion(promotion);
             return "redirect:/admin/promotion/promotion";
         } else {

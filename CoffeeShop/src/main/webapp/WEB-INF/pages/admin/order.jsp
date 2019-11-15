@@ -49,7 +49,7 @@
                             <input type="date" name="endDate" id="endDate"/>
                         </div>
                     </div>
-                    <div class="span4">
+                    <div class="span5">
                         <div class="span6">
                             <h5>Status</h5>
                         </div>
@@ -61,7 +61,7 @@
                             </c:forEach>
                         </div>
                     </div>
-                    <div  class="span7">
+                    <div  class="span2">
                         <div class="span1"></div>    
                         <button type="submit" class="btn btn-success">Search Order Date</button>                         
                     </div>

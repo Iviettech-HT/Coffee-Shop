@@ -7,6 +7,7 @@
                 http://www.springframework.org/schema/security
                 http://www.springframework.org/schema/security/spring-security-4.2.xsd
 ">
+    <security:global-method-security pre-post-annotations="enabled"/>
     <security:authentication-manager>
         <security:authentication-provider ref="authentication" />
         
@@ -36,9 +37,23 @@
         <security:intercept-url pattern="/user/*" 
                                 access="hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_MANAGER')" />
         <security:intercept-url pattern="/seller/*" 
-                                access="hasAnyRole('ROLE_SELLER','ROLE_ADMIN','ROLE_MANAGER')" />
-        <security:intercept-url pattern="/admin/*" 
-                                access="hasAnyRole('ROLE_ADMIN','ROLE_SELLER','ROLE_MANAGER')" />
+                                access="hasAnyRole('ROLE_SELLER','ROLE_MANAGER')" />
+        <security:intercept-url pattern="/admin/account/*" 
+                                access="hasRole('ROLE_ADMIN')" />
+        
+        
+        <security:intercept-url pattern="/admin/category/category" 
+                                access="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER','ROLE_SELLER')" />
+        
+        <security:intercept-url pattern="/admin/category/*" 
+                                access="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')" />
+        <security:intercept-url pattern="/admin/product/*" 
+                                access="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')" />
+        <security:intercept-url pattern="/admin/promotion/*" 
+                                access="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')" />
+        <security:intercept-url pattern="/admin/order/*" 
+                                access="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER','ROLE_SELLER')" />
+        
     </security:http>
     
     

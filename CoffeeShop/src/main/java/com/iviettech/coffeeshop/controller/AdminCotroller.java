@@ -46,6 +46,7 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.POST;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ResourceLoaderAware;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -291,7 +292,7 @@ public class AdminCotroller implements ResourceLoaderAware {
         }
 
     }
-
+    
     @RequestMapping(value = {"/category/edit-category/{id}"})
     public String editCategory(Model model,
             @PathVariable("id") int id
@@ -300,7 +301,9 @@ public class AdminCotroller implements ResourceLoaderAware {
         model.addAttribute("action", "category/edit-category");
         return "admin/add-category-form";
     }
-
+    
+    
+    @PreAuthorize("!hasRole('ROLE_SELLER')")
     @RequestMapping(value = {"/category/disable-category/{id}"})
     public String disableCategory(Model model,
             @PathVariable("id") int Id) {
@@ -308,6 +311,8 @@ public class AdminCotroller implements ResourceLoaderAware {
         return "redirect:/admin/category/category";
     }
 
+    
+    @PreAuthorize("!hasRole('ROLE_SELLER')")
     @RequestMapping(value = {"/category/enable-category/{id}"})
     public String enableCategory(Model model,
             @PathVariable("id") int Id) {

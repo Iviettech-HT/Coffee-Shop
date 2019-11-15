@@ -34,7 +34,7 @@
 
         <div id="content">
             <div id="content-header">
-                <div id="breadcrumb"> <a href = "<c:url value = "/admin/home"/>" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href = "<c:url value = "/admin/product"/>" class="tip-bottom">Product</a> <a href="#" class="current"> Add Product</a> </div>
+                <div id="breadcrumb"> <a href = "<c:url value = "/admin/home/home"/>" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href = "<c:url value = "/admin/product/product"/>" class="tip-bottom">Product</a> <a href="#" class="current"> Add Product</a> </div>
                 <h1>Products</h1>
             </div>
             <div class="container-fluid">
@@ -47,8 +47,8 @@
                                 <h5>Personal-info</h5>
                             </div>
                             <div class="widget-content nopadding">
-                                <mvc:form action="${pageContext.request.contextPath}/admin/add-product" method="post" class="form-horizontal" modelAttribute="product" enctype="multipart/form-data">
-                                    <c:if test="${action eq 'edit-product'}">
+                                <mvc:form action="${pageContext.request.contextPath}/admin/product/add-product" method="post" class="form-horizontal" modelAttribute="product" enctype="multipart/form-data">
+                                    <c:if test="${action eq 'product/edit-product'}">
                                         <input type="hidden" name="id" value="${product.id}"  />
                                     </c:if>
 
@@ -121,7 +121,7 @@
                                         </div>
                                     </div>
 
-                                    <c:if test="${action == 'edit-product'}">
+                                    <c:if test="${action == 'product/edit-product'}">
                                         <c:if test="${product.images.size() != 0}"> 
                                             <div class="control-group">
 
@@ -140,7 +140,7 @@
                                                     <div class="span5"></div>
                                                     <!--                                                    <a class="btn btn-xs" id="change-image" >Change Image</a>-->
                                                     <div>
-                                                        <a class="btn-danger btn-xs" href = '<c:url value="/admin/delete-image/${product.id}"/>'>Delete Product</a>
+                                                        <a class="btn-danger btn-xs" href = '<c:url value="/admin/product/delete-image/${product.id}"/>'>Delete Product</a>
                                                     </div>
                                                 </div>
                                                 <div class="text"></div>
@@ -160,7 +160,7 @@
                                         </div>
 
                                     </c:if>
-                                    <c:if test="${action != 'edit-product'}">                                        
+                                    <c:if test="${action != 'product/edit-product'}">                                        
                                         <div class="control-group">
                                             <label class="control-label">Image :</label>
                                             <div class="controls">

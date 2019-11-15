@@ -90,7 +90,7 @@ public class AdminCotroller implements ResourceLoaderAware {
     private ResourceLoader resourceLoader;
 
 //-----Home----------------------------------------
-    @RequestMapping(value = {"/*", "/home"})
+    @RequestMapping(value = {"/*", "/home/home"})
     public String viewAdmin(Model model) {
         model.addAttribute("order", orderService.getOrdersByStatus(OrderStatus.NEW));
         model.addAttribute("order1", orderService.getOrdersByStatus(OrderStatus.MAKING));
@@ -101,23 +101,23 @@ public class AdminCotroller implements ResourceLoaderAware {
     }
 //-----Product--------------------------------------------
 
-    @RequestMapping(value = {"/product"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/product/product"}, method = RequestMethod.GET)
     public String product(Model model) {
         List<ProductEntity> product = productService.getProducts();
         model.addAttribute("products", productService.getProducts());
         return "admin/product";
     }
 
-    @RequestMapping(value = {"/add-product"})
+    @RequestMapping(value = {"/product/add-product"})
     public String viewForm(Model model) {
         model.addAttribute("product", new ProductEntity());
         model.addAttribute("sizes", sizeService.findSizes());
         model.addAttribute("categories", categoryService.getCategoryByStatus());
-        model.addAttribute("action", "add-product");
+        model.addAttribute("action", "/product/add-product");
         return "admin/add-product-form";
     }
 
-    @RequestMapping(value = "/add-product", method = RequestMethod.POST)
+    @RequestMapping(value = "/product/add-product", method = RequestMethod.POST)
     public String addProduct(Model model,
             @ModelAttribute("product") ProductEntity product,
             @RequestParam(name = "file", required = false) MultipartFile[] images,
@@ -181,7 +181,7 @@ public class AdminCotroller implements ResourceLoaderAware {
             product.setImages(listImage);
             model.addAttribute("product", product);
             productService.addProduct(product);
-            return "redirect:/admin/product";
+            return "redirect:/admin/product/product";
         } else {
             if (product.getId() == 0) {
                 model.addAttribute("messageError", messageError);
@@ -192,7 +192,7 @@ public class AdminCotroller implements ResourceLoaderAware {
                 model.addAttribute("product", productService.getProductById(product.getId()));
                 model.addAttribute("sizes", sizeService.findSizes());
                 model.addAttribute("categories", categoryService.getCategories());
-                model.addAttribute("action", "edit-product");
+                model.addAttribute("action", "product/edit-product");
             }
             return "admin/add-product-form";
         }
@@ -205,68 +205,68 @@ public class AdminCotroller implements ResourceLoaderAware {
         this.resourceLoader = resourceLoader;
     }
 
-    @RequestMapping(value = {"/edit-product/{id}"})
+    @RequestMapping(value = {"/product/edit-product/{id}"})
     public String editProduct(Model model,
             @PathVariable("id") int Id
     ) {
         model.addAttribute("product", productService.getProductById(Id));
         model.addAttribute("sizes", sizeService.findSizes());
         model.addAttribute("categories", categoryService.getCategories());
-        model.addAttribute("action", "edit-product");
+        model.addAttribute("action", "product/edit-product");
         return "admin/add-product-form";
     }
 
-    @RequestMapping(value = "/edit-product/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/product/edit-product/{id}", method = RequestMethod.POST)
     public String saveProduct(Model model,
             @PathVariable("id") int Id) {
         ProductEntity product = productService.getProductById(Id);
         productService.saveProduct(product);
-        return "redirect:admin/product";
+        return "redirect:admin/product/product";
     }
 
-    @RequestMapping(value = {"/delete-image/{id}"})
+    @RequestMapping(value = {"/product/delete-image/{id}"})
     public String deleteImage(Model model,
             @PathVariable("id") int Id
     ) {
         imageService.deleteImageByProductId(Id);
-        return "redirect:/admin/edit-product/" + Id;
+        return "redirect:/admin/product/edit-product/" + Id;
     }
 
-    @RequestMapping(value = {"/disable-product/{id}"})
+    @RequestMapping(value = {"/product/disable-product/{id}"})
     public String delteteProduct(Model model,
             @PathVariable("id") int Id) {
         ProductEntity product = productService.getProductById(Id);
         product.setStatus(false);
         productService.saveProduct(product);
-        return "redirect:/admin/product";
+        return "redirect:/admin/product/product";
     }
 
-    @RequestMapping(value = {"/enable-product/{id}"})
+    @RequestMapping(value = {"/product/enable-product/{id}"})
     public String enableProduct(Model model,
             @PathVariable("id") int Id) {
         ProductEntity product = productService.getProductById(Id);
         product.setStatus(true);
         productService.saveProduct(product);
-        return "redirect:/admin/product";
+        return "redirect:/admin/product/product";
     }
 //-----Category---------------------------------
 
-    @RequestMapping(value = {"/category"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/category/category"}, method = RequestMethod.GET)
     public String viewCategory(Model model
     ) {
         model.addAttribute("category", categoryService.getCategories());
         return "admin/category";
     }
 
-    @RequestMapping(value = {"/add-category"})
+    @RequestMapping(value = {"/category/add-category"})
     public String addCategory(Model model
     ) {
         model.addAttribute("category", new CategoryEntity());
-        model.addAttribute("action", "save-category");
+        model.addAttribute("action", "/category/save-category");
         return "admin/add-category-form";
     }
 
-    @RequestMapping(value = "/save-category", method = RequestMethod.POST)
+    @RequestMapping(value = "/category/save-category", method = RequestMethod.POST)
     public String saveCategory(Model model,
             @ModelAttribute("category") CategoryEntity category
     ) {
@@ -279,7 +279,7 @@ public class AdminCotroller implements ResourceLoaderAware {
         if (isValidated) {
             model.addAttribute("category", category);
             categoryService.addCategory(category);
-            return "redirect:/admin/category";
+            return "redirect:/admin/category/category";
         } else {
             if (category.getId() == 0) {
                 model.addAttribute("messageError", messageError);
@@ -292,38 +292,38 @@ public class AdminCotroller implements ResourceLoaderAware {
 
     }
 
-    @RequestMapping(value = {"/edit-category/{id}"})
+    @RequestMapping(value = {"/category/edit-category/{id}"})
     public String editCategory(Model model,
             @PathVariable("id") int id
     ) {
         model.addAttribute("category", categoryService.findCategory(id));
-        model.addAttribute("action", "edit-category");
+        model.addAttribute("action", "category/edit-category");
         return "admin/add-category-form";
     }
 
-    @RequestMapping(value = {"/disable-category/{id}"})
+    @RequestMapping(value = {"/category/disable-category/{id}"})
     public String disableCategory(Model model,
             @PathVariable("id") int Id) {
         CategoryEntity category = categoryService.changeStatus(Id, false);
-        return "redirect:/admin/category";
+        return "redirect:/admin/category/category";
     }
 
-    @RequestMapping(value = {"/enable-category/{id}"})
+    @RequestMapping(value = {"/category/enable-category/{id}"})
     public String enableCategory(Model model,
             @PathVariable("id") int Id) {
         CategoryEntity category = categoryService.changeStatus(Id, true);
-        return "redirect:/admin/category";
+        return "redirect:/admin/category/category";
     }
 
 //-----Promotion---------------------------------
-    @RequestMapping(value = {"/promotion"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/promotion/promotion"}, method = RequestMethod.GET)
     public String viewPromotion(Model model
     ) {
         model.addAttribute("promotion", promotionService.findPromotion());
         return "admin/promotion";
     }
 
-    @RequestMapping(value = {"/detail-promotion/{id}"})
+    @RequestMapping(value = {"/promotion/detail-promotion/{id}"})
     public String promotionDetail(Model model,
             @PathVariable("id") int id) {
         model.addAttribute("promotion", promotionService.findPromotionById(id));
@@ -331,14 +331,14 @@ public class AdminCotroller implements ResourceLoaderAware {
         return "admin/promotion-detail";
     }
 
-    @RequestMapping(value = {"/add-promotion"})
+    @RequestMapping(value = {"/promotion/add-promotion"})
     public String addPromotion(Model model) {
         model.addAttribute("promotion", new PromotionEntity());
-        model.addAttribute("action", "add-promotion");
+        model.addAttribute("action", "promotion/add-promotion");
         return "admin/promotion-form";
     }
 
-    @RequestMapping(value = "/add-promotion", method = RequestMethod.POST)
+    @RequestMapping(value = "/promotion/add-promotion", method = RequestMethod.POST)
     public String savePromotion(Model model,
             @ModelAttribute("promotion") PromotionEntity promotion,
             @RequestParam(name = "file", required = false) MultipartFile image,
@@ -392,59 +392,59 @@ public class AdminCotroller implements ResourceLoaderAware {
         if (isValidated) {            
             model.addAttribute("promotion", promotion);
             promotionService.addPromotion(promotion);
-            return "redirect:/admin/promotion";
+            return "redirect:/admin/promotion/promotion";
         } else {
             if (promotion.getId() == 0) {
                 model.addAttribute("errorMessage", errorMessage);
             } else {
                 model.addAttribute("messageError", errorMessage);
                 model.addAttribute("promotion", promotionService.findPromotionById(promotion.getId()));
-                model.addAttribute("action", "edit-promotion");
+                model.addAttribute("action", "promotion/edit-promotion");
             }
             return "admin/promotion-form";
         }
     }
 
-    @RequestMapping(value = {"/edit-promotion/{id}"})
+    @RequestMapping(value = {"/promotion/edit-promotion/{id}"})
     public String editPromotion(Model model,
             @PathVariable("id") int id
     ) {
         model.addAttribute("promotion", promotionService.getPromotion(id));
-        model.addAttribute("action", "edit-promotion");
+        model.addAttribute("action", "promotion/edit-promotion");
         return "admin/promotion-form";
     }
 
-    @RequestMapping(value = {"/disable-promotion/{id}"})
+    @RequestMapping(value = {"/promotion/disable-promotion/{id}"})
     public String disablePromotion(Model model,
             @PathVariable("id") int Id
     ) {
         PromotionEntity promotion = promotionService.getPromotion(Id);
         promotion.setStatus(false);
         promotionService.addPromotion(promotion);
-        return "redirect:/admin/promotion";
+        return "redirect:/admin/promotion/promotion";
     }
 
-    @RequestMapping(value = {"/enable-promotion/{id}"})
+    @RequestMapping(value = {"/promotion/enable-promotion/{id}"})
     public String enablePromotion(Model model,
             @PathVariable("id") int Id
     ) {
         PromotionEntity promotion = promotionService.getPromotion(Id);
         promotion.setStatus(true);
         promotionService.addPromotion(promotion);
-        return "redirect:/admin/promotion";
+        return "redirect:/admin/promotion/promotion";
     }
 
-    @RequestMapping(value = {"/promotionForProduct/{id}"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/promotion/promotionForProduct/{id}"}, method = RequestMethod.GET)
     public String promotionForProduct(Model model,
             @PathVariable("id") int Id
     ) {
         model.addAttribute("promotion", promotionService.findPromotionById(Id));
         model.addAttribute("product", productService.findProducts());
-        model.addAttribute("action", "promotionForProduct");
+        model.addAttribute("action", "promotion/promotionForProduct");
         return "admin/promotionForProduct";
     }
 
-    @RequestMapping(value = {"/promotionForProduct"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/promotion/promotionForProduct"}, method = RequestMethod.POST)
     public String savePromotionForProduct(Model model,
             @RequestParam("id") int id,
             @RequestParam(name = "productTemp", required = false) List<Integer> prodpuctIds
@@ -456,7 +456,7 @@ public class AdminCotroller implements ResourceLoaderAware {
         } catch (Exception ex) {
             promotion.setProducts(products);
             promotionService.addPromotion(promotion);
-            return "redirect:/admin/promotion";
+            return "redirect:/admin/promotion/promotion";
         }
         for (int productId : prodpuctIds) {
             ProductEntity product = productService.getProductById(productId);
@@ -464,11 +464,11 @@ public class AdminCotroller implements ResourceLoaderAware {
         }
         promotion.setProducts(products);
         promotionService.addPromotion(promotion);
-        return "redirect:/admin/promotion";
+        return "redirect:/admin/promotion/promotion";
     }
 
 //----Orders----------------------------------------------------------------------
-    @RequestMapping("/order")
+    @RequestMapping("/order/order")
     public String getOrder(Model model
     ) {
         double total = 0;
@@ -483,7 +483,7 @@ public class AdminCotroller implements ResourceLoaderAware {
         return "admin/order";
     }
 
-    @RequestMapping("/new-order")
+    @RequestMapping("/order/new-order")
     public String getNewOrder(Model model
     ) {
         model.addAttribute("os", OrderStatus.values());
@@ -491,7 +491,7 @@ public class AdminCotroller implements ResourceLoaderAware {
         return "admin/order";
     }
 
-    @RequestMapping("/making-order")
+    @RequestMapping("/order/making-order")
     public String getMakingOrder(Model model
     ) {
         model.addAttribute("os", OrderStatus.values());
@@ -499,7 +499,7 @@ public class AdminCotroller implements ResourceLoaderAware {
         return "admin/order";
     }
 
-    @RequestMapping("/shipping-order")
+    @RequestMapping("/order/shipping-order")
     public String getShipingOrder(Model model
     ) {
         model.addAttribute("os", OrderStatus.values());
@@ -507,7 +507,7 @@ public class AdminCotroller implements ResourceLoaderAware {
         return "admin/order";
     }
 
-    @RequestMapping("/cancel-order")
+    @RequestMapping("/order/cancel-order")
     public String getCancelOrder(Model model
     ) {
         model.addAttribute("os", OrderStatus.values());
@@ -515,7 +515,7 @@ public class AdminCotroller implements ResourceLoaderAware {
         return "admin/order";
     }
 
-    @RequestMapping("/done-order")
+    @RequestMapping("/order/done-order")
     public String getDoneOrder(Model model
     ) {
         double total = 0;
@@ -530,7 +530,7 @@ public class AdminCotroller implements ResourceLoaderAware {
         return "admin/order";
     }
 
-    @RequestMapping("/orderDetail/{id}")
+    @RequestMapping("/order/orderDetail/{id}")
     public String getOrderDetails(Model model,
             @PathVariable("id") int Id
     ) {
@@ -540,7 +540,7 @@ public class AdminCotroller implements ResourceLoaderAware {
         return "admin/orderDetail";
     }
 
-    @RequestMapping(value = {"/searchOrder"})
+    @RequestMapping(value = {"/order/searchOrder"})
     public String searchOrder(Model model,
             @RequestParam(name = "startDate") String startDate,
             @RequestParam(name = "endDate") String endDate,
@@ -599,7 +599,7 @@ public class AdminCotroller implements ResourceLoaderAware {
         return this.getOrder(model);
     }
 
-    @RequestMapping(value = {"/change-order/{id}"})
+    @RequestMapping(value = {"/order/change-order/{id}"})
     public String changeOrder(Model model,
             @PathVariable("id") int Id
     ) {
@@ -607,32 +607,32 @@ public class AdminCotroller implements ResourceLoaderAware {
         if (order.getStatus() == OrderStatus.NEW) {
             order.setStatus(OrderStatus.MAKING);
             orderService.addOrder(order);
-            return "redirect:/admin/making-order";
+            return "redirect:/admin/order/making-order";
         } else {
             if (order.getStatus() == OrderStatus.MAKING) {
                 order.setStatus(OrderStatus.SHIPPING);
                 order.setShippingDate(new Date());
                 orderService.addOrder(order);
-                return "redirect:/admin/shipping-order";
+                return "redirect:/admin/order/shipping-order";
             } else {
                 order.setStatus(OrderStatus.DONE);
                 orderService.addOrder(order);
-                return "redirect:/admin/done-order";
+                return "redirect:/admin/order/done-order";
             }
         }
     }
 
-    @RequestMapping(value = {"/cancel-order/{id}"})
+    @RequestMapping(value = {"/order/cancel-order/{id}"})
     public String cancelOrder(Model model,
             @PathVariable("id") int Id
     ) {
         OrderEntity order = orderService.findOrder(Id);
         order.setStatus(OrderStatus.CANCELED);
         orderService.addOrder(order);
-        return "redirect:/admin/order";
+        return "redirect:/admin/order/order";
     }
 
-    @RequestMapping(value = {"/export-file"})
+    @RequestMapping(value = {"/order/export-file"})
     public ModelAndView reportExcel(HttpSession session
     ) {
         ModelAndView newView = new ModelAndView("ExcelView");
@@ -647,44 +647,44 @@ public class AdminCotroller implements ResourceLoaderAware {
     }
 //----Account----------------------------------------------------------------------
 
-    @RequestMapping("/account")
+    @RequestMapping("/account/account")
     public String getAccount(Model model
     ) {
         model.addAttribute("account", accountService.findAllAccount());
         return "admin/account";
     }
 
-    @RequestMapping(value = {"/disable-account/{id}"})
+    @RequestMapping(value = {"/account/disable-account/{id}"})
     public String disableAccount(Model model,
             @PathVariable("id") int Id
     ) {
         AccountEntity account = accountService.findAccountById(Id);
         account.setStatus(false);
         accountService.addAccount(account);
-        return "redirect:/admin/account";
+        return "redirect:/admin/account/account";
     }
 
-    @RequestMapping(value = {"/enable-account/{id}"})
+    @RequestMapping(value = {"/account/enable-account/{id}"})
     public String enableAccount(Model model,
             @PathVariable("id") int Id
     ) {
         AccountEntity account = accountService.findAccountById(Id);
         account.setStatus(true);
         accountService.addAccount(account);
-        return "redirect:/admin/account";
+        return "redirect:/admin/account/account";
     }
 
-    @RequestMapping(value = {"/promote-account/{id}"})
+    @RequestMapping(value = {"/account/promote-account/{id}"})
     public String promoteAccount(Model model,
             @PathVariable("id") int Id
     ) {
         model.addAttribute("roles", roleService.findAllRoles());
         model.addAttribute("account", accountService.findAccountById(Id));
-        model.addAttribute("action", "update-promote-account");
+        model.addAttribute("action", "account/update-promote-account");
         return "admin/promote";
     }
 
-    @RequestMapping(value = {"/update-promote-account"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/account/update-promote-account"}, method = RequestMethod.POST)
     public String promoteAccount(Model model,
             @ModelAttribute("account") AccountEntity account,
             @RequestParam(name = "roleTemp", required = false) List<Integer> roleIds
@@ -705,12 +705,12 @@ public class AdminCotroller implements ResourceLoaderAware {
         }
         if (isValidated) {
             accountService.addAccount(account);
-            return "redirect:/admin/account";
+            return "redirect:/admin/account/account";
         } else {
             model.addAttribute("messageError", messageError);
             model.addAttribute("account", accountService.findAccountById(account.getId()));
             model.addAttribute("roles", roleService.findAllRoles());
-            model.addAttribute("action", "promote-account");
+            model.addAttribute("action", "account/promote-account");
         }
         return "admin/promote";
     }

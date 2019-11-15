@@ -33,7 +33,7 @@
 
         <div id="content">
             <div id="content-header">
-                <div id="breadcrumb"> <a href = "<c:url value = "/admin/home"/>" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href = "<c:url value = "/admin/promotion"/>" class="tip-bottom">Promotion</a> <a href="#" class="current">Promotion for Product</a> </div>
+                <div id="breadcrumb"> <a href = "<c:url value = "/admin/home/home"/>" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href = "<c:url value = "/admin/promotion/promotion"/>" class="tip-bottom">Promotion</a> <a href="#" class="current">Promotion for Product</a> </div>
                 <h1>Promotion</h1>
             </div>
             <div class="container-fluid">
@@ -41,7 +41,7 @@
                 <div class="row-fluid">
                     <div class="span12"> 
                         <mvc:form action="${pageContext.request.contextPath}/admin/${action}" method="post" class="form-horizontal">
-                            <c:if test="${action eq 'promotionForProduct'}">
+                            <c:if test="${action eq 'promotion/promotionForProduct'}">
                                 <input type="hidden" name="id" value="${promotion.id}"  />
                             </c:if>
                             <div class="widget-content nopadding">   

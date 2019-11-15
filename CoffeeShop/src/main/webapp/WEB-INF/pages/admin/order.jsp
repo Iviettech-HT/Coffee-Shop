@@ -33,12 +33,12 @@
 
         <div id="content">
             <div id="content-header">
-                <div id="breadcrumb"> <a href = "<c:url value = "/admin/home"/>" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Orders</a> </div>
+                <div id="breadcrumb"> <a href = "<c:url value = "/admin/home/home"/>" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#" class="current">Orders</a> </div>
                 <h1>Orders</h1>
             </div>
             <div class="container-fluid">
                 <hr>  
-                <mvc:form action="${pageContext.request.contextPath}/admin/searchOrder" method="GET"  class="form-horizontal">
+                <mvc:form action="${pageContext.request.contextPath}/admin/order/searchOrder" method="GET"  class="form-horizontal">
                     <div class="span5">
                         <div class="span6">
                             <h5>Date</h5>
@@ -100,12 +100,12 @@
                                                 <td>${o.status}</td>
                                                 <td>
                                                     <button type="button" class="btn btn-primary btn-sm"
-                                                            onclick="location.href = '<c:url value="/admin/orderDetail/${o.id}"/>'">Order Detail</button>
+                                                            onclick="location.href = '<c:url value="/admin/order/orderDetail/${o.id}"/>'">Order Detail</button>
                                                     <c:if test="${o.status != 'DONE' && o.status != 'CANCELED' }">
                                                         <button type="button" class="btn btn-primary btn-sm"
-                                                                onclick="location.href = '<c:url value="/admin/change-order/${o.id}"/>'">Change</button>
+                                                                onclick="location.href = '<c:url value="/admin/order/change-order/${o.id}"/>'">Change</button>
                                                         <button type="button" class="btn btn-danger btn-sm"
-                                                                onclick="location.href = '<c:url value="/admin/cancel-order/${o.id}"/>'">Cancel</button>
+                                                                onclick="location.href = '<c:url value="/admin/order/cancel-order/${o.id}"/>'">Cancel</button>
 
                                                     </c:if>
                                                 </td>                                           

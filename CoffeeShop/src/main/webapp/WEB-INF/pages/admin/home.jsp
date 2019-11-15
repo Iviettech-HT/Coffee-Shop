@@ -42,11 +42,11 @@
             <div class="container-fluid">
                 <div class="quick-actions_homepage">
                     <ul class="quick-actions">
-                        <li class="bg_lb"> <a href = "<c:url value = "/admin/new-order"/>"> <i class="icon-dashboard"></i> <span class="label label-important">${order.size()}</span> New Order </a> </li>
-                        <li class="bg_ly"> <a href = "<c:url value = "/admin/making-order"/>"> <i class="icon-inbox"></i><span class="label label-success">${order1.size()}</span> Making </a> </li>                        
-                        <li class="bg_ls"> <a href = "<c:url value = "/admin/shipping-order"/>"> <i class="icon-fullscreen"><span class="label label-success">${order2.size()}</span></i> Shipping</a> </li>
-                        <li class="bg_lo"> <a href = "<c:url value = "/admin/cancel-order"/>"> <i class="icon-info-sign"><span class="label label-important">${order3.size()}</span></i> Cancel</a> </li>
-                        <li class="bg_lg span3"> <a href = "<c:url value = "/admin/new-order"/>"> <i class="icon-signal"><span class="label label-important">${order4.size()}</span></i> Done</a> </li>
+                        <li class="bg_lb"> <a href = "<c:url value = "/admin/order/new-order"/>"> <i class="icon-dashboard"></i> <span class="label label-important">${order.size()}</span> New Order </a> </li>
+                        <li class="bg_ly"> <a href = "<c:url value = "/admin/order/making-order"/>"> <i class="icon-inbox"></i><span class="label label-success">${order1.size()}</span> Making </a> </li>                        
+                        <li class="bg_ls"> <a href = "<c:url value = "/admin/order/shipping-order"/>"> <i class="icon-fullscreen"><span class="label label-success">${order2.size()}</span></i> Shipping</a> </li>
+                        <li class="bg_lo"> <a href = "<c:url value = "/admin/order/cancel-order"/>"> <i class="icon-info-sign"><span class="label label-important">${order3.size()}</span></i> Cancel</a> </li>
+                        <li class="bg_lg"> <a href = "<c:url value = "/admin/order/new-order"/>"> <i class="icon-signal"><span class="label label-important">${order4.size()}</span></i> Done</a> </li>
                     </ul>
                 </div>
 

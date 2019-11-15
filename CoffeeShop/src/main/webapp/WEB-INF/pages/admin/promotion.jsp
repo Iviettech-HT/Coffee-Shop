@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <html lang="en">
     <head>
@@ -76,24 +76,24 @@
                                                 <td>${pr.status}</td>
                                                 <td>
                                                     <div>
-                                                        <button type="button" class="btn btn-primary btn-sm"
-                                                                onclick="location.href = '<c:url value="/admin/promotion/edit-promotion/${pr.id}"/>'">Edit</button>
-                                                        <c:if test="${pr.status == false}">
+                                                        <sec:authorize access="!hasRole('ROLE_SELLER')">
+                                                            <button type="button" class="btn btn-primary btn-sm"
+                                                                    onclick="location.href = '<c:url value="/admin/promotion/edit-promotion/${pr.id}"/>'">Edit</button>
+                                                            <c:if test="${pr.status == false}">
+                                                                <button type="button" class="btn btn-success btn-sm"
+                                                                        onclick="location.href = '<c:url value="/admin/promotion/enable-promotion/${pr.id}"/>'">Enable</button>
+                                                            </c:if>
+                                                            <c:if test="${pr.status == true}">
+                                                                <button type="button" class="btn btn-danger btn-sm"
+                                                                        onclick="location.href = '<c:url value="/admin/promotion/disable-promotion/${pr.id}"/>'">Disable</button>
+                                                            </c:if>
                                                             <button type="button" class="btn btn-success btn-sm"
-                                                                    onclick="location.href = '<c:url value="/admin/promotion/enable-promotion/${pr.id}"/>'">Enable</button>
-                                                        </c:if>
-                                                        <c:if test="${pr.status == true}">
-                                                            <button type="button" class="btn btn-danger btn-sm"
-                                                                    onclick="location.href = '<c:url value="/admin/promotion/disable-promotion/${pr.id}"/>'">Disable</button>
-                                                        </c:if>
-                                                        <button type="button" class="btn btn-success btn-sm"
-                                                                onclick="location.href = '<c:url value="/admin/promotion/promotionForProduct/${pr.id}"/>'">Add Product</button>
+                                                                    onclick="location.href = '<c:url value="/admin/promotion/promotionForProduct/${pr.id}"/>'">Add Product</button>
+                                                        </sec:authorize>
                                                         <button type="button" class="btn btn-primary btn-sm"
                                                                 onclick="location.href = '<c:url value="/admin/promotion/detail-promotion/${pr.id}"/>'">List Product</button>
-
                                                     </div>
-                                                </td>                                           
-
+                                                </td>
                                             </tr>
                                         </c:forEach>
                                     </tbody>

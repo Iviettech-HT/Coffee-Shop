@@ -302,8 +302,6 @@ public class AdminCotroller implements ResourceLoaderAware {
         return "admin/add-category-form";
     }
     
-    
-    @PreAuthorize("!hasRole('ROLE_SELLER')")
     @RequestMapping(value = {"/category/disable-category/{id}"})
     public String disableCategory(Model model,
             @PathVariable("id") int Id) {
@@ -312,7 +310,6 @@ public class AdminCotroller implements ResourceLoaderAware {
     }
 
     
-    @PreAuthorize("!hasRole('ROLE_SELLER')")
     @RequestMapping(value = {"/category/enable-category/{id}"})
     public String enableCategory(Model model,
             @PathVariable("id") int Id) {

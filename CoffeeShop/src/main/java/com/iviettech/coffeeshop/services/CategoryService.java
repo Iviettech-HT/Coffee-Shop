@@ -28,7 +28,7 @@ public class CategoryService {
     public List<CategoryEntity> getCategories(){
         return (List<CategoryEntity>) categoryRepository.findAll();
     }
-
+    
     public void addCategory(CategoryEntity category) {
         category.setProducts(null);
         categoryRepository.save(category);

@@ -10,7 +10,7 @@
     <ul>
 
         <sec:authorize access="isAuthenticated()">
-            <li class="active"><a href = "<c:url value = "/admin/home/home"/>"><i class="icon icon-home"></i> <span>Dashboard</span></a> </li>
+            <li><a href = "<c:url value = "/admin/home/home"/>"><i class="icon icon-home"></i> <span>Dashboard</span></a> </li>
             <li> <a href = "<c:url value = "/admin/category/category"/>"><i class="icon icon-signal"></i> <span>Category</span></a> </li>
             <li> <a href="<c:url value = "/admin/product/product"/>"><i class="icon icon-inbox"></i> <span>Product</span></a> </li>
             <li> <a href="<c:url value = "/admin/promotion/promotion"/>"><i class="icon icon-star"></i><span>Promotion</span> </a> </li>

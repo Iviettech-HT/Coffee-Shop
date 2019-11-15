@@ -44,6 +44,10 @@
         
         <security:intercept-url pattern="/admin/category/category" 
                                 access="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER','ROLE_SELLER')" />
+        <security:intercept-url pattern="/admin/product/product" 
+                                access="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER','ROLE_SELLER')" />
+        <security:intercept-url pattern="/admin/promotion/promotion" 
+                                access="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER','ROLE_SELLER')" />
         
         <security:intercept-url pattern="/admin/category/*" 
                                 access="hasAnyRole('ROLE_ADMIN','ROLE_MANAGER')" />

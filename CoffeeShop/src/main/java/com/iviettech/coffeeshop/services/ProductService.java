@@ -36,14 +36,16 @@ public class ProductService {
     @Autowired
     private VoteRepository voteRepository;
     @Autowired
+    private FavoriteService favoriteService;
+    @Autowired
     private PromotionRepository promotionRepository;
     @Autowired
     private SizeRepository sizeRepository;
-    
-    public ProductEntity findProduct(int id){
+
+    public ProductEntity findProduct(int id) {
         return productRepository.findOne(id);
     }
-    
+
     public ProductEntity getProductByIdAndSizeId(int id, int sizeId) {
         ProductEntity product = productRepository.findOne(id);
         Set<SizeEntity> sizes = new HashSet<>();
@@ -54,8 +56,8 @@ public class ProductService {
         product.setPromotions(promotionRepository.getPromotionsByProductId(product.getId(), new Date()));
         return product;
     }
-    
-    public ProductEntity getProductById(int id){
+
+    public ProductEntity getProductById(int id) {
         ProductEntity product = productRepository.findOne(id);
         product.setSizes(sizeRepository.getSizesByProductId(product.getId()));
         product.setImages(imageRepository.getImagesByProductId(product.getId()));
@@ -63,7 +65,7 @@ public class ProductService {
         product.setPromotions(promotionRepository.getPromotionsByProductId(product.getId(), new Date()));
         return product;
     }
-    
+
     public List<ProductEntity> getProducts() {
 
         List<ProductEntity> products = (List<ProductEntity>) productRepository.findAll();
@@ -87,8 +89,8 @@ public class ProductService {
         }
         return products;
     }
-    
-    public List<ProductEntity> getFavoriteProducts(int accountId){
+
+    public List<ProductEntity> getFavoriteProducts(int accountId) {
         List<ProductEntity> products = productRepository.getFavoriteProducts(accountId);
         for (ProductEntity product : products) {
             product.setSizes(sizeRepository.getSizesByProductId(product.getId()));
@@ -97,9 +99,9 @@ public class ProductService {
             product.setPromotions(promotionRepository.getPromotionsByProductId(product.getId(), new Date()));
         }
         return products;
-    } 
-    
-    public List<ProductEntity> searchProducts(String name){
+    }
+
+    public List<ProductEntity> searchProducts(String name) {
         name = '%' + name + '%';
         List<ProductEntity> products = productRepository.getProductsByName(name);
         for (ProductEntity product : products) {
@@ -110,7 +112,7 @@ public class ProductService {
         }
         return products;
     }
-    
+
     public List<ProductEntity> getBestProducts() {
         List<Integer> productIds = productRepository.getBestProducts();
         List<ProductEntity> products = new ArrayList<ProductEntity>();
@@ -146,14 +148,13 @@ public class ProductService {
         return (List<ProductEntity>) productRepository.findAll();
     }
 
-    public LinkedHashSet<ProductEntity> getProductByPromotionId(int id){
-        
+    public LinkedHashSet<ProductEntity> getProductByPromotionId(int id) {
+
         return (LinkedHashSet<ProductEntity>) productRepository.getProductsByPromotionId(id);
     }
-    
+
     public void saveProduct(ProductEntity product) {
         productRepository.save(product);
     }
-
 
 }

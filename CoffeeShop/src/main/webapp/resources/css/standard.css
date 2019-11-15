@@ -23,7 +23,7 @@ main{
 #go-to-top{
     position: fixed;
     z-index: 2;
-    right: 23px;
+    right: 1.5%;
     bottom: 15px;
 }
 #go-to-top{
@@ -85,7 +85,7 @@ header img:hover{cursor: pointer;}
 }
 
 .logo{
-    width: 25%;
+    width: 200px;
     height: 100%;
 }
 
@@ -97,7 +97,7 @@ header img:hover{cursor: pointer;}
     justify-content: flex-end;
 }
 .control > a{
-    width: 10em;
+    width: 8em;
     padding: 1%;
     margin: 0 1%;
     text-align: center;

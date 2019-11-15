@@ -96,12 +96,12 @@
                                 <c:set var="totalDiscount" value="${totalDiscount*(1 - promotion.discount)}"/>
                             </c:forEach>
                             <p class="product__item--price">
-                                <fmt:formatNumber type="number" pattern="###,###" value="${product.price + product.sizes.iterator().next().addition}"/>đ   
-                                <span style="color: red">
-                                    (-<fmt:formatNumber type="number" 
-                                                      pattern="###,###" 
-                                                      value="${Math.round(product.price + product.sizes.iterator().next().addition-totalDiscount)}"/>đ)
-                                </span>
+                                <span style="text-decoration: line-through; color: grey;"><fmt:formatNumber type="number" pattern="###,###" value="${product.price + product.sizes.toArray()[0].addition}"/>đ</span>
+                                <br>
+                                <span style="font-weight: 600;">
+                                    <fmt:formatNumber type="number" 
+                                                      pattern="###,###,###" 
+                                                      value="${totalDiscount}"/>đ</span>
                             </p>
                         </c:if>
                         <c:if test="${product.promotions.size() == 0}">
@@ -130,7 +130,12 @@
                                 <sec:authorize access="isAuthenticated()">
                                     <sec:authentication var="user" property="principal"/>
                                     <sec:authorize access="${user.status}">
-                                        <p class="favorite" id="btn-favorite-${product.id}" onclick="addToFavoriteProduct(${product.id})">Thêm vào yêu thích</p>
+                                        <c:if test="${product.favorites.size() == 0}">
+                                            <p class="favorite" id="btn-favorite-${product.id}" onclick="addToFavoriteProduct(${product.id})">Thêm vào yêu thích</p>
+                                        </c:if>
+                                        <c:if test="${product.favorites.size() > 0}">
+                                            <p class="favorite" id="btn-favorite-${product.id}" onclick="deleteFavoriteProductFromHome(${product.id})">Xóa khỏi yêu thích</p>
+                                        </c:if>
                                     </sec:authorize>
                                 </sec:authorize>
                             </div>
@@ -199,7 +204,11 @@
                 xhttp.send();
                 xhttp.onreadystatechange = () => {
                     if (xhttp.readyState == 4 && xhttp.status == 200) {
-                        document.getElementById('btn-favorite-' + productId).innerHTML += '(Đã thêm)';
+                        document.getElementById('btn-favorite-' + productId)
+                                .innerHTML = 'Xóa khỏi yêu thích';
+                        
+                        document.getElementById('btn-favorite-' + productId)
+                                .setAttribute("onclick", 'deleteFavoriteProductFromHome(' + productId + ')');
                     }
                 }
             }
@@ -214,6 +223,20 @@
                         if (document.getElementsByClassName('product')[0].innerText == "") {
                             document.getElementsByClassName('product')[0].innerHTML = "<h2>Không có sản phẩm nào</h2>"
                         }
+                    }
+                }
+            }
+            function deleteFavoriteProductFromHome(productId) {
+                xhttp = new XMLHttpRequest();
+                xhttp.open('GET', '${pageContext.request.contextPath}/user/xoa-san-pham-yeu-thich/' + productId, true);
+                xhttp.send();
+                xhttp.onreadystatechange = () => {
+                    if (xhttp.readyState == 4 && xhttp.status == 200) {
+                        document.getElementById('btn-favorite-' + productId)
+                                .innerHTML = 'Thêm vào yêu thích';
+                        
+                        document.getElementById('btn-favorite-' + productId)
+                                .setAttribute("onclick", 'addToFavoriteProduct(' + productId + ')');
                     }
                 }
             }

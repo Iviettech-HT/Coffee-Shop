@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <script>
     let goToTop = document.getElementById('go-to-top');
     let header = document.getElementsByTagName('header')[0];
@@ -26,10 +27,18 @@
 
     window.onscroll = function () {
         goToTop.style.transition = 'opacity 1s';
-        if (isInViewport(header)) {
-            goToTop.style.opacity = 0;
-        } else
-            goToTop.style.opacity = 1;
+        if (window.innerWidth > 768) {
+            if (isInViewport(header)) {
+                goToTop.style.opacity = 0;
+            } else
+                goToTop.style.opacity = 1;
+        }else{
+            if (isInViewport(document.getElementsByClassName("show-image")[0])) {
+                console.log("abc");
+                goToTop.style.opacity = 0;
+            } else
+                goToTop.style.opacity = 1;
+        }
     };
 
     window.onresize = function () {
@@ -52,7 +61,7 @@
     } else {
         logo.src = '${pageContext.request.contextPath}/resources/images/landingPage/logo.jpg'
     }
-
+    
     function displayMenu(id) {
         console.log(id);
         document.getElementById(id).style.display = 'flex';

@@ -22,6 +22,6 @@ public interface PromotionRepository extends CrudRepository<PromotionEntity, Int
             + "WHERE p.id = ?1 AND pr.endDate >= ?2 AND pr.startDate <= ?2")
     public Set<PromotionEntity> getPromotionsByProductId(int id, Date now);
     
-    @Query(value = "SELECT pr FROM PromotionEntity pr WHERE pr.endDate >= ?1 AND pr.startDate <= ?1")
+    @Query(value = "SELECT pr FROM PromotionEntity pr WHERE pr.endDate >= ?1 AND pr.startDate <= ?1 AND pr.status = true")
     public Set<PromotionEntity> getPromotionsAvailable(Date now);
 }

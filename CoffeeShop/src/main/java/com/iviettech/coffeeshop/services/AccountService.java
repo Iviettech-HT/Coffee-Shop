@@ -32,6 +32,9 @@ public class AccountService {
         return accountRepository.findByUsername(username);
     }
     
+    public AccountEntity findAccountByEmail(String email){
+        return accountRepository.findByEmail(email);
+    }
     public boolean isExistedUsername(String username){
         AccountEntity accountEntity = accountRepository.findByUsername(username);
         if(accountEntity != null)
@@ -55,6 +58,10 @@ public class AccountService {
     
     public AccountEntity addAccount(AccountEntity account){
         account.setPassword(passwordEncoder.encode(account.getPassword()));
+        return accountRepository.save(account);
+    }
+    
+    public AccountEntity updateAccount(AccountEntity account){
         return accountRepository.save(account);
     }
     

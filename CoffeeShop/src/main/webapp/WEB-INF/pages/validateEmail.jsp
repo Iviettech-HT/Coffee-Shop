@@ -33,7 +33,7 @@
             }
         </style>
         <div id="form">
-            <mvc:form action="${pageContext.request.contextPath}/xac-thuc-dang-ky" method="POST" modelAttribute="account" 
+            <mvc:form action="${pageContext.request.contextPath}/${action}" method="POST" modelAttribute="account" 
                       id="container">
                 <h1>XÁC THỰC EMAIL</h1>
                 <div class="group">

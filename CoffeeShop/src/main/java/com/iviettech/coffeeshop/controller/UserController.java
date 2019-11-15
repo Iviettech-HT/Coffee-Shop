@@ -67,6 +67,7 @@ public class UserController {
             @RequestParam(name = "reNewPassword", required = false) String reNewPassword) {
         AccountEntity currentAccount = (AccountEntity) a.getPrincipal();
         boolean isValidated = true;
+        
         String messageError = "";
         if (account.getName().isEmpty() || account.getEmail().isEmpty() || account.getPhone().isEmpty()) {
             messageError = "Vui lòng không bỏ trống";
@@ -87,7 +88,10 @@ public class UserController {
             isValidated = false;
         } else {
             currentAccount.setName(account.getName());
-            currentAccount.setEmail(account.getEmail());
+            if (!currentAccount.getEmail().equals(account.getEmail())) {
+                currentAccount.setEmail(account.getEmail());
+                currentAccount.setStatus(false);
+            }
             currentAccount.setPhone(account.getPhone());
             currentAccount.setAddress(account.getAddress());
         }
@@ -105,12 +109,12 @@ public class UserController {
                 messageError = "Nhập lại mật khẩu mới không khớp";
                 isValidated = false;
             } else {
-                currentAccount.setPassword(newPassword);
+                currentAccount.setPassword(passwordEncoder.encode(newPassword));
             }
         }
         if (isValidated) {
 //          Add existed account mean update
-            accountService.addAccount(currentAccount);
+            accountService.updateAccount(currentAccount);
             model.addAttribute("messageSuccess", "Cập nhật thành công");
         } else {
             model.addAttribute("messageError", messageError);
@@ -135,7 +139,7 @@ public class UserController {
         OrderEntity order = orderService.getOrderByIdAndAccountId(orderId, account.getId());
         List<OrderDetailEntity> orderDetails = orderDetailService.findByOrderId(order.getId());
         order.setOrderDetails(orderDetails);
-        
+
         model.addAttribute("order", order);
         model.addAttribute("customer", order.getCustomer());
         return "orderDetail";

@@ -64,7 +64,7 @@
                                 </c:forEach>
                                 <tr>
                                     <td colspan="7">
-                                        <a href="#" class="btn btn-success" id="btn-confirm">XÁC NHẬN</a>
+                                        <a href="<c:url value="/seller/dat-hang"/>" class="btn btn-success" id="btn-confirm">XÁC NHẬN</a>
                                         <a href="<c:url value="/seller/xuat-hoa-don"/>" 
                                            class="btn btn-primary" target="_blank"
                                            onclick="addHrefConfirmOrder()">XUẤT HÓA ĐƠN</a>

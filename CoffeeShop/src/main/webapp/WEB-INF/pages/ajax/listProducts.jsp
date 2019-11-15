@@ -33,16 +33,16 @@
                     <c:set var="totalDiscount" value="${totalDiscount*(1 - promotion.discount)}"/>
                 </c:forEach>
                 <p class="product__item--price">
-                    <fmt:formatNumber type="number" pattern="###,###" value="${product.price}"/>đ
-                    <span style="color: red">
-                        (-<fmt:formatNumber type="number" 
-                                          pattern="###,###" 
-                                          value="${Math.round(product.price-totalDiscount)}"/>đ)
-                    </span>
+                    <span style="text-decoration: line-through; color: grey;"><fmt:formatNumber type="number" pattern="###,###" value="${product.price + product.sizes.toArray()[0].addition}"/>đ</span>
+                    <br>
+                    <span style="font-weight: 600;">
+                        <fmt:formatNumber type="number" 
+                                          pattern="###,###,###" 
+                                          value="${totalDiscount}"/>đ</span>
                 </p>
             </c:if>
             <c:if test="${product.promotions.size() == 0}">
-                <p class="product__item--price">
+                <p class="product__item--price" style="font-weight: 600;">
                     <fmt:formatNumber type="number" pattern="###,###" value="${totalDiscount}"/>đ
                 </p>
             </c:if>
@@ -69,7 +69,12 @@
                         <sec:authentication var="user" property="principal"/>
                         <sec:authorize access="${user.status}">
                             <c:if test="${!favorite}">
-                                <p class="favorite" id="btn-favorite-${product.id}" onclick="addToFavoriteProduct(${product.id})">Thêm vào yêu thích</p>
+                                <c:if test="${product.favorites.size() == 0}">
+                                    <p class="favorite" id="btn-favorite-${product.id}" onclick="addToFavoriteProduct(${product.id})">Thêm vào yêu thích</p>
+                                </c:if>
+                                <c:if test="${product.favorites.size() > 0}">
+                                    <p class="favorite" id="btn-favorite-${product.id}" onclick="deleteFavoriteProductFromHome(${product.id})">Xóa khỏi yêu thích</p>
+                                </c:if>
                             </c:if>
                             <c:if test="${favorite}">
                                 <p class="favorite" 

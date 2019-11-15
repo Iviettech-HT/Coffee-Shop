@@ -29,9 +29,15 @@
                 <input type="password" name="password" required id="password">
                 <label for="password">Mật khẩu</label>				
             </div>
-            <div class="group">
-                <p class= "messageError">${messageError}</p>
-            </div>
+            <c:if test="${messageError != null || !empty messageError}">
+                <div class="group">
+                    <p class="messageError">${messageError}</p>
+                </div>
+                <div class="group" style="margin-bottom: 5px;">
+                    <a href="<c:url value="/xac-thuc-email-da-dang-ky"/>" style="text-decoration: underline; margin-left: 5px;">Quên mật khẩu(tên đăng nhập)</a>
+                </div>
+            </c:if>
+
             <div class="button">
                 <input type="submit" name="submit" value="Đăng nhập">
             </div>

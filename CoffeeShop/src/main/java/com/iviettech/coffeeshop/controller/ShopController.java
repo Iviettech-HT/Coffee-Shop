@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iviettech.coffeeshop.entities.AccountEntity;
 import com.iviettech.coffeeshop.entities.CustomerEntity;
+import com.iviettech.coffeeshop.entities.FavoriteEntity;
 import com.iviettech.coffeeshop.entities.OrderDetailEntity;
 import com.iviettech.coffeeshop.entities.OrderEntity;
 import com.iviettech.coffeeshop.entities.ProductEntity;
@@ -19,15 +20,14 @@ import com.iviettech.coffeeshop.enums.OrderStatus;
 import com.iviettech.coffeeshop.enums.Role;
 import com.iviettech.coffeeshop.services.AccountService;
 import com.iviettech.coffeeshop.services.CategoryService;
+import com.iviettech.coffeeshop.services.EmailSenderSerivce;
+import com.iviettech.coffeeshop.services.FavoriteService;
 import com.iviettech.coffeeshop.services.OrderService;
 import com.iviettech.coffeeshop.services.ProductService;
 import com.iviettech.coffeeshop.services.PromotionService;
 import com.iviettech.coffeeshop.services.RoleService;
 import com.iviettech.coffeeshop.services.ToppingService;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashSet;
@@ -35,14 +35,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.mail.internet.MimeMessage;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -61,7 +56,6 @@ import org.springframework.web.bind.support.SessionStatus;
  * @author admin
  */
 @Controller
-@SessionAttributes(names = {"mailCode"})
 public class ShopController {
 
     @Autowired
@@ -75,26 +69,30 @@ public class ShopController {
     @Autowired
     private AccountService accountService;
     @Autowired
+    FavoriteService favoriteService;
+    @Autowired
     private RoleService roleService;
     @Autowired
     private OrderService orderService;
     @Autowired
-    private JavaMailSender jvs;
-    @Autowired
-    private ServletContext context;
-
-    private StringBuilder textHtml;
-
-    @ModelAttribute("mailCode")
-    Integer getMailCode() {
-        return new Integer(0);
-    }
+    private EmailSenderSerivce emailSenderSerivce;
 
     @RequestMapping(value = {"/*", "/home"})
-    public String viewHome(Model model, HttpSession session) {
-        model.addAttribute("products", productService.getBestProducts());
+    public String viewHome(Model model, Authentication a) {
+        List<ProductEntity> products =  productService.getBestProducts();
         model.addAttribute("categories", categoryService.getCategories());
         model.addAttribute("promotions", promotionService.getPromotionsAvailable());
+        if(a != null){
+            AccountEntity account = (AccountEntity) a.getPrincipal();
+            for(ProductEntity product : products){
+                product.setFavorites(new ArrayList<>());
+                FavoriteEntity favorite = favoriteService.getFavoritesByAccountIdAndProductId(account.getId(), product.getId());
+                if(favorite != null && favorite.isStatus())
+                    product.getFavorites().add(favorite);
+            }
+        }
+        
+        model.addAttribute("products", products);
         return "home";
     }
 
@@ -195,7 +193,7 @@ public class ShopController {
             orderDetails.add(orderDetail);
         }
         session.setAttribute("orderDetails", orderDetails);
-
+        session.removeAttribute("mailCode");
         return "redirect:/gio-hang";
     }
 
@@ -218,6 +216,8 @@ public class ShopController {
         orderDetails.get(pos).setPrice((orderDetails.get(pos).getUnitPrice() + totalToppingPrice) * orderDetails.get(pos).getQuantity());
         orderDetails.get(pos).setPrice(Math.round(orderDetails.get(pos).getPrice() * 10) / 10);
         session.setAttribute("orderDetails", orderDetails);
+        session.removeAttribute("mailCode");
+        
         return "redirect:/gio-hang";
     }
 
@@ -229,6 +229,7 @@ public class ShopController {
         orderDetails.remove(orderDetails.get(pos));
 
         session.setAttribute("orderDetails", orderDetails);
+        session.removeAttribute("mailCode");
         return "redirect:/gio-hang";
     }
 
@@ -274,12 +275,15 @@ public class ShopController {
         } catch (Exception ex) {
             Logger.getLogger(ShopController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        session.removeAttribute("mailCode");
         return "redirect:/gio-hang";
     }
 
     @RequestMapping(value = "/xoa-gio-hang")
     public String clearCart(HttpSession session) {
         session.removeAttribute("orderDetails");
+        session.removeAttribute("mailCode");
         return "redirect:/home";
     }
 
@@ -323,66 +327,31 @@ public class ShopController {
         List<OrderDetailEntity> orderDetails = (List<OrderDetailEntity>) session.getAttribute("orderDetails");
         OrderEntity order = new OrderEntity(new Date(), new Date(), totalPrice, OrderStatus.NEW, orderDetails, customer);
         order = orderService.addOrder(order);
-//        Send mail order
-        fileForSend += "emailSendOrder.html";
-        textHtml = new StringBuilder();
-        File f = new File(context.getRealPath(fileForSend));
-        try (
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(
-                                new FileInputStream(f), "UTF-8"));) {
+        // Create mail content
+        StringBuilder textHtml = new StringBuilder();
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        textHtml.append(String.format("<h2>Người nhận: %s</h2><h2>Ngày đặt:%s</h2>", order.getCustomer().getName(), format.format(order.getShippingDate())));
+        textHtml.append("<h2><table>");
+        textHtml.append("<tr><td colspan='6'>Mã đơn hàng:" + order.getId() + "</td></tr>");
+        textHtml.append("<tr><td>Tên</td><td>Đơn giá</td><td>Số lượng</td><td>Giá</td><td>Size</td><td>Topping</td></tr>");
+        for (OrderDetailEntity orderDetail : orderDetails) {
 
-            String line;
-            int check = 1;
-            while ((line = reader.readLine()) != null) {
-                //Custom name at Line 16 for total price and 17 for empty
-                if (check == 2) {
-                    textHtml.append("Tổng cộng:" + Math.round(order.getTotalPrice()) + "đ");
-                } else if (check == 3) {
-                    textHtml.append("<table>");
-                    textHtml.append("<tr><td colspan='6'>Mã đơn hàng:" + order.getId() + "</td></tr>");
-                    textHtml.append("<tr><td>Tên</td><td>Đơn giá</td><td>Số lượng</td><td>Giá</td><td>Size</td><td>Topping</td></tr>");
-                    for (OrderDetailEntity orderDetail : orderDetails) {
-
-                        textHtml.append(String.format("<tr><td>%s</td><td>%,dđ</td><td>%d</td><td>%,dđ</td><td>%s</td><td>",
-                                orderDetail.getProduct().getName(), Math.round(orderDetail.getUnitPrice()), orderDetail.getQuantity(),
-                                Math.round(orderDetail.getPrice()), orderDetail.getSize().toString()));
-                        if (orderDetail.getTopping() != null) {
-                            textHtml.append(String.format("%s</td></tr>", orderDetail.getTopping()));
-                        } else {
-                            textHtml.append(" </td></tr>");
-                        }
-                    }
-
-                    textHtml.append("</table>");
-                } else {
-                    textHtml.append(line);
-                }
-                check++;
+            textHtml.append(String.format("<tr><td>%s</td><td>%,dđ</td><td>%d</td><td>%,dđ</td><td>%s</td><td>",
+                    orderDetail.getProduct().getName(), Math.round(orderDetail.getUnitPrice()), orderDetail.getQuantity(),
+                    Math.round(orderDetail.getPrice()), orderDetail.getSize().toString()));
+            if (orderDetail.getTopping() != null) {
+                textHtml.append(String.format("%s</td></tr>", orderDetail.getTopping()));
+            } else {
+                textHtml.append(" </td></tr>");
             }
-            MimeMessagePreparator preparator = new MimeMessagePreparator() {
-                @Override
-                public void prepare(MimeMessage mm) throws Exception {
-                    MimeMessageHelper helper = new MimeMessageHelper(mm, true, "UTF-8");
-                    helper.setSubject("Coffe Shop Order");
-                    helper.setTo(customer.getEmail());
-                    helper.setText(textHtml.toString(), true);
-                    // Get image from resources
-                    String pathUrl = context.getRealPath("/images");
-                    int index = pathUrl.indexOf("target");
-                    String pathImage = pathUrl.substring(0, index) + pathToResources + "/images/email/logo.jpg";
-
-                    //attach image into html
-                    helper.addInline("logoHeader", new File(pathImage));
-                }
-            };
-            jvs.send(preparator);
-            textHtml = new StringBuilder();
-        } catch (Exception ex) {
-            Logger.getLogger(ShopController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        textHtml.append("</table></h2>");
+        textHtml.append("<h1>Tổng cộng:" + Math.round(order.getTotalPrice()) + "đ</h1>");
+        
+        emailSenderSerivce.sendMail(customer.getEmail(), fileForSend, pathToResources, textHtml.toString());
 
         session.removeAttribute("orderDetails");
+        session.removeAttribute("mailCode");
         return "orderSuccess";
     }
 
@@ -392,8 +361,13 @@ public class ShopController {
             @RequestParam(name = "rePassword") String rePassword,
             @Value(value = "${fileForSend}") String fileForSend,
             @Value(value = "${pathToResources}") String pathToResources,
-            @ModelAttribute("mailCode") Integer mailCode) {
+            HttpSession session) {
+        Integer mailCode = (Integer) session.getAttribute("mailCode");
         // validate infomation
+        if(mailCode == null){
+            mailCode = 0;
+            session.setAttribute("mailCode", mailCode);
+        }
         boolean isValidated = true;
         String messageError = "";
         if (!account.getPassword().equals(rePassword)) {
@@ -401,6 +375,9 @@ public class ShopController {
             isValidated = false;
         } else if (accountService.isExistedUsername(account.getUsername())) {
             messageError = "Tài khoản đã tồn tại";
+            isValidated = false;
+        } else if (account.getUsername().length() <= 5) {
+            messageError = "Tên đăng nhập phải lớn hơn 5 ký tự";
             isValidated = false;
         } else if (accountService.isExistedEmail(account.getEmail())) {
             messageError = "Email đã được sử dụng";
@@ -432,8 +409,8 @@ public class ShopController {
         accountService.addAccount(account);
         model.addAttribute("email", account.getEmail());
 
-        this.sendCodeEmail(model, account.getEmail(), fileForSend, pathToResources, mailCode);
-
+        this.sendCodeEmail(model, account.getEmail(), fileForSend, pathToResources, session);
+        model.addAttribute("action", "xac-thuc-dang-ky");
         return "validateEmail";
     }
 
@@ -441,15 +418,21 @@ public class ShopController {
     public String completeRegister(Model model,
             @RequestParam(name = "email") String email,
             @RequestParam(name = "code") int code,
-            @ModelAttribute("mailCode") Integer mailCode,
-            SessionStatus sessionStatus) {
+            @Value(value = "${fileForSend}") String fileForSend,
+            @Value(value = "${pathToResources}") String pathToResources,
+            HttpSession session) {
+        int mailCode =  (Integer) session.getAttribute("mailCode");
         if (code != mailCode) {
             model.addAttribute("messageError", "Mã xác thực không chính xác");
             model.addAttribute("email", email);
+            model.addAttribute("action", "xac-thuc-dang-ky");
             return "validateEmail";
         }
         accountService.updateAccountStatus(email, true);
-        sessionStatus.setComplete();
+
+        String content = "<h2>Chúc mừng bạn xác thực email thành công</h2><h2>Cảm ơn bạn đã quan tâm đến Teaffee</h2>";
+        emailSenderSerivce.sendMail(email, fileForSend, pathToResources, content);
+        session.invalidate();
         return "redirect:/dang-nhap";
     }
 
@@ -458,17 +441,98 @@ public class ShopController {
             @RequestParam(name = "email") String email,
             @Value(value = "${fileForSend}") String fileForSend,
             @Value(value = "${pathToResources}") String pathToResources,
-            @ModelAttribute("mailCode") Integer mailCode) {
-
-        this.sendCodeEmail(model, email, fileForSend, pathToResources, mailCode);
+            HttpSession session) {
+        Integer mailCode = (Integer) session.getAttribute("mailCode");
+        if(mailCode == null){
+            mailCode = 0;
+            session.setAttribute("mailCode", mailCode);
+        }
+        this.sendCodeEmail(model, email, fileForSend, pathToResources, session);
         model.addAttribute("email", email);
+        model.addAttribute("action", "xac-thuc-dang-ky");
         return "validateEmail";
+    }
+
+    @RequestMapping("/xac-thuc-email-da-dang-ky")
+    public String enterEmailRegistered(Model model) {
+        return "formEmail";
+    }
+
+    @RequestMapping(value = "/xac-thuc-email-da-dang-ky", method = RequestMethod.POST)
+    public String validateEmailRegistered(Model model,
+            @RequestParam("email") String email,
+            @Value(value = "${fileForSend}") String fileForSend,
+            @Value(value = "${pathToResources}") String pathToResources,
+            HttpSession session) {
+        Integer mailCode = (Integer) session.getAttribute("mailCode");
+        if(mailCode == null){
+            mailCode = 0;
+            session.setAttribute("mailCode", mailCode);
+        }
+        
+        AccountEntity account = accountService.findAccountByEmail(email);
+
+        if (account == null) {
+            model.addAttribute("messageError", "Email này chưa được sử dụng");
+            return "formEmail";
+        } else {
+            this.sendCodeEmail(model, email, fileForSend, pathToResources, session);
+
+            model.addAttribute("email", email);
+            model.addAttribute("action", "xac-thuc-khoi-phuc-tai-khoan");
+            return "validateEmail";
+        }
+    }
+
+    @RequestMapping(value = "/xac-thuc-khoi-phuc-tai-khoan")
+    public String startResetAccount(Model model,
+            @RequestParam(name = "email") String email,
+            @RequestParam(name = "code") int code,
+            @SessionAttribute("mailCode") Integer mailCode) {
+        if (code != mailCode) {
+            model.addAttribute("messageError", "Mã xác thực không chính xác");
+            model.addAttribute("email", email);
+            model.addAttribute("action", "xac-thuc-khoi-phuc-tai-khoan");
+            return "validateEmail";
+        } else {
+            AccountEntity account = accountService.findAccountByEmail(email);
+            model.addAttribute("code", code);
+            model.addAttribute("username", account.getUsername());
+            return "formResetPassword";
+        }
+    }
+
+    @RequestMapping(value = "/reset-mat-khau", method = RequestMethod.POST)
+    public String resetPassword(Model model,
+            @RequestParam(name = "code") int code,
+            @RequestParam(name = "username") String username,
+            @RequestParam(name = "password") String password,
+            @RequestParam(name = "rePassword") String rePassword,
+            HttpSession session) {
+        Integer mailCode = (Integer) session.getAttribute("mailCode");
+
+        if (code == mailCode) {
+            if (!password.equalsIgnoreCase(rePassword)) {
+                model.addAttribute("messageError", "Nhập lại mật khẩu");
+                model.addAttribute("code", code);
+                model.addAttribute("username", username);
+                return "formResetPassword";
+            } else {
+                AccountEntity account = accountService.findAccount(username);
+                account.setPassword(password);
+                accountService.addAccount(account);
+                session.removeAttribute("mailCode");
+                return "redirect:/dang-nhap";
+            }
+        }else{
+            return "redirect:/home";
+        }
     }
 //    AJAX 
 
     @RequestMapping(value = "/list-san-pham")
     public String getCategory(Model model,
-            @RequestParam(name = "name") String nameCategory) {
+            @RequestParam(name = "name") String nameCategory, Authentication a) {
         List<ProductEntity> products = null;
         if (nameCategory.equalsIgnoreCase("best choose")) {
             products = productService.getBestProducts();
@@ -476,6 +540,16 @@ public class ShopController {
             products = productService.getProductsByCategoryName(nameCategory);
         }
 
+        model.addAttribute("products", products);
+        if(a != null){
+            AccountEntity account = (AccountEntity) a.getPrincipal();
+            for(ProductEntity product : products){
+                product.setFavorites(new ArrayList<>());
+                FavoriteEntity favorite = favoriteService.getFavoritesByAccountIdAndProductId(account.getId(), product.getId());
+                if(favorite != null && favorite.isStatus())
+                    product.getFavorites().add(favorite);
+            }
+        }
         model.addAttribute("products", products);
         model.addAttribute("favorite", false);
         return "ajax/listProducts";
@@ -530,58 +604,19 @@ public class ShopController {
             @RequestParam(name = "email") String email,
             @Value(value = "${fileForSend}") String fileForSend,
             @Value(value = "${pathToResources}") String pathToResources,
-            @ModelAttribute("mailCode") Integer mailCode) {
-
-        mailCode = (int) Math.round(Math.random() * 1000000);
-        model.addAttribute("mailCode", mailCode);
+            HttpSession session) {
+        Integer mailCode = (Integer) session.getAttribute("mailCode");
+        if(mailCode == null){
+            mailCode = 0;
+            session.setAttribute("mailCode", mailCode);
+        }
+        mailCode = (int) Math.round(Math.random() * 100000);
+        session.setAttribute("mailCode", mailCode);
         String content = String.format("<h2>Mã xác thực của bạn là:%d</h2><h2>Điền mã này vào ô xác thực</h2>", mailCode);
-        this.sendMail(email, fileForSend, pathToResources, content);
+        emailSenderSerivce.sendMail(email, fileForSend, pathToResources, content);
 
         return "ok";
     }
 
-    private void sendMail(String email, String fileForSend, String pathToResources, String content) {
-
-        fileForSend += "emailTemplate.html";
-
-        textHtml = new StringBuilder();
-        File f = new File(context.getRealPath(fileForSend));
-        try (
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(
-                                new FileInputStream(f), "UTF-8"));) {
-
-            String line;
-            int check = 1;
-            while ((line = reader.readLine()) != null) {
-                //Custom name at Line 35
-                if (check == 2) {
-                    textHtml.append(content);
-                } else {
-                    textHtml.append(line);
-                }
-                check++;
-            }
-            MimeMessagePreparator preparator = new MimeMessagePreparator() {
-                @Override
-                public void prepare(MimeMessage mm) throws Exception {
-                    MimeMessageHelper helper = new MimeMessageHelper(mm, true, "UTF-8");
-                    helper.setSubject("Coffe Shop Validation");
-                    helper.setTo(email);
-                    helper.setText(textHtml.toString(), true);
-                    // Get image from resources
-                    String pathUrl = context.getRealPath("/images");
-                    int index = pathUrl.indexOf("target");
-                    String pathImage = pathUrl.substring(0, index) + pathToResources + "/images/email/logo.jpg";
-
-                    //attach image into html
-                    helper.addInline("logoHeader", new File(pathImage));
-                }
-            };
-            jvs.send(preparator);
-            textHtml = new StringBuilder();
-        } catch (Exception ex) {
-            Logger.getLogger(ShopController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+//    Send mail with custom content
 }

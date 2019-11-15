@@ -20,11 +20,11 @@
 
 @keyframes zoomIn {
     from {
-        background-size: 105% auto;
+        background-size: 120% auto;
     }
 
     to {
-        background-size: 110% auto;
+        background-size: 125% auto;
     }
 }
 

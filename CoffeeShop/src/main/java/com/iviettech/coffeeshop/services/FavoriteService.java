@@ -8,6 +8,7 @@ package com.iviettech.coffeeshop.services;
 import com.iviettech.coffeeshop.controller.UserController;
 import com.iviettech.coffeeshop.entities.FavoriteEntity;
 import com.iviettech.coffeeshop.repositories.FavoriteRepository;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.aop.AopInvocationException;
@@ -23,7 +24,11 @@ public class FavoriteService {
 
     @Autowired
     private FavoriteRepository favoriteRepository;
-
+    
+    public FavoriteEntity getFavoritesByAccountIdAndProductId(int accountId, int productId){
+        return favoriteRepository.getFavoritesByAccountIdAndProductId(accountId, productId);
+    }
+    
     public FavoriteEntity addFavorite(FavoriteEntity favorite) {
         try {
             int id = favoriteRepository.getFavoriteIdByAccountAndProductId(favorite.getAccount().getId(), favorite.getProduct().getId());

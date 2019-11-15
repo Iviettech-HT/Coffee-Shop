@@ -39,10 +39,8 @@
                     <li><a href="<c:url value = "/admin/shipping-order"/>"><i class="icon icon-truck"></i>Shipping Orders</a></li>
                     <li><a href="<c:url value = "/admin/cancel-order"/>"><i class="icon icon-remove"></i>Cancel Orders</a></li>
                     <li><a href="<c:url value = "/admin/done-order"/>"><i class="icon icon-thumbs-up"></i>Done Orders</a></li>
-
                 </ul>
             <li><a href="<c:url value = "/admin/account"/>"><i class="icon icon-user"></i> Account</a></li>
-            </li>
         </sec:authorize>
 
 

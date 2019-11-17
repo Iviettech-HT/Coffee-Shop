@@ -79,20 +79,22 @@ public class ShopController {
 
     @RequestMapping(value = {"/*", "/home"})
     public String viewHome(Model model, Authentication a) {
-        List<ProductEntity> products =  productService.getBestProducts();
+        List<ProductEntity> products = productService.getBestProducts();
         model.addAttribute("categories", categoryService.getCategories());
         model.addAttribute("promotions", promotionService.getPromotionsAvailable());
-        if(a != null){
+        if (a != null) {
             AccountEntity account = (AccountEntity) a.getPrincipal();
-            for(ProductEntity product : products){
+            for (ProductEntity product : products) {
                 product.setFavorites(new ArrayList<>());
                 FavoriteEntity favorite = favoriteService.getFavoritesByAccountIdAndProductId(account.getId(), product.getId());
-                if(favorite != null && favorite.isStatus())
+                if (favorite != null && favorite.isStatus()) {
                     product.getFavorites().add(favorite);
+                }
             }
         }
-        
+
         model.addAttribute("products", products);
+        model.addAttribute("hadSearchFunction", true);
         return "home";
     }
 
@@ -117,7 +119,33 @@ public class ShopController {
             model.addAttribute("promotions", promotions);
             model.addAttribute("products", products);
         }
+        model.addAttribute("hadSearchFunction", true);
         return "discountedProducts";
+    }
+    
+    @RequestMapping(value = "/tim-kiem")
+    public String searchProductsNotAtHome(Model model,
+            @RequestParam(name = "name") String productName,
+            Authentication a){
+        List<ProductEntity> products = productService.searchProducts(productName);
+
+        if (a != null) {
+            AccountEntity account = (AccountEntity) a.getPrincipal();
+            for (ProductEntity product : products) {
+                product.setFavorites(new ArrayList<>());
+                FavoriteEntity favorite = favoriteService.getFavoritesByAccountIdAndProductId(account.getId(), product.getId());
+                if (favorite != null && favorite.isStatus()) {
+                    product.getFavorites().add(favorite);
+                }
+            }
+        }
+        model.addAttribute("categories", categoryService.getCategories());
+        model.addAttribute("promotions", promotionService.getPromotionsAvailable());
+        model.addAttribute("products", products);
+        model.addAttribute("favorite", false);
+        model.addAttribute("hadSearchFunction", true);
+        model.addAttribute("isSearching", true);
+        return "home";
     }
 
     @RequestMapping(value = {"/dang-nhap"})
@@ -142,8 +170,21 @@ public class ShopController {
 
     @RequestMapping(value = "/chi-tiet-san-pham/{productId}")
     public String viewProductDetail(Model model,
-            @PathVariable("productId") int id) {
-        model.addAttribute("product", productService.getProductById(id));
+            @PathVariable("productId") int id,
+            Authentication a) {
+        ProductEntity product = productService.getProductById(id);
+        if (a != null) {
+            AccountEntity account = (AccountEntity) a.getPrincipal();
+            
+            product.setFavorites(new ArrayList<>());
+            
+            FavoriteEntity favorite = favoriteService.getFavoritesByAccountIdAndProductId(account.getId(), product.getId());
+            if (favorite != null && favorite.isStatus()) {
+                product.getFavorites().add(favorite);
+            }
+        }
+        model.addAttribute("product", product);
+
         return "productDetail";
     }
 
@@ -217,7 +258,7 @@ public class ShopController {
         orderDetails.get(pos).setPrice(Math.round(orderDetails.get(pos).getPrice() * 10) / 10);
         session.setAttribute("orderDetails", orderDetails);
         session.removeAttribute("mailCode");
-        
+
         return "redirect:/gio-hang";
     }
 
@@ -275,7 +316,7 @@ public class ShopController {
         } catch (Exception ex) {
             Logger.getLogger(ShopController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         session.removeAttribute("mailCode");
         return "redirect:/gio-hang";
     }
@@ -347,7 +388,7 @@ public class ShopController {
         }
         textHtml.append("</table></h2>");
         textHtml.append(String.format("<h1>Tổng cộng: %,dđ</h1>", Math.round(order.getTotalPrice())));
-        
+
         emailSenderSerivce.sendMail(customer.getEmail(), fileForSend, pathToResources, textHtml.toString());
 
         session.removeAttribute("orderDetails");
@@ -363,7 +404,7 @@ public class ShopController {
             HttpSession session) {
         Integer mailCode = (Integer) session.getAttribute("mailCode");
         // validate infomation
-        if(mailCode == null){
+        if (mailCode == null) {
             mailCode = 0;
             session.setAttribute("mailCode", mailCode);
         }
@@ -420,7 +461,7 @@ public class ShopController {
             @Value(value = "${fileForSend}") String fileForSend,
             @Value(value = "${pathToResources}") String pathToResources,
             HttpSession session) {
-        int mailCode =  (Integer) session.getAttribute("mailCode");
+        int mailCode = (Integer) session.getAttribute("mailCode");
         if (code != mailCode) {
             model.addAttribute("messageError", "Mã xác thực không chính xác");
             model.addAttribute("email", email);
@@ -442,7 +483,7 @@ public class ShopController {
             @Value(value = "${pathToResources}") String pathToResources,
             HttpSession session) {
         Integer mailCode = (Integer) session.getAttribute("mailCode");
-        if(mailCode == null){
+        if (mailCode == null) {
             mailCode = 0;
             session.setAttribute("mailCode", mailCode);
         }
@@ -464,11 +505,11 @@ public class ShopController {
             @Value(value = "${pathToResources}") String pathToResources,
             HttpSession session) {
         Integer mailCode = (Integer) session.getAttribute("mailCode");
-        if(mailCode == null){
+        if (mailCode == null) {
             mailCode = 0;
             session.setAttribute("mailCode", mailCode);
         }
-        
+
         AccountEntity account = accountService.findAccountByEmail(email);
 
         if (account == null) {
@@ -523,7 +564,7 @@ public class ShopController {
                 session.removeAttribute("mailCode");
                 return "redirect:/dang-nhap";
             }
-        }else{
+        } else {
             return "redirect:/home";
         }
     }
@@ -540,13 +581,14 @@ public class ShopController {
         }
 
         model.addAttribute("products", products);
-        if(a != null){
+        if (a != null) {
             AccountEntity account = (AccountEntity) a.getPrincipal();
-            for(ProductEntity product : products){
+            for (ProductEntity product : products) {
                 product.setFavorites(new ArrayList<>());
                 FavoriteEntity favorite = favoriteService.getFavoritesByAccountIdAndProductId(account.getId(), product.getId());
-                if(favorite != null && favorite.isStatus())
+                if (favorite != null && favorite.isStatus()) {
                     product.getFavorites().add(favorite);
+                }
             }
         }
         model.addAttribute("products", products);
@@ -569,14 +611,15 @@ public class ShopController {
             @RequestParam(name = "name") String productName,
             Authentication a) {
         List<ProductEntity> products = productService.searchProducts(productName);
-        
-        if(a != null){
+
+        if (a != null) {
             AccountEntity account = (AccountEntity) a.getPrincipal();
-            for(ProductEntity product : products){
+            for (ProductEntity product : products) {
                 product.setFavorites(new ArrayList<>());
                 FavoriteEntity favorite = favoriteService.getFavoritesByAccountIdAndProductId(account.getId(), product.getId());
-                if(favorite != null && favorite.isStatus())
+                if (favorite != null && favorite.isStatus()) {
                     product.getFavorites().add(favorite);
+                }
             }
         }
         model.addAttribute("products", products);
@@ -618,7 +661,7 @@ public class ShopController {
             @Value(value = "${pathToResources}") String pathToResources,
             HttpSession session) {
         Integer mailCode = (Integer) session.getAttribute("mailCode");
-        if(mailCode == null){
+        if (mailCode == null) {
             mailCode = 0;
             session.setAttribute("mailCode", mailCode);
         }

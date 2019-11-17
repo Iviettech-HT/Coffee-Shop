@@ -64,9 +64,9 @@
                                     </c:forEach>
                         </div>
                         <div class="product-info__buy-action">
-<!--                            <div class="product-info__buy-button">
-                                <p>Thêm vào giỏ</p>
-                            </div>-->
+                            <!--                            <div class="product-info__buy-button">
+                                                            <p>Thêm vào giỏ</p>
+                                                        </div>-->
 
                             <div class="product-info__buy-button">
                                 <p>Thêm vào giỏ</p>
@@ -86,6 +86,20 @@
                         <div class="star"></div>
                         <div class="star"></div>
                     </div>
+
+                    <sec:authorize access="isAuthenticated()">
+                        <sec:authentication var="user" property="principal"/>
+                        <c:if test="${user.status}">
+                            <div>
+                                <c:if test="${product.favorites.size() == 0}">
+                                    <p class="favorite" id="btn-favorite-${product.id}" onclick="addToFavoriteProduct(${product.id})">Thêm vào yêu thích</p>
+                                </c:if>
+                                <c:if test="${product.favorites.size() > 0}">
+                                    <p class="favorite" id="btn-favorite-${product.id}" onclick="deleteFavoriteProductFromHome(${product.id})">Xóa khỏi yêu thích</p>
+                                </c:if>
+                            </div>
+                        </c:if>
+                    </sec:authorize>
                 </div>
             </div>
         </main>    
@@ -136,7 +150,7 @@
                         if (xhttp.readyState == 4 && xhttp.status == 200) {
                             totalStar = parseInt(xhttp.responseText);
                             // Show popup in 1s then hide
-                            document.getElementById('popup-message').children[0].children[0].innerHTML = "Bạn đã đánh giá " + (5-i) + " sao";
+                            document.getElementById('popup-message').children[0].children[0].innerHTML = "Bạn đã đánh giá " + (5 - i) + " sao";
                             document.getElementById('popup-message').style.display = 'flex';
                             setTimeout(() => {
                                 document.getElementById('popup-message').style.display = 'none';
@@ -148,9 +162,9 @@
 //
                 </sec:authorize>
             </sec:authorize>
-            buyFast.onclick = () => {
-                window.location = '<c:url value="/mua-nhanh/${product.id}/"/>' + sizeId;
-            }
+//            buyFast.onclick = () => {
+//                window.location = '<c:url value="/mua-nhanh/${product.id}/"/>' + sizeId;
+//            }
 
             let showedTotalQuantity = false;
             addToCart.onclick = () => {
@@ -184,6 +198,37 @@
                 }
                 for (let i = 4; i >= 5 - numberStar; i--) {
                     stars[i].classList.add('selected');
+                }
+            }
+
+            function addToFavoriteProduct(productId) {
+                xhttp = new XMLHttpRequest();
+                xhttp.open('GET', '<c:url value="/user/them-vao-yeu-thich/"/>' + productId, true);
+                xhttp.send();
+                xhttp.onreadystatechange = () => {
+                    if (xhttp.readyState == 4 && xhttp.status == 200) {
+                        document.getElementById('btn-favorite-' + productId)
+                                .innerHTML = 'Xóa khỏi yêu thích';
+
+                        document.getElementById('btn-favorite-' + productId)
+                                .setAttribute("onclick", 'deleteFavoriteProductFromHome(' + productId + ')');
+                    }
+                }
+            }
+
+
+            function deleteFavoriteProductFromHome(productId) {
+                xhttp = new XMLHttpRequest();
+                xhttp.open('GET', '${pageContext.request.contextPath}/user/xoa-san-pham-yeu-thich/' + productId, true);
+                xhttp.send();
+                xhttp.onreadystatechange = () => {
+                    if (xhttp.readyState == 4 && xhttp.status == 200) {
+                        document.getElementById('btn-favorite-' + productId)
+                                .innerHTML = 'Thêm vào yêu thích';
+
+                        document.getElementById('btn-favorite-' + productId)
+                                .setAttribute("onclick", 'addToFavoriteProduct(' + productId + ')');
+                    }
                 }
             }
         </script>

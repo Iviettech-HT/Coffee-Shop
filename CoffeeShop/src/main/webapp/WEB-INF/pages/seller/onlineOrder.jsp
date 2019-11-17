@@ -24,77 +24,78 @@
     <body>
         <jsp:include page="../include/sellerHeader.jsp"/>
 
-            <div class="tab-content clearfix">
+        <div class="tab-content clearfix">
 
-                <div class="tab-pane active  table-responsive" id="2a">
-                    <h2>ĐƠN HÀNG ONLINE</h2>         
-                    <c:forEach var="order" items="${orders}">
-                        <div class="container">
-                            <h3>
-                                ${order.customer.name}
-                                <c:if test="${order.status.toString() eq 'MAKING'}">
-                                    (Đang thực hiện...)
-                                </c:if>
-                            </h3>
-                            <p>${order.orderDate}</p>
-                            <p>${order.totalPrice}</p>
-                            <button type="button" class="btn btn-info" 
-                                    data-toggle="collapse" 
-                                    data-target="#order-${order.id}">Chi tiết</button>
-                            <div id="order-${order.id}" class="collapse">
+            <div class="tab-pane active  table-responsive" id="2a">
+                <h2>ĐƠN HÀNG ONLINE</h2>         
+                <c:forEach var="order" items="${orders}">
+                    <div class="container">
+                        <h3>
+                            ${order.customer.name}
+                            <c:if test="${order.status.toString() eq 'MAKING'}">
+                                (Đang thực hiện...)
+                            </c:if>
+                        </h3>
+                        <h5>${order.customer.address}</h5>
+                        <p>${order.orderDate}</p>
+                        <p><fmt:formatNumber type="number" pattern="###,###,###" value="${order.totalPrice}"/></p>
+                        <button type="button" class="btn btn-info" 
+                                data-toggle="collapse" 
+                                data-target="#order-${order.id}">Chi tiết</button>
+                        <div id="order-${order.id}" class="collapse">
 
-                                <table class="table table-striped table-bordered">
-                                    <thead>
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Tên</th>
+                                        <th>Đơn giá</th>
+                                        <th>Số lượng</th>
+                                        <th>Giá</th>
+                                        <th>Size</th>
+                                        <th>Topping</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:set var="position" value="0"/>
+                                    <c:forEach var="orderDetail" items="${order.orderDetails}">
                                         <tr>
-                                            <th>Tên</th>
-                                            <th>Đơn giá</th>
-                                            <th>Số lượng</th>
-                                            <th>Giá</th>
-                                            <th>Size</th>
-                                            <th>Topping</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:set var="position" value="0"/>
-                                        <c:forEach var="orderDetail" items="${order.orderDetails}">
-                                            <tr>
-                                                <td>${orderDetail.product.name}</td>
-                                                <td>
-                                                    <fmt:formatNumber type="number" pattern="###,###" value="${orderDetail.unitPrice}"/>đ
-                                                </td>
-                                                <td>
-                                                    ${orderDetail.quantity}
-                                                </td>
-                                                <td>
-                                                    <fmt:formatNumber type="number" pattern="###,###" value="${orderDetail.price}"/>đ
-                                                </td>
-                                                <td>${orderDetail.size}</td>
-                                                <td>${orderDetail.topping}</td>
-                                            </tr>
-                                            <c:set var="position" value="${position + 1}"/>
-                                        </c:forEach>
-                                        <tr>
-                                            <td colspan="7">
-                                                <c:if test="${order.status.toString() eq 'NEW'}">
-                                                    <a href="<c:url value="/seller/lam-don-hang-online/${order.id}"/>" class="btn btn-primary">NHẬN ĐƠN HÀNG</a>
-                                                </c:if>
-                                                <c:if test="${order.status.toString() == 'MAKING'}">
-                                                    <a href="<c:url value="/seller/xac-nhan-don-hang-online/${order.id}"/>" class="btn btn-success">BẮT ĐẦU SHIP</a>
-                                                </c:if>
-                                                <a href="<c:url value="/seller/huy-don-hang"/>" class="btn btn-danger">HỦY</a>
+                                            <td>${orderDetail.product.name}</td>
+                                            <td>
+                                                <fmt:formatNumber type="number" pattern="###,###" value="${orderDetail.unitPrice}"/>đ
                                             </td>
+                                            <td>
+                                                ${orderDetail.quantity}
+                                            </td>
+                                            <td>
+                                                <fmt:formatNumber type="number" pattern="###,###" value="${orderDetail.price}"/>đ
+                                            </td>
+                                            <td>${orderDetail.size}</td>
+                                            <td>${orderDetail.topping}</td>
                                         </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                        <c:set var="position" value="${position + 1}"/>
+                                    </c:forEach>
+                                    <tr>
+                                        <td colspan="7">
+                                            <c:if test="${order.status.toString() eq 'NEW'}">
+                                                <a href="<c:url value="/seller/lam-don-hang-online/${order.id}"/>" class="btn btn-primary">NHẬN ĐƠN HÀNG</a>
+                                            </c:if>
+                                            <c:if test="${order.status.toString() == 'MAKING'}">
+                                                <a href="<c:url value="/seller/xac-nhan-don-hang-online/${order.id}"/>" class="btn btn-success">BẮT ĐẦU SHIP</a>
+                                            </c:if>
+                                            <a href="<c:url value="/seller/huy-don-hang/${order.id}"/>" class="btn btn-danger">HỦY</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                    </c:forEach>
+                    </div>
+                </c:forEach>
 
-                </div>
             </div>
         </div>
+    </div>
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    </body>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</body>
 </html>

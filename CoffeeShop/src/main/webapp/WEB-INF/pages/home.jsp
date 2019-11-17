@@ -53,7 +53,7 @@
                     <li class="category__item-header">
                         <h2>Danh mục:</h2>
                     </li>
-                    <li class="category__item category__item--border category__item--active">
+                    <li class="category__item <c:if test="${isSearching != true}">category__item--border category__item--active</c:if>">
                         <p>Best choose</p>
                     </li>
                     <c:forEach var="category" items="${categories}">

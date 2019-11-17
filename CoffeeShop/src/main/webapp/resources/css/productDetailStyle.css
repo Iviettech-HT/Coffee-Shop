@@ -99,6 +99,15 @@ main{
     color: #ccc;
     background: black;
 }
+.favorite{
+    padding-left: 10px;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #ff6666;
+}
+.favorite:hover{
+    text-decoration: underline;
+}
 .product-info__buy-action{
     display: flex;
     flex: 1 0 auto;

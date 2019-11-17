@@ -51,7 +51,7 @@
                     </thead>
                     <tbody style="text-align: center">
                         <c:forEach var="order" items="${orders}">
-                            <c:if test="${order.status == 'NEW' or order.status == 'MAKING' }">
+                            <c:if test="${order.status != 'DONE' and order.status != 'CANCELED'}">
                                 <tr class="row--active"
                                     onclick="window.location = '<c:url value="/user/chi-tiet-don-hang/${order.id}"/>'">
                                     <td>${order.id}</td>

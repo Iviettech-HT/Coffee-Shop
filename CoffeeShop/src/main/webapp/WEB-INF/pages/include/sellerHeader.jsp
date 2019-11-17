@@ -28,6 +28,7 @@
         <li ><a href="<c:url value="/seller/don-hang-dang-ship"/>">Đơn hàng đang ship</a>
         </li>
         <li>
-            <a  href="<c:url value="/admin/"/>" >Quản lý</a>
+            <a  href="<c:url value="/admin/"/>" style="color: blue" >Quản lý</a>
         </li>
+        <li><a href="<c:url value="/dang-xuat"/>" style="color: blue">Đăng xuất</a></li>
     </ul>

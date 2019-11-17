@@ -131,12 +131,13 @@
         </script>
         <script>
             let slideShow = document.getElementById('slide-show');
-            let changeImage = setInterval(function () {
-                let lastImage = slideShow.children[slideShow.children.length - 1].cloneNode(true);
-                slideShow.removeChild(slideShow.children[slideShow.children.length - 1]);
-                slideShow.insertBefore(lastImage, slideShow.firstChild);
-            }, 2000);
-
+            if (slideShow.children.length > 1) {
+                let changeImage = setInterval(function () {
+                    let lastImage = slideShow.children[slideShow.children.length - 1].cloneNode(true);
+                    slideShow.removeChild(slideShow.children[slideShow.children.length - 1]);
+                    slideShow.insertBefore(lastImage, slideShow.firstChild);
+                }, 2000);
+            }
 //            Search
             let searchIcon = document.getElementById('search__icon');
             let searchBox = document.getElementById('search__box');
@@ -159,6 +160,9 @@
                         productContainer.appendChild(productItem);
                     }
                 }
+            }
+            document.getElementById('search__icon').onclick = () => {
+                window.location = '#main'
             }
         </script>
     </body>
